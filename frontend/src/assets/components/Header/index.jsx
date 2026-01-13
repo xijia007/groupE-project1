@@ -12,8 +12,8 @@ function Header() {
                 />
             </div>
             <div className="site-header-userAuth">
-                 <div className='site-header-userInfo'><FaRegUser /></div>
-                 <div className='site-header-login'>SignIn/SignOut</div>
+                 <div className='site-header-image'><FaRegUser /></div>
+                 <div className='site-header-login'>SignIn/Login</div>
             </div>
              <div className='site-header-shoppingcart'>
                 <MdOutlineShoppingCart />

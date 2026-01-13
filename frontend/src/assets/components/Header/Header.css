@@ -13,7 +13,7 @@
     color: white;
 }
 
-.site-header-userInfo { /* User icon */
+.site-header-image { /* User icon */
     font-size: 16px;
     font-weight: 600;
     color: white;
@@ -53,7 +53,7 @@
     font-size: 16px;
 }
 .site-header-login,
-.site-header-userInfo,
+.site-header-image,
 .site-header-shoppingcart {
     font-size: 16px;
 }
