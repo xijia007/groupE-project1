@@ -1,0 +1,68 @@
+[
+    {
+      "id": "b1f5b2c3-1a2b-4c3d-9e0f-111111111111",
+      "name": "Aurora Wireless Headphones",
+      "description": "Over-ear noise-cancelling headphones with 40h battery life.",
+      "price": 129.99,
+      "stock": 85,
+      "imageURL": "https://images.example.com/products/headphones-aurora.jpg",
+      "category": "Electronics",
+      "createdBy": "admin_001",
+      "updatedAt": "2025-01-10T10:30:00.000Z"
+    },
+    {
+      "id": "c2a6d7e8-2b3c-4d5e-8f10-222222222222",
+      "name": "Nimbus Smart Lamp",
+      "description": "Minimal desk lamp with adjustable brightness and warm light.",
+      "price": 49.5,
+      "stock": 120,
+      "imageURL": "https://images.example.com/products/lamp-nimbus.jpg",
+      "category": "Home",
+      "createdBy": "admin_002",
+      "updatedAt": "2025-01-11T08:15:00.000Z"
+    },
+    {
+      "id": "d3b7e8f9-3c4d-5e6f-9a11-333333333333",
+      "name": "TrailForge Hiking Backpack",
+      "description": "45L backpack with waterproof coating and ergonomic straps.",
+      "price": 79.0,
+      "stock": 60,
+      "imageURL": "https://images.example.com/products/backpack-trailforge.jpg",
+      "category": "Outdoors",
+      "createdBy": "admin_001",
+      "updatedAt": "2025-01-12T14:00:00.000Z"
+    },
+    {
+      "id": "e4c8f901-4d5e-6f7a-0b12-444444444444",
+      "name": "Pulse Stainless Water Bottle",
+      "description": "750ml insulated bottle keeps drinks cold for 24h.",
+      "price": 24.99,
+      "stock": 200,
+      "imageURL": "https://images.example.com/products/bottle-pulse.jpg",
+      "category": "Outdoors",
+      "createdBy": "admin_003",
+      "updatedAt": "2025-01-13T09:45:00.000Z"
+    },
+    {
+      "id": "f5d90112-5e6f-7a8b-1c13-555555555555",
+      "name": "Luma Mechanical Keyboard",
+      "description": "Hot-swappable switches with RGB backlight.",
+      "price": 99.99,
+      "stock": 42,
+      "imageURL": "https://images.example.com/products/keyboard-luma.jpg",
+      "category": "Electronics",
+      "createdBy": "admin_002",
+      "updatedAt": "2025-01-14T12:20:00.000Z"
+    },
+    {
+      "id": "a6e01223-6f7a-8b9c-2d14-666666666666",
+      "name": "Canvas Tote Bag",
+      "description": "Durable cotton tote bag for daily use.",
+      "price": 15.0,
+      "stock": 150,
+      "imageURL": "https://images.example.com/products/tote-canvas.jpg",
+      "category": "Fashion",
+      "createdBy": "admin_001",
+      "updatedAt": "2025-01-15T16:05:00.000Z"
+    }
+  ]

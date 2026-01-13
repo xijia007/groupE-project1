@@ -1,7 +1,7 @@
-import Footer from './assets/components/Footer/index.jsx'
-import Header from './assets/components/Header/index.jsx'
-import { BrowserRouter, Routes, Route} from 'react-router-dom'
-import Home from './pages/Home.jsx'
+import Footer from './assets/components/Footer/index.jsx';
+import Header from './assets/components/Header/index.jsx';
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import Home from './pages/Home.jsx';
 
 
 function App() {
