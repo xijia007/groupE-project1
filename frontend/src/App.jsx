@@ -6,7 +6,7 @@ function App() {
     <>
 
         <Header />
-        <main>Project: Product Management System</main>
+        <main className='mainContainer'>Project: Product Management System</main>
         <Footer />
     </>
   )

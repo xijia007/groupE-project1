@@ -4,6 +4,22 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 body {
-  margin: 0;
+  margin: 0; 
+}
+
+.mainContainer{
+  flex: 1;
 }

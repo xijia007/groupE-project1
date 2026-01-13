@@ -2,25 +2,52 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 24px;
-    background: #f3f5f8;
+    padding: 16px 22px;
+    background: black;
     border-bottom: 1px solid #e4e7ec;
 }
 
-.site-header__userAuth {
+.site-header-brand {
+    font-size: 18px;
+    font-weight: 300;
+    color: white;
+}
+
+.site-header-image {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    
+}
+
+.site-header-search {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.site-header-userAuth {
+    display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    color: #4b5563;
+    align-items: center;
+    font-size: 12px;
+    color: white;
+    gap: 5px;
 }
 
-.site-header__brand {
-    font-size: 18px;
+.site-header-image {
+    font-size: 16px;
     font-weight: 600;
-    color: #111827;
+    color: white;
 }
 
-.site-header__login {
+.site-header-login {
+    font-size: 12px;
+    color: white;
+}
+
+.site-header-shoppingcart {
     font-size: 18px;
     font-weight: 600;
-    color: #111827;
+    color: white;
 }
