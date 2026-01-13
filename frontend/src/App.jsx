@@ -1,14 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Footer from './assets/components/Footer/index.jsx'
+import Header from './assets/components/Header/index.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-        <div>Project: Product Management System </div>
+
+        <Header />
+        <main>Project: Product Management System</main>
+        <Footer />
     </>
   )
 }
