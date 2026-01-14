@@ -1,4 +1,5 @@
-import buildErrorResponse from "../utils/errorResponse";
+import buildErrorResponse from "../utils/errorResponse.js";
+import { ERROR_CODES } from "../constants/errorCodes.js";
 
 function errorHandler(err, req, res, next) {
     const status = err.status || 500;
@@ -14,4 +15,4 @@ function errorHandler(err, req, res, next) {
     res.status(status).json(response);
 }
 
-export default errorHandler;
+export { errorHandler };

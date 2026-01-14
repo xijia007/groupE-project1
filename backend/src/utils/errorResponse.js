@@ -1,4 +1,4 @@
-import { DEFAULT_MESSAGES } from "../constants/errorCodes";
+import { DEFAULT_MESSAGES } from "../constants/errorCodes.js";
 
 function buildErrorResponse({ code, message, details, traceId }) {
     return {
