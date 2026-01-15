@@ -30,5 +30,5 @@ const DEFAULT_MESSAGES = {
     [ERROR_CODES.SERVICE_UNAVAILABLE]: "服务暂不可用"
   };
 
-  export default { ERROR_CODES, DEFAULT_MESSAGES };
+  export { ERROR_CODES, DEFAULT_MESSAGES };
 
