@@ -1,14 +1,15 @@
+<<<<<<< Updated upstream
 import Footer from './assets/components/Footer/index.jsx';
 import Header from './assets/components/Header/index.jsx';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
-import EditProduct from './pages/EditProduct.jsx';
 
 
 function App() {
   return (
     <BrowserRouter>
+<<<<<<< Updated upstream
       <Header />
       <main className='mainContainer'>
         <Routes>
@@ -18,8 +19,11 @@ function App() {
         </Routes>
       </main>
       <Footer />
+=======
+      <AppContent />
+>>>>>>> Stashed changes
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

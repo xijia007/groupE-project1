@@ -6,24 +6,19 @@ import { RiFacebookBoxLine } from "react-icons/ri";
 
 function Footer() {
     return (
-        <>
         <footer className="site-footer">
-            <div className="site-footer-copyright">@2022 All Rights Reserved</div>
-            <div className='site-footer-image'>
-                <AiOutlineYoutube className='site-footer-space'/>
-                <CiTwitter className='site-footer-space'/>
-                <RiFacebookBoxLine className='site-footer-space'/>
-
+            <div className="site-footer-copyright">©2022 All Rights Reserved.</div>
+            <div className='site-footer-social'>
+                <AiOutlineYoutube className='social-icon'/>
+                <CiTwitter className='social-icon'/>
+                <RiFacebookBoxLine className='social-icon'/>
             </div>
-
-             <div className='site-footer-contact'>
-                <button className='site-footer-space' title="Contact us">Contact us</button>
-                <button className='site-footer-space'>Privacy Policies</button>
-                <button className='site-footer-space'>Help</button>
+            <div className='site-footer-links'>
+                <a href="#" className='footer-link'>Contact us</a>
+                <a href="#" className='footer-link'>Privacy Policies</a>
+                <a href="#" className='footer-link'>Help</a>
             </div>
-  
         </footer>
-        </>
     )
 }
 
