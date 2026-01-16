@@ -11,6 +11,12 @@ dist/
 build/
 coverage/
 
+# Tool caches
+.vite/
+.parcel-cache/
+.turbo/
+.eslintcache
+
 # Logs
 logs/
 *.log
