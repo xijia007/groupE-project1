@@ -1,12 +1,9 @@
 function EditProduct() {
-    return (
-        <>
-            <h1>Edit Product Page</h1>
-
-
-
-        </>
-    )
+  return (
+    <>
+      <h1>Edit Product Page</h1>
+    </>
+  );
 }
 
 export default EditProduct;
