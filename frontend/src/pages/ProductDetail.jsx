@@ -4,7 +4,8 @@ function ProductDetail() {
 
     return (
         <>
-            <h1>Product Detail Page</h1>
+        <div className="header"></div>
+            <h1>Products Detail</h1>
             <Link className="back-to-home" to='/'>
                 <button>Back To Home Page</button>
             </Link>
