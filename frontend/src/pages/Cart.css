@@ -2,10 +2,8 @@
   position: fixed;
   top: 5px;
   right: 2px;
-  padding: 12px;
   width: min(320px, 90vw);
-  border: 1px solid grey;
-  border-radius: 5px;
+  border: 1px solid white;
   background: white;
 }
 
@@ -17,5 +15,26 @@
 .cart-header {
     display: flex;
     justify-content: space-between;
+    background-color: rgb(84, 84, 224);
 } 
 
+.cart-body, .cart-bottom {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.cart-body {
+    border-bottom: 1px solid #ccc;
+}
+
+.cart-bottom {
+    display: flex;
+    justify-content: center;
+}
+
+.continue-button {
+    background-color: rgb(84, 84, 224);
+    border-radius: 3px;
+    color: white;
+    width: 100%;
+}

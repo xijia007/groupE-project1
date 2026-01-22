@@ -8,6 +8,7 @@ import Home from "./pages/Home.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct.jsx";
 import Cart from "./pages/Cart.jsx";
+import Checkout from "./pages/Checkout.jsx";
 
   function AppContent() {
     const [showSignIn, setShowSignIn] = useState(false);
@@ -43,6 +44,7 @@ import Cart from "./pages/Cart.jsx";
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/products/:id/edit" element={<EditProduct />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
               </Routes>
 
               {backgroundLocation && (

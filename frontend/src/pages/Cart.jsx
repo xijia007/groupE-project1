@@ -7,21 +7,30 @@ function Cart() {
         console.log("cart closing");
         navigate(-1);
     }
-    console.log("render cart")
+
+    const handleCheckout = () => {
+        navigate('/checkout');
+    }
 
     return (
         <div className="cart-overlay" onClick={handleClose}>
-        <div    
-            className="cart-popup" 
-            onClick={(e)=>e.stopPropagation()}
-            // style={{ position: "fixed", top: 20, right: 20, zIndex: 9999 }}
-        >
-
-        <div className="cart-header">
-            <h1>Cart(count)</h1>
-            <button onClick={handleClose}>X</button>
-        </div>
-        </div>
+            <div    
+                className="cart-popup" 
+                onClick={(e)=>e.stopPropagation()}
+            >
+                <div className="cart-header">
+                    <h1>Cart (count)</h1>
+                    <button onClick={handleClose}>X</button>
+                </div>
+                <div className="cart-body">
+                    Cart body
+                </div>
+                <div className="cart-bottom">
+                    <button className="continue-button" onClick={handleCheckout}>
+                       Continue to checkout
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }
