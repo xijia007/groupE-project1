@@ -1,0 +1,53 @@
+.product-detail {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-detail-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+
+.product-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.product-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.product-button {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.product-price-stock {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.product-price {
+    padding: 3px;
+}
+
+.stock-status {
+    background-color: aquamarine;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.add-button {
+    background-color: rgb(84, 84, 224);
+    /* border-color: none; */
+    border-radius: 5px;
+    padding: 3px;
+}

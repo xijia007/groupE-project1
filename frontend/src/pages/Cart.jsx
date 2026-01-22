@@ -5,7 +5,7 @@ function Cart() {
     const navigate = useNavigate();
     const handleClose = () => {
         console.log("cart closing");
-        navigate('/');
+        navigate(-1);
     }
 
     const handleCheckout = () => {

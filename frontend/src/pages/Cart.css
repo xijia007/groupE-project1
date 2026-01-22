@@ -25,6 +25,7 @@
 
 .cart-body {
     border-bottom: 1px solid #ccc;
+    padding: 10px 10px;
 }
 
 .discount-part {
@@ -38,16 +39,25 @@
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .discount-input {
     padding: 5px;
     width: 100%;
 }
+
+.apply-button {
+    background-color: rgb(84, 84, 224);
+    color: white;
+    /* font-size: 12px;
+    text-align: center; */
+}
 .cart-bottom {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+     padding: 10px 10px;
 }
 
 .numbers-between {
@@ -60,4 +70,5 @@
     border-radius: 3px;
     color: white;
     width: 100%;
+    padding: 8px;
 }

@@ -21,7 +21,7 @@ function ProductItem({ product }) {
     <div className="product-card">
       <Link to={`/products/${product.id}`}>
         <div className="product-card-image">
-          <img src={product.imageURL} alt={product.name} />
+          <img src={product.img_url} alt={product.name} />
         </div>
         <div className="product-card-body">
           <div className="product-card-name">{product.name}</div>

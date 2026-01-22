@@ -5,7 +5,7 @@
       "description": "Over-ear noise-cancelling headphones with 40h battery life.",
       "price": 129.99,
       "stock": 85,
-      "imageURL": "https://images.example.com/products/headphones-aurora.jpg",
+      "img_url": "https://images.example.com/products/headphones-aurora.jpg",
       "category": "Electronics",
       "createdBy": "admin_001",
       "updatedAt": "2025-01-10T10:30:00.000Z"
@@ -16,7 +16,7 @@
       "description": "Minimal desk lamp with adjustable brightness and warm light.",
       "price": 49.5,
       "stock": 120,
-      "imageURL": "https://images.example.com/products/lamp-nimbus.jpg",
+      "img_url": "https://images.example.com/products/lamp-nimbus.jpg",
       "category": "Home",
       "createdBy": "admin_002",
       "updatedAt": "2025-01-11T08:15:00.000Z"
@@ -27,7 +27,7 @@
       "description": "45L backpack with waterproof coating and ergonomic straps.",
       "price": 79.0,
       "stock": 60,
-      "imageURL": "https://images.example.com/products/backpack-trailforge.jpg",
+      "img_url": "https://images.example.com/products/backpack-trailforge.jpg",
       "category": "Outdoors",
       "createdBy": "admin_001",
       "updatedAt": "2025-01-12T14:00:00.000Z"
@@ -38,7 +38,7 @@
       "description": "750ml insulated bottle keeps drinks cold for 24h.",
       "price": 24.99,
       "stock": 200,
-      "imageURL": "https://images.example.com/products/bottle-pulse.jpg",
+      "img_url": "https://images.example.com/products/bottle-pulse.jpg",
       "category": "Outdoors",
       "createdBy": "admin_003",
       "updatedAt": "2025-01-13T09:45:00.000Z"
@@ -49,7 +49,7 @@
       "description": "Hot-swappable switches with RGB backlight.",
       "price": 99.99,
       "stock": 42,
-      "imageURL": "https://images.example.com/products/keyboard-luma.jpg",
+      "img_url": "https://images.example.com/products/keyboard-luma.jpg",
       "category": "Electronics",
       "createdBy": "admin_002",
       "updatedAt": "2025-01-14T12:20:00.000Z"
@@ -60,7 +60,7 @@
       "description": "Durable cotton tote bag for daily use.",
       "price": 15.0,
       "stock": 150,
-      "imageURL": "https://images.example.com/products/tote-canvas.jpg",
+      "img_url": "https://images.example.com/products/tote-canvas.jpg",
       "category": "Fashion",
       "createdBy": "admin_001",
       "updatedAt": "2025-01-15T16:05:00.000Z"
@@ -71,7 +71,7 @@
       "description": "Set of 4 ceramic mugs with matte finish.",
       "price": 28.0,
       "stock": 90,
-      "imageURL": "https://images.example.com/products/mug-breeze.jpg",
+      "img_url": "https://images.example.com/products/mug-breeze.jpg",
       "category": "Home",
       "createdBy": "admin_004",
       "updatedAt": "2025-01-16T09:10:00.000Z"
@@ -82,7 +82,7 @@
       "description": "Lightweight tracker with heart-rate and sleep monitoring.",
       "price": 59.99,
       "stock": 140,
-      "imageURL": "https://images.example.com/products/tracker-nova.jpg",
+      "img_url": "https://images.example.com/products/tracker-nova.jpg",
       "category": "Electronics",
       "createdBy": "admin_002",
       "updatedAt": "2025-01-16T12:45:00.000Z"
@@ -93,7 +93,7 @@
       "description": "Portable speaker with deep bass and 12h playtime.",
       "price": 45.5,
       "stock": 75,
-      "imageURL": "https://images.example.com/products/speaker-echo.jpg",
+      "img_url": "https://images.example.com/products/speaker-echo.jpg",
       "category": "Electronics",
       "createdBy": "admin_003",
       "updatedAt": "2025-01-17T08:00:00.000Z"
@@ -104,7 +104,7 @@
       "description": "Non-slip yoga mat with 6mm cushioning.",
       "price": 32.0,
       "stock": 110,
-      "imageURL": "https://images.example.com/products/yoga-sierra.jpg",
+      "img_url": "https://images.example.com/products/yoga-sierra.jpg",
       "category": "Fitness",
       "createdBy": "admin_001",
       "updatedAt": "2025-01-17T11:20:00.000Z"
@@ -115,7 +115,7 @@
       "description": "Soft linen blanket for sofa or bed.",
       "price": 64.0,
       "stock": 55,
-      "imageURL": "https://images.example.com/products/blanket-linen.jpg",
+      "img_url": "https://images.example.com/products/blanket-linen.jpg",
       "category": "Home",
       "createdBy": "admin_004",
       "updatedAt": "2025-01-18T15:05:00.000Z"
@@ -126,7 +126,7 @@
       "description": "Ceramic planter with drainage tray included.",
       "price": 21.75,
       "stock": 130,
-      "imageURL": "https://images.example.com/products/planter-terra.jpg",
+      "img_url": "https://images.example.com/products/planter-terra.jpg",
       "category": "Home",
       "createdBy": "admin_002",
       "updatedAt": "2025-01-18T18:30:00.000Z"
