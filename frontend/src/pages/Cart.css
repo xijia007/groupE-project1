@@ -27,9 +27,32 @@
     border-bottom: 1px solid #ccc;
 }
 
+.discount-part {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.discount-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.discount-input {
+    padding: 5px;
+    width: 100%;
+}
 .cart-bottom {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+}
+
+.numbers-between {
+    display: flex;
+    justify-content: space-between;
 }
 
 .continue-button {
