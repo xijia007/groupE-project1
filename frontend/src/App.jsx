@@ -39,9 +39,7 @@ function AppContent() {
   const handleUserAuthClick = () => {
     if (isLoggedIn) {
       logout();
-      if (location.pathname === "/cart") {
-        navigate("/", { replace: true });
-      }
+      navigate("/signin", { replace: true });
       return;
     }
     navigate("/signin", { state: { from: location } });
