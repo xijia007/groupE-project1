@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Footer from "./assets/components/Footer/index.jsx";
 import Header from "./assets/components/Header/index.jsx";
 import SignIn from "./assets/components/SignModal/SignIn.jsx";
