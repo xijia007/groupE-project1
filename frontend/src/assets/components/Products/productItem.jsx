@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Product.css";
 
-function ProductItem({ product }) {
+function ProductItem({ product, userRole }) {
   const [quantity, setQuantity] = useState(0);
 
   const handleAdd = () => {
@@ -48,11 +48,13 @@ function ProductItem({ product }) {
             </button>
           </div>
         )}
-        <Link to={`/products/${product.id}/edit`}>
-          <button className="product-card-edit" type="button">
-            Edit
-          </button>
-        </Link>
+        {userRole === "admin" && (
+          <Link to={`/products/${product.id}/edit`}>
+            <button className="product-card-edit" type="button">
+              Edit
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );

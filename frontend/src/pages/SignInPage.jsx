@@ -7,10 +7,8 @@ function SignInPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const fromPath = location.state?.from?.pathname || "/";
-
   const goBackAfterAuth = () => {
-    navigate(fromPath, { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
