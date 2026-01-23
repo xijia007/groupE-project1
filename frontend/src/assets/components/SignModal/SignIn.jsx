@@ -61,11 +61,7 @@ function SignIn({ onClose, onSignUp, onAuthSuccess }) {
         throw new Error(data?.message || "Email or password is incorrect");
       }
 
-      if (data?.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-      }
-
-      if (onAuthSuccess) onAuthSuccess();
+      if (onAuthSuccess) onAuthSuccess(data?.accessToken);
 
       if (onClose) onClose();
     } catch (err) {

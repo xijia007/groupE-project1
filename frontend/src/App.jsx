@@ -3,7 +3,15 @@ import Footer from "./assets/components/Footer/index.jsx";
 import Header from "./assets/components/Header/index.jsx";
 import SignIn from "./assets/components/SignModal/SignIn.jsx";
 import SignUp from "./assets/components/SignModal/SignUp.jsx";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate, } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import Home from "./pages/Home.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct.jsx";
@@ -15,12 +23,14 @@ import { useAuth } from "./context/AuthContext.jsx";
 import CreateProduct from "./pages/CreateProduct.jsx";
 import productsData from './assets/data/mock_products.json';
 
+
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
   const [products, setProducts] = useState(productsData);
+
 
   const handleHomeClick = () => {
     navigate("/");
@@ -37,6 +47,7 @@ function AppContent() {
     navigate("/signin", { state: { from: location } });
   };
 
+
   const handleCreateProduct = (newProduct) => {
     const productWithId = {
       ...newProduct,
@@ -48,6 +59,7 @@ function AppContent() {
   const handleUpdateProduct = (updatedProduct) => {
     setProducts((prev) => 
       prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
+    navigate("/signin", { state: { from: location } });
   };
 
   const handleCartClick = () => {

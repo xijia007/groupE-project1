@@ -65,11 +65,7 @@ function SignUp({ onClose, onSignIn, onAuthSuccess }) {
         );
       }
 
-      if (data?.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-      }
-
-      if (onAuthSuccess) onAuthSuccess();
+      if (onAuthSuccess) onAuthSuccess(data?.accessToken);
 
       if (onClose) onClose();
     } catch (err) {
