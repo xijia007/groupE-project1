@@ -87,17 +87,20 @@ function Home() {
                         Welcome, user email: {userInfo.email}, user role: {userInfo.role}
                     </div>
                 )}
-                <div className="add-product">
-                    <button 
-                        className="add-button" 
-                        onClick={handleCreateProduct}
-                    >
-                        Add Product
-                    </button>
-                </div>
+                {userInfo?.role === "admin" && (
+                    <div className="add-product">
+                        <button 
+                            className="add-button" 
+                            onClick={handleCreateProduct}
+                        >
+                            Add Product
+                        </button>
+                    </div>
+                )}
+                
             </div>
             <div className="product-list">
-                <ProductList products={products} />
+                <ProductList products={products} userRole={userInfo?.role} />
             </div>
       
             

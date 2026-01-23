@@ -4,12 +4,37 @@ import './ProductDetail.css';
 
 function ProductDetail() {
     const { id } = useParams();
-    // const product = products.find((p) => String(p.id) === id);
+    const [userInfo, setUserInfo] = useState(null);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let isMounted = true;
+        const token = localStorage.getItem("accessToken");
+
+        if (!token) {
+            if (isMounted) setUserInfo(null);
+            return () => {
+                isMounted = false;
+            };
+        }
+
+        const fetchMe = async () => {
+            try {
+                const res = await fetch('/api/auth/me', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await res.json();
+                if (isMounted) {
+                    setUserInfo(data.user || null);
+                }
+            } catch (err) {
+                if (isMounted) setUserInfo(null);
+            }
+        };
+        fetchMe();
 
         const fetchProduct = async () => {
         try {
@@ -38,7 +63,7 @@ function ProductDetail() {
     if (loading) {
         return <h1>Loading...</h1>
     }
-    
+
     if (!product) {
         return <h1>Product not found</h1>;
     }
@@ -67,9 +92,11 @@ function ProductDetail() {
             
                     <div className="product-button">
                         <button className='add-button'>Add To Cart</button>
-                        <Link to={`/products/${product._id || product.id}/edit`}>
-                            <button className="edit-button">Edit</button>
-                        </Link>
+                        {userInfo?.role === 'admin' && (
+                            <Link to={`/products/${product._id || product.id}/edit`}>
+                                <button className="edit-button">Edit</button>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>
