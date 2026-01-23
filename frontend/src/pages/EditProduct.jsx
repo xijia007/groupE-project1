@@ -9,6 +9,9 @@ function EditProduct() {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [deleteError, setDeleteError] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,35 +36,112 @@ function EditProduct() {
     };
   }, [id]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/products");
+        const result = await res.json();
+        const list = (result.data || [])
+          .map((item) => item.category)
+          .filter(Boolean);
+        setCategories(Array.from(new Set(list)));
+      } catch (err) {
+        setCategories([]);
+      }
+    };
+    fetchCategories();
+  }, []);
+
   if (loading) return <h1>Loading...</h1>;
 
   if (!product) {
     return <h1>Product not found</h1>
   }
 
-  return (
-  <ProductForm
-    initialValues={product}
-    submitLabel="Update Product"
-    onSubmit={async (data) => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        const res = await fetch(`/api/products/${id}/edit`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(data),
-        });
+  const handleDelete = () => {
+    setShowDeleteConfirm(true);
+  };
 
-        if (!res.ok) return;
-        navigate("/");
-      } catch (err) {
-        // 可选：错误处理
+  const handleDeleteConfirm = async () => {
+    setDeleteError("");
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`/api/products/${id}/delete`, {
+        method: "DELETE",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (!res.ok) {
+        setDeleteError("Failed to delete product.");
+        return;
       }
-    }}
-  />
+
+      navigate("/");
+    } catch (err) {
+      setDeleteError("Failed to delete product.");
+    }
+  };
+
+  return (
+  <>
+    <ProductForm
+      initialValues={product}
+      submitLabel="Update Product"
+      categories={categories}
+      onSubmit={async (data) => {
+        try {
+          const token = localStorage.getItem("accessToken");
+          const res = await fetch(`/api/products/${id}/edit`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!res.ok) return;
+          navigate("/");
+        } catch (err) {
+          // optional: error handling
+        }
+      }}
+    />
+    <div className="edit-product-actions">
+      <button type="button" className="delete-button" onClick={handleDelete}>
+        Delete Product
+      </button>
+      {deleteError && <div className="delete-error">{deleteError}</div>}
+    </div>
+    {showDeleteConfirm && (
+      <div className="edit-delete-overlay">
+        <div className="edit-delete-modal">
+          <div className="edit-delete-title">
+            Are you sure to delete this product?
+          </div>
+          <div className="edit-delete-actions">
+            <button
+              type="button"
+              className="delete-confirm"
+              onClick={handleDeleteConfirm}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              className="delete-cancel"
+              onClick={() => setShowDeleteConfirm(false)}
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
   );
 }
 

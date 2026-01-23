@@ -68,6 +68,16 @@ function ProductDetail() {
         return <h1>Product not found</h1>;
     }
 
+    const stockValue = Number(product.stock ?? 0);
+    const isAdmin = userInfo?.role === "admin";
+    let stockText = "";
+    if (isAdmin) {
+        stockText = stockValue > 0 ? `Stock: ${stockValue}` : "Stock: Out of Stock";
+    } else {
+        if (stockValue <= 0) stockText = "Stock: Out of Stock";
+        else if (stockValue < 10) stockText = "Low Stock";
+    }
+
     return (
         <div className="product-detail">
             <div className="product-detail-header">
@@ -83,10 +93,13 @@ function ProductDetail() {
                 </div>
                
                 <div className="product-body">
+                    {product.category && (
+                        <div className="product-category">{product.category}</div>
+                    )}
                     <div className="product-name">{product.name}</div>
                     <div className="product-price-stock">
                         <div className="product-price">${product.price}</div>
-                        <div className="stock-status">Stock status</div>
+                        {stockText && <div className="stock-status">{stockText}</div>}
                     </div>
                     <div className="product-description">{product.description}</div>
             

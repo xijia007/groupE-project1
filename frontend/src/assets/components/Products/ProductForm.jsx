@@ -7,10 +7,11 @@ const defaultValues = {
     description: "",
     img_url: "",
     stock: "",
-    category: ""
+    category: "",
+    customCategory: ""
 };
 
-function ProductForm( { initialValues, onSubmit, submitLabel }) {
+function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
     // State to manage form input values
     const [formData, setFormData] = useState(defaultValues);
     // State to store validation error messages
@@ -70,11 +71,14 @@ function ProductForm( { initialValues, onSubmit, submitLabel }) {
         e.preventDefault(); // Prevent page refresh
         if (validate()) {
             // Normalize optional numeric fields for API validation.
+            const customCategory = formData.customCategory.trim();
             const cleanedData = {
                 ...formData,
+                category: customCategory || formData.category,
                 stock: formData.stock === "" ? undefined : Number(formData.stock),
                 price: formData.price === "" ? undefined : Number(formData.price),
             };
+            delete cleanedData.customCategory;
             // Execute the parent-provided submission logic if valid
             onSubmit(cleanedData);
         }
@@ -113,11 +117,38 @@ function ProductForm( { initialValues, onSubmit, submitLabel }) {
                     </div>
                     <div className="form-group">
                         <label>Category</label>
-                        <input 
+                        <select
                             value={formData.category}
                             onChange={handleChange("category")}
-                        />
+                        >
+                            <option value="">Select category</option>
+                            {(categories || []).map((category) => (
+                                <option key={category} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
                     </div>
+                </div>
+
+                <div className="form-group">
+                    <label>Custom Category</label>
+                    <input
+                        value={formData.customCategory}
+                        onChange={handleChange("customCategory")}
+                        placeholder="Type a new category"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>In Stock Quantity</label>
+                    <input
+                        className={errors.stock ? "error-input" : ""}
+                        type="number"
+                        value={formData.stock}
+                        onChange={handleChange("stock")}
+                    />
+                    {errors.stock && <span className="error-text">{errors.stock}</span>}
                 </div>
 
                 <div className="form-group">
