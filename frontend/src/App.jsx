@@ -4,40 +4,38 @@ import Footer from "./assets/components/Footer/index.jsx";
 import Header from "./assets/components/Header/index.jsx";
 import SignIn from "./assets/components/SignModal/SignIn.jsx";
 import SignUp from "./assets/components/SignModal/SignUp.jsx";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate, } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
+import SignInPage from "./pages/SignInPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import { useAuth } from "./context/AuthContext.jsx";
 import CreateProduct from "./pages/CreateProduct.jsx";
 import productsData from './assets/data/mock_products.json';
 
 function AppContent() {
-  const [authModal, setAuthModal] = useState(null);
-  const [authTick, setAuthTick] = useState(0);
+  const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
-  const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
   const [products, setProducts] = useState(productsData);
 
   const handleHomeClick = () => {
-    setAuthModal(null);
     navigate("/");
   };
 
   const handleUserAuthClick = () => {
     if (isLoggedIn) {
-      localStorage.removeItem("accessToken");
-      setAuthModal(null);
-      setAuthTick((t) => t + 1);
+      logout();
       if (location.pathname === "/cart") {
         navigate("/", { replace: true });
       }
       return;
     }
-    setAuthModal("signin");
+    navigate("/signin", { state: { from: location } });
   };
 
   const handleCreateProduct = (newProduct) => {
@@ -54,20 +52,14 @@ function AppContent() {
   };
 
   const handleCartClick = () => {
-    if (!isLoggedIn) {
-      setAuthModal("signin");
-      return;
-    }
     if (location.pathname === "/cart") return;
     navigate("/cart", { state: { backgroundLocation: location } });
   };
 
-  useEffect(() => {
-    if (location.pathname === "/cart" && !isLoggedIn) {
-      queueMicrotask(() => setAuthModal("signin"));
-      navigate("/", { replace: true });
-    }
-  }, [location.pathname, isLoggedIn, navigate, authTick]);
+  const requireAuth = (element) => {
+    if (isLoggedIn) return element;
+    return <Navigate to="/signin" replace state={{ from: location }} />;
+  };
 
   return (
     <>
@@ -78,24 +70,13 @@ function AppContent() {
         isLoggedIn={isLoggedIn}
       />
       <main className="mainContainer">
-        {authModal ? (
-          authModal === "signup" ? (
-            <SignUp
-              onClose={() => setAuthModal(null)}
-              onSignIn={() => setAuthModal("signin")}
-              onAuthSuccess={() => setAuthTick((t) => t + 1)}
-            />
-          ) : (
-            <SignIn
-              onClose={() => setAuthModal(null)}
-              onSignUp={() => setAuthModal("signup")}
-              onAuthSuccess={() => setAuthTick((t) => t + 1)}
-            />
-          )
-        ) : (
           <>
             <Routes location={backgroundLocation || location}>
               <Route path="/" element={<Home products={products} />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/SignIn" element={<Navigate to="/signin" replace />} />
+              <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
               <Route path="/products/:id" element={<ProductDetail products={products} />} />
               <Route 
                 path="/createProduct" 
@@ -116,7 +97,6 @@ function AppContent() {
               </Routes>
             )}
           </>
-        )}
       </main>
       <Footer />
     </>
