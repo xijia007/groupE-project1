@@ -8,6 +8,7 @@ function SignUp({ onClose, onSignIn, onAuthSuccess }) {
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [role, setRole] = useState("regular");
 
   // Email validation function
   const isValidEmail = (email) => {
@@ -53,7 +54,7 @@ function SignUp({ onClose, onSignIn, onAuthSuccess }) {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, role }),
       });
 
       const data = await response.json();
@@ -118,6 +119,13 @@ function SignUp({ onClose, onSignIn, onAuthSuccess }) {
               <span className="error-message">Invalid password input!</span>
             )}
           </div>
+          <select required onChange={(e) => setRole(e.target.value)}>
+            <option value="" disabled selected hidden>
+              Please select a role
+            </option>
+            <option value="regular">Regular</option>
+            <option value="admin">Admin</option>
+          </select>
 
           <button type="submit" className="signin-button">
             {isSubmitting ? "Signing Up..." : "Sign Up"}
