@@ -1,7 +1,7 @@
 import db from "../routers.js/database.js";
 import { ObjectId } from "mongodb";
 import buildErrorResponse from "../utils/errorResponse.js";
-import { z } from "zod";
+import { success, z } from "zod";
 
 const newProductSchema = z.object({
   name: z.string().min(2).max(100),
@@ -137,6 +137,52 @@ export const EditProduct = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Product updated successfully",
+    });
+  } catch (error) {
+    return res.status(500).json(
+      buildErrorResponse({
+        code: "INTERNAL_SERVER_ERROR",
+        message: error.message,
+      }),
+    );
+  }
+};
+
+// get products list
+export const GetProducts = async (req, res) => {
+  try {
+    const products = await db.collection("Products").find({}).toArray();
+    return res.status(200).json({
+      success: true,
+      data: products,
+    })
+  } catch (error) {
+    return res.status(500).json(
+      buildErrorResponse({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message,
+      }),
+    );
+  }
+};
+
+// get product by Id
+export const GetProductById = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await db.collection("Products").findOne({_id: new ObjectId(productId)});
+
+    if (!product) {
+      return res.status(404).json(
+        buildErrorResponse({
+          code: "PRODUCT_NOT_FOUND",
+          message: "Product not Found",
+        }),
+      );
+    }
+    return res.status(200).json({
+      success: true,
+      data: product,
     });
   } catch (error) {
     return res.status(500).json(

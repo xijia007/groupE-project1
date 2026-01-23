@@ -7,10 +7,10 @@ const defaultValues = {
     description: "",
     img_url: "",
     stock: "",
-    categoty: ""
+    category: ""
 };
 
-function ProductFrom( { initialValues, onSubmit, submitLabel }) {
+function ProductForm( { initialValues, onSubmit, submitLabel }) {
     // State to manage form input values
     const [formData, setFormData] = useState(defaultValues);
     // State to store validation error messages
@@ -60,7 +60,7 @@ function ProductFrom( { initialValues, onSubmit, submitLabel }) {
     const handleChange = (field) => (e) => {
         setFormData((prev) => ({ ...prev, [field]: e.target.value }));
         // clear the specific error message as the user starts typing
-        if (errors(field)) {
+        if (errors[field]) {
             setErrors((prev) => ({ ...prev, [field]: null}));
         }
     };
@@ -69,9 +69,17 @@ function ProductFrom( { initialValues, onSubmit, submitLabel }) {
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent page refresh
         if (validate()) {
+            // Normalize optional numeric fields for API validation.
+            const cleanedData = {
+                ...formData,
+                stock: formData.stock === "" ? undefined : Number(formData.stock),
+                price: formData.price === "" ? undefined : Number(formData.price),
+            };
             // Execute the parent-provided submission logic if valid
-            onSubmit(formData);
+            onSubmit(cleanedData);
         }
+        console.log("form submit", formData);
+        
     };
 
     return (
@@ -106,7 +114,7 @@ function ProductFrom( { initialValues, onSubmit, submitLabel }) {
                     <div className="form-group">
                         <label>Category</label>
                         <input 
-                            value={formData.categoty}
+                            value={formData.category}
                             onChange={handleChange("category")}
                         />
                     </div>
@@ -119,14 +127,14 @@ function ProductFrom( { initialValues, onSubmit, submitLabel }) {
                         value={formData.img_url}
                         onChange={handleChange("img_url")}
                     />
-                    {errors.img_url && <span className="error-text">{formData.img_url}</span>}
+                    {errors.img_url && <span className="error-text">{errors.img_url}</span>}
                 </div>
 
                 <div className="form-group">
                     <label>Description</label>
                     <input 
-                        value={formData.Description}
-                        onChange={handleChange("Description")}
+                        value={formData.description}
+                        onChange={handleChange("description")}
                         row='4'
                     />
                 </div>
@@ -137,4 +145,4 @@ function ProductFrom( { initialValues, onSubmit, submitLabel }) {
     )
 };
 
-export default ProductFrom;
+export default ProductForm;
