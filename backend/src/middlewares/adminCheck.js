@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
-import buildErrorResponse from "../utils/errorResponse.js";
+import errorHandler from "../utils/errorResponse.js";
 import config from "../config.js";
 
-export const requireAuth = (req, res, next) => {
+export const adminCheck = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || "";
     const [schema, token] = authHeader.split(" ");
     if (schema !== "Bearer" || !token) {
       return res.status(401).json(
-        buildErrorResponse({
+        errorHandler({
           code: "UNAUTHORIZED",
           message: "No token provided",
         }),
@@ -19,10 +19,18 @@ export const requireAuth = (req, res, next) => {
       userId: payload.userId,
       role: payload.role,
     };
+    if (req.user.role !== "admin") {
+      return res.status(403).json(
+        errorHandler({
+          code: "FORBIDDEN",
+          message: "Access denied",
+        }),
+      );
+    }
     return next();
   } catch (err) {
     return res.status(401).json(
-      buildErrorResponse({
+      errorHandler({
         code: "UNAUTHORIZED",
         message: "Invalid or expired token",
       }),
