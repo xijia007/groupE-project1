@@ -1,4 +1,4 @@
-import ProductList from "../assets/components/Products/productList";
+import ProductList from "../assets/components/Products/ProductList";
 import products from "../assets/data/mock_products.json";
 import './Home.css';
 import { useNavigate } from "react-router-dom"

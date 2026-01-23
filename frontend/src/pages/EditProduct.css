@@ -20,11 +20,16 @@
     margin-right: 20px;
 }
 
-.edit-stock-label, .edit-description-label {
+.edit-img-label, .edit-name-label, .edit-price-label, .edit-stock-label, .edit-description-label {
     min-width: 150px;
 }
-.edit-stock-detail , .edit-description-detail {
+
+.edit-img-detail, .edit-name-detail, .edit-price-detail, .edit-stock-detail , .edit-description-detail {
     text-align: left;
     margin-left: 30px;
 } 
 
+.edit-img-detail {
+    width: 200px;
+    height: 200px;
+}

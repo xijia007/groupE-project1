@@ -1,4 +1,4 @@
-import ProductItem from "./productItem";
+import ProductItem from "./ProductItem";
 import "./Product.css";
 
 function ProductList({ products }) {

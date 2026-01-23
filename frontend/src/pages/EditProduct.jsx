@@ -22,18 +22,18 @@ function EditProduct() {
       </div>
       <div className="edit-product-frame">
         <div className="edit-product-img"> 
-          <label className="edit-stock-label"> Product image: </label>
-          <div className="edit-stock-detail">
+          <label className="edit-img-label"> Product image: </label>
+          <div className="edit-img-detail">
             <img src={product.img_url} alt={product.name} />
           </div>
         </div>
         <div className="edit-product-name">
-          <label className="edit-stock-label"> Product name: </label>
-          <div className="edit-stock-detail">{product.name}</div>
+          <label className="edit-name-label"> Product name: </label>
+          <div className="edit-name-detail">{product.name}</div>
         </div>
         <div className="edit-product-price">
-          <label className="edit-stock-label"> Product price: </label>
-          <div className="edit-stock-detail">${product.price}</div>
+          <label className="edit-price-label"> Product price: </label>
+          <div className="edit-price-detail">${product.price}</div>
         </div>
         <div className="edit-product-stock-status">
           <label className="edit-stock-label"> Product stock: </label>
