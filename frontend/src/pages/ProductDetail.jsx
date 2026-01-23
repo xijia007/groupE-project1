@@ -34,7 +34,9 @@ function ProductDetail() {
             
                     <div className="product-button">
                         <button className='add-button'>Add To Cart</button>
-                        <button className="edit-button">Edit</button>
+                        <Link to={`/products/${product.id}/edit`}>
+                            <button className="edit-button">Edit</button>
+                        </Link>
                     </div>
                 </div>
             </div>
