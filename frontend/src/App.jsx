@@ -21,7 +21,7 @@ import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import CreateProduct from "./pages/CreateProduct.jsx";
-import productsData from './assets/data/mock_products.json';
+// import productsData from './assets/data/mock_products.json';
 
 
 function AppContent() {
@@ -29,7 +29,7 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
-  const [products, setProducts] = useState(productsData);
+  // const [products, setProducts] = useState(productsData);
 
 
   const handleHomeClick = () => {
@@ -48,19 +48,19 @@ function AppContent() {
   };
 
 
-  const handleCreateProduct = (newProduct) => {
-    const productWithId = {
-      ...newProduct,
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-    };
-    setProducts((prev) => [productWithId, ...prev]);
-  };
+  // const handleCreateProduct = (newProduct) => {
+  //   const productWithId = {
+  //     ...newProduct,
+  //     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+  //   };
+  //   setProducts((prev) => [productWithId, ...prev]);
+  // };
 
-  const handleUpdateProduct = (updatedProduct) => {
-    setProducts((prev) => 
-      prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
-    navigate("/signin", { state: { from: location } });
-  };
+  // const handleUpdateProduct = (updatedProduct) => {
+  //   setProducts((prev) => 
+  //     prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
+  //   navigate("/signin", { state: { from: location } });
+  // };
 
   const handleCartClick = () => {
     if (location.pathname === "/cart") return;
@@ -83,19 +83,19 @@ function AppContent() {
       <main className="mainContainer">
           <>
             <Routes location={backgroundLocation || location}>
-              <Route path="/" element={<Home products={products} />} />
+              <Route path="/" element={<Home />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/SignIn" element={<Navigate to="/signin" replace />} />
               <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
-              <Route path="/products/:id" element={<ProductDetail products={products} />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
               <Route 
                 path="/createProduct" 
-                element={<CreateProduct products={products} onCreateProduct={handleCreateProduct}/>} 
+                element={<CreateProduct />} 
               />
               <Route 
                 path="/products/:id/edit" 
-                element={<EditProduct products={products} onUpdateProduct={handleUpdateProduct} />} 
+                element={<EditProduct />} 
               />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
