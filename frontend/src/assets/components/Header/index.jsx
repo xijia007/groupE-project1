@@ -1,8 +1,16 @@
 import "./Header.css";
 import { FaRegUser, FaSearch } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
+// import { Link, useLocation, useNavigate } from "react-router-dom";
 
-function Header({ onSignInClick, onHomeClick }) {
+function Header({ onSignInClick, onHomeClick, onCartClick }) {
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  
+  // const handleCartClick = () => {
+  //   navigate('/cart', { state: { backgroundLocation: location }});
+  // };
+
   return (
     <header className="site-header">
       <div className="site-header-brand" onClick={onHomeClick}>
@@ -19,8 +27,11 @@ function Header({ onSignInClick, onHomeClick }) {
           <FaRegUser className="site-header-image" />
           <span className="site-header-login">Sign In</span>
         </div>
-        <div className="site-header-cart">
-          <MdOutlineShoppingCart className="cart-icon" />
+        <div className="site-header-cart" onClick={onCartClick}>
+          <MdOutlineShoppingCart 
+            className="cart-icon"
+           
+          />
           <span className="cart-price">$0.00</span>
         </div>
       </div>
