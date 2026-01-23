@@ -3,10 +3,10 @@ import { FaRegUser, FaSearch } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 // import { Link, useLocation, useNavigate } from "react-router-dom";
 
-function Header({ onSignInClick, onHomeClick, onCartClick }) {
+function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
   // const navigate = useNavigate();
   // const location = useLocation();
-  
+
   // const handleCartClick = () => {
   //   navigate('/cart', { state: { backgroundLocation: location }});
   // };
@@ -25,15 +25,16 @@ function Header({ onSignInClick, onHomeClick, onCartClick }) {
       <div className="site-header-right">
         <div className="site-header-userAuth" onClick={onSignInClick}>
           <FaRegUser className="site-header-image" />
-          <span className="site-header-login">Sign In</span>
+          <span className="site-header-login">
+            {isLoggedIn ? "Logout" : "Sign In"}
+          </span>
         </div>
-        <div className="site-header-cart" onClick={onCartClick}>
-          <MdOutlineShoppingCart 
-            className="cart-icon"
-           
-          />
-          <span className="cart-price">$0.00</span>
-        </div>
+        {isLoggedIn && (
+          <div className="site-header-cart" onClick={onCartClick}>
+            <MdOutlineShoppingCart className="cart-icon" />
+            <span className="cart-price">$0.00</span>
+          </div>
+        )}
       </div>
     </header>
   );

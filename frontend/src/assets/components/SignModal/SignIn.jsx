@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./SignIn.css";
 
-function SignIn({ onClose }) {
+function SignIn({ onClose, onSignUp, onAuthSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -64,6 +64,8 @@ function SignIn({ onClose }) {
       if (data?.accessToken) {
         localStorage.setItem("accessToken", data.accessToken);
       }
+
+      if (onAuthSuccess) onAuthSuccess();
 
       if (onClose) onClose();
     } catch (err) {
@@ -132,7 +134,13 @@ function SignIn({ onClose }) {
         <div className="signin-footer">
           <span>
             Don't have an account?{" "}
-            <a href="#" onClick={(e) => e.preventDefault()}>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onSignUp) onSignUp();
+              }}
+            >
               Sign up
             </a>
           </span>
