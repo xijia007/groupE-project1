@@ -1,0 +1,30 @@
+.edit-product-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.edit-product-frame {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.edit-product-img, .edit-product-name, .edit-product-price, .edit-product-stock-status, .edit-product-description {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.edit-stock-label, .edit-description-label {
+    min-width: 150px;
+}
+.edit-stock-detail , .edit-description-detail {
+    text-align: left;
+    margin-left: 30px;
+} 
+

@@ -1,53 +1,34 @@
-# =========================
 # Dependencies
-# =========================
 node_modules/
 
-# =========================
-# Environment / secrets
-# =========================
+# Environment files
 .env
 .env.*
 !.env.example
 
-# =========================
+# Build outputs
+dist/
+build/
+coverage/
+
+# Tool caches
+.vite/
+.parcel-cache/
+.turbo/
+.eslintcache
+
 # Logs
-# =========================
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-# =========================
-# Build outputs / caches
-# =========================
-dist/
-build/
-coverage/
-.nyc_output/
-
-# Vite
-.vite/
-
-# TypeScript
-*.tsbuildinfo
-
-# =========================
 # OS / Editor
-# =========================
 .DS_Store
-Thumbs.db
-
 .idea/
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/launch.json
-!.vscode/tasks.json
-
+.vscode/
 *.suo
 *.ntvs*
 *.njsproj

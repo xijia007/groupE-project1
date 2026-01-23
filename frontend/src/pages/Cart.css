@@ -1,0 +1,74 @@
+.cart-popup {
+  position: fixed;
+  top: 5px;
+  right: 2px;
+  width: min(320px, 90vw);
+  border: 1px solid white;
+  background: white;
+}
+
+.cart-popup h1 {
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(84, 84, 224);
+} 
+
+.cart-body, .cart-bottom {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.cart-body {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 10px;
+}
+
+.discount-part {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.discount-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.discount-input {
+    padding: 5px;
+    width: 100%;
+}
+
+.apply-button {
+    background-color: rgb(84, 84, 224);
+    color: white;
+    /* font-size: 12px;
+    text-align: center; */
+}
+.cart-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 10px;
+}
+
+.numbers-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.continue-button {
+    background-color: rgb(84, 84, 224);
+    border-radius: 3px;
+    color: white;
+    width: 100%;
+    padding: 8px;
+}
