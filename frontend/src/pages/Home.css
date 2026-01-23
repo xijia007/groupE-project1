@@ -1,0 +1,25 @@
+.product-main {
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.product-header {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    justify-content: space-between;
+
+}
+
+.product-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.add-product {
+    margin-right: 20px;
+}
+
+.product-list {
+    width: 100%;
+}
