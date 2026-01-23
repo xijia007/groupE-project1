@@ -4,8 +4,8 @@ import './EditProduct.css';
 
 
 function EditProduct() {
-  const { id } = useParams();
-  const product = products.find((p)=>String(p.id) === id);
+  const { id } = useParams(); // use useParams to get the id
+  const product = products.find((p)=>String(p.id) === id); // find the product through id
 
   if (!product) {
     return <h1>Product not found</h1>
