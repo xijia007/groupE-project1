@@ -3,7 +3,7 @@ import products from "../assets/data/mock_products.json";
 import './Home.css';
 import { useNavigate } from "react-router-dom"
 
-function Home() {
+function Home( { products }) {
     const navigate = useNavigate();
     const handleCreateProduct = () => {
         navigate('/createProduct');

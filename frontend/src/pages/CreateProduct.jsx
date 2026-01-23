@@ -1,11 +1,23 @@
-function CreateProduct() {
+import { useNavigate } from "react-router-dom";
+import ProductFrom from "../assets/components/Products/ProductForm";
+
+function CreateProduct({onCreateProduct}) {
+    const navigate = useNavigate();
+
+    const handleSubmit = (data) => {
+        onCreateProduct(data);
+        navigate("/");
+    };
+
     return (
-        <>
-            <h1>Create Product Page</h1>
-            {/* <Link className="back-to-home" to='/'>
-                <button>Back To Home Page</button>
-            </Link> */}
-        </>
+        <div className="create-product">
+            <h1>Create Product</h1>
+            <ProductFrom 
+                initialValues={null}
+                submitLabel="Create Product"
+                onSubmit={handleSubmit}
+            />
+        </div>
     )
 }
 

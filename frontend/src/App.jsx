@@ -11,6 +11,7 @@ import EditProduct from "./pages/EditProduct.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import CreateProduct from "./pages/CreateProduct.jsx";
+import productsData from './assets/data/mock_products.json';
 
 function AppContent() {
   const [authModal, setAuthModal] = useState(null);
@@ -19,8 +20,8 @@ function AppContent() {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
   const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
+  const [products, setProducts] = useState(productsData);
 
-  console.log("path:", location.pathname, "bg:", backgroundLocation?.pathname);
   const handleHomeClick = () => {
     setAuthModal(null);
     navigate("/");
@@ -36,8 +37,20 @@ function AppContent() {
       }
       return;
     }
-
     setAuthModal("signin");
+  };
+
+  const handleCreateProduct = (newProduct) => {
+    const productWithId = {
+      ...newProduct,
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    };
+    setProducts((prev) => [productWithId, ...prev]);
+  };
+
+  const handleUpdateProduct = (updatedProduct) => {
+    setProducts((prev) => 
+      prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
   };
 
   const handleCartClick = () => {
@@ -82,12 +95,19 @@ function AppContent() {
         ) : (
           <>
             <Routes location={backgroundLocation || location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/products/:id/edit" element={<EditProduct />} />
+              <Route path="/" element={<Home products={products} />} />
+              <Route path="/products/:id" element={<ProductDetail products={products} />} />
+              <Route 
+                path="/createProduct" 
+                element={<CreateProduct products={products} onCreateProduct={handleCreateProduct}/>} 
+              />
+              <Route 
+                path="/products/:id/edit" 
+                element={<EditProduct products={products} onUpdateProduct={handleUpdateProduct} />} 
+              />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/createProduct" element={<CreateProduct />} />
+          
             </Routes>
 
             {backgroundLocation && (
