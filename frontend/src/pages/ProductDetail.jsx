@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import products from '../assets/data/mock_products.json';
 import './ProductDetail.css';
 
-function ProductDetail() {
+function ProductDetail( { products }) {
     const { id } = useParams();
     const product = products.find((p) => String(p.id) === id);
 
