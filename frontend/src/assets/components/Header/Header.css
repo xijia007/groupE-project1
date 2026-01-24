@@ -133,9 +133,33 @@
   opacity: 0.7;
 }
 
+.cart-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
 .cart-icon {
   font-size: 22px;
   color: white;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #e74c3c;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cart-price {
@@ -144,6 +168,7 @@
   color: white;
   white-space: nowrap;
 }
+
 
 @media (max-width: 640px) {
   .site-header {

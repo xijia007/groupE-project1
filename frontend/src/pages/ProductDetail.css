@@ -49,3 +49,39 @@
     background-color: rgb(84, 84, 224);
     border-radius: 5px;
 }
+
+.product-qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+.product-qty-controls .qty-btn {
+    background-color: rgb(84, 84, 224);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.product-qty-controls .qty-btn:hover {
+    background-color: rgb(64, 64, 204);
+}
+
+.product-qty-controls .qty-value {
+    min-width: 40px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}

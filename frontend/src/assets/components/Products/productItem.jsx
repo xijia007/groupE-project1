@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, updateQuantity, selectItemQuantity } from "../../../store/cartSlice";
 import "./Product.css";
 
 function ProductItem({ product, userRole }) {
-  const [quantity, setQuantity] = useState(0);
+  const dispatch = useDispatch();
+  const cartQuantity = useSelector(selectItemQuantity(product.id));
+  const [quantity, setQuantity] = useState(cartQuantity);
+
+  // Sync local state with cart state
+  useEffect(() => {
+    setQuantity(cartQuantity);
+  }, [cartQuantity]);
 
   const handleAdd = () => {
-    setQuantity(1);
+    dispatch(addToCart({ product, quantity: 1 }));
   };
 
   const handleIncrement = () => {
-    setQuantity((prev) => prev + 1);
+    const newQuantity = quantity + 1;
+    dispatch(updateQuantity({ productId: product.id, quantity: newQuantity }));
   };
 
   const handleDecrement = () => {
-    setQuantity((prev) => Math.max(0, prev - 1));
+    const newQuantity = Math.max(0, quantity - 1);
+    dispatch(updateQuantity({ productId: product.id, quantity: newQuantity }));
   };
 
   return (

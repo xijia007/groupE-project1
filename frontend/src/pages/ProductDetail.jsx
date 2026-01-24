@@ -1,5 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, updateQuantity, selectItemQuantity } from "../store/cartSlice";
 import './ProductDetail.css';
 
 function ProductDetail() {
@@ -8,6 +10,8 @@ function ProductDetail() {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem("accessToken");
+    const dispatch = useDispatch();
+    const cartQuantity = useSelector(selectItemQuantity(id));
 
     useEffect(() => {
         let isMounted = true;
@@ -69,6 +73,30 @@ function ProductDetail() {
         };
     }, [id]);
 
+    const handleAddToCart = () => {
+        if (product) {
+            dispatch(addToCart({ product, quantity: 1 }));
+        }
+    };
+
+    const handleIncrement = () => {
+        if (product) {
+            dispatch(updateQuantity({ 
+                productId: product._id || product.id, 
+                quantity: cartQuantity + 1 
+            }));
+        }
+    };
+
+    const handleDecrement = () => {
+        if (product && cartQuantity > 0) {
+            dispatch(updateQuantity({ 
+                productId: product._id || product.id, 
+                quantity: cartQuantity - 1 
+            }));
+        }
+    };
+
     if (loading) {
         return <h1>Loading...</h1>
     }
@@ -114,7 +142,17 @@ function ProductDetail() {
                     <div className="product-description">{product.description}</div>
             
                     <div className="product-button">
-                        <button className='add-button'>Add To Cart</button>
+                        {cartQuantity === 0 ? (
+                            <button className='add-button' onClick={handleAddToCart}>
+                                Add To Cart
+                            </button>
+                        ) : (
+                            <div className="product-qty-controls">
+                                <button className="qty-btn" onClick={handleDecrement}>-</button>
+                                <span className="qty-value">{cartQuantity}</span>
+                                <button className="qty-btn" onClick={handleIncrement}>+</button>
+                            </div>
+                        )}
                         {userInfo?.role === 'admin' && (
                             <Link to={`/products/${product._id || product.id}/edit`}>
                                 <button className="edit-button">Edit</button>

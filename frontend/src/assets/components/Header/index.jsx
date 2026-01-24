@@ -1,9 +1,14 @@
 import "./Header.css";
 import { FaRegUser, FaSearch } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { selectCartTotalItems, selectCartTotalPrice } from "../../../store/cartSlice";
 // import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
+  const totalItems = useSelector(selectCartTotalItems);
+  const totalPrice = useSelector(selectCartTotalPrice);
+  
   // const navigate = useNavigate();
   // const location = useLocation();
 
@@ -29,12 +34,17 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
             {isLoggedIn ? "Logout" : "Sign In"}
           </span>
         </div>
-        {isLoggedIn && (
-          <div className="site-header-cart" onClick={onCartClick}>
+
+        <div className="site-header-cart" onClick={onCartClick}>
+          <div className="cart-icon-wrapper">
             <MdOutlineShoppingCart className="cart-icon" />
-            <span className="cart-price">$0.00</span>
+            {totalItems > 0 && (
+              <span className="cart-badge">{totalItems}</span>
+            )}
           </div>
-        )}
+          <span className="cart-price">${totalPrice.toFixed(2)}</span>
+        </div>
+ 
       </div>
     </header>
   );
