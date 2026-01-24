@@ -7,12 +7,40 @@ function ProductDetail() {
     const [userInfo, setUserInfo] = useState(null);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const token = localStorage.getItem("accessToken");
 
     useEffect(() => {
         let isMounted = true;
-        const token = localStorage.getItem("accessToken");
 
-        if (!token) {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                const data = await res.json();
+                if (isMounted) {
+                    setProduct(data.data || null);
+                }
+            } catch (err) {
+                if (isMounted) {
+                    setProduct(null);
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchProduct();
+        return () => {
+            isMounted = false;
+        };
+    }, [id]);
+
+    useEffect(() => {
+        let isMounted = true;
+        const authToken = localStorage.getItem("accessToken");
+
+        if (!authToken) {
             if (isMounted) setUserInfo(null);
             return () => {
                 isMounted = false;
@@ -21,9 +49,9 @@ function ProductDetail() {
 
         const fetchMe = async () => {
             try {
-                const res = await fetch('/api/auth/me', {
+                const res = await fetch("/api/auth/me", {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${authToken}`,
                     },
                 });
                 const data = await res.json();
@@ -34,29 +62,10 @@ function ProductDetail() {
                 if (isMounted) setUserInfo(null);
             }
         };
+
         fetchMe();
-
-        const fetchProduct = async () => {
-        try {
-            const res = await fetch(`/api/products/${id}`);
-            const data = await res.json();
-            if (isMounted) {
-            setProduct(data.data || null);
-            }
-        } catch (err) {
-            if (isMounted) {
-            setProduct(null);
-            }
-        } finally {
-            if (isMounted) {
-            setLoading(false);
-            }
-        }
-        };
-
-        fetchProduct();
         return () => {
-        isMounted = false;
+            isMounted = false;
         };
     }, [id]);
 
@@ -77,6 +86,7 @@ function ProductDetail() {
         if (stockValue <= 0) stockText = "Stock: Out of Stock";
         else if (stockValue < 10) stockText = "Low Stock";
     }
+
 
     return (
         <div className="product-detail">
