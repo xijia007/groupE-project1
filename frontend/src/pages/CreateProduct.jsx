@@ -6,6 +6,8 @@ function CreateProduct() {
     console.log("CreateProduct rendered");
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
+    const [authLoading, setAuthLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     // const handleSubmit = (data) => {
     //     onCreateProduct(data);
@@ -43,6 +45,44 @@ function CreateProduct() {
     };
 
     useEffect(() => {
+        let isMounted = true;
+        const token = localStorage.getItem("accessToken");
+
+        if (!token) {
+            navigate("/signin", { replace: true });
+            return;
+        }
+
+        const fetchMe = async () => {
+            try {
+                const res = await fetch("/api/auth/me", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await res.json();
+                const role = data?.user?.role;
+                if (isMounted) {
+                    setIsAdmin(role === "admin");
+                    setAuthLoading(false);
+                }
+                if (role !== "admin") {
+                    navigate("/", { replace: true });
+                }
+            } catch (err) {
+                if (isMounted) setAuthLoading(false);
+                navigate("/signin", { replace: true });
+            }
+        };
+
+        fetchMe();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [navigate]);
+
+    useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const res = await fetch("/api/products");
@@ -57,6 +97,14 @@ function CreateProduct() {
         };
         fetchCategories();
     }, []);
+
+    if (authLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!isAdmin) {
+        return null;
+    }
 
     return (
         <div className="create-product">
