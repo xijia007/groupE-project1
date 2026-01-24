@@ -9,7 +9,6 @@ function Home() {
     const navigate = useNavigate();
     const location = useLocation();
     const [userInfo, setUserInfo] = useState(null);
-    const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
         let isMounted = true;
@@ -18,7 +17,6 @@ function Home() {
         if (!token) {
             if (isMounted) {
                 setUserInfo(null);
-                setLoading(false);
             }
             return () => {
                 isMounted = false;
@@ -41,6 +39,14 @@ function Home() {
             }
         };
         fetchMe();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [location.key]);
+
+    useEffect(() => {
+        let isMounted = true;
 
         const fetchProducts = async () => {
             try {
@@ -75,20 +81,6 @@ function Home() {
     const handleCreateProduct = () => {
         navigate('/createProduct');
         console.log("Add Product clicked");
-    }
-
-    if (!accessToken) {
-        return (
-            <div className="product-main">
-                <button
-                    className="signin-prompt"
-                    type="button"
-                    onClick={() => navigate("/signin")}
-                >
-                    Sign in to explore more
-                </button>
-            </div>
-        );
     }
 
     if (loading) {
