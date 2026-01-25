@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./ProductForm.css";
 
 // Define initial empty state for the product fields
 const defaultValues = {
@@ -87,37 +88,39 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
     };
 
     return (
-        <div className="form-container">
+        <div className="product-form-container">
             <form
                 onSubmit={handleSubmit}
-                className="responsive-form"
+                className="product-form"
             >
-                {/* Name Input Group */}
+                {/* 1. Product Name */}
                 <div className="form-group">
-                    <label>Product Name</label>
+                    <label>Product name</label>
                     <input 
-                        className={errors.name ? "error-input" : ""}
+                        className={errors.name ? "error" : ""}
                         value={formData.name}
                         onChange={handleChange("name")}
+                        placeholder="iWatch"
                     />
-                    {/* Conditional rendering of error message */}
-                    {errors.name && <span className="error-text">{errors.name}</span>}
+                    {errors.name && <span className="error-message">{errors.name}</span>}
                 </div>
 
+                {/* 2. Product Description */}
+                <div className="form-group">
+                    <label>Product Description</label>
+                    <textarea 
+                        value={formData.description}
+                        onChange={handleChange("description")}
+                        rows="4"
+                    />
+                </div>
+
+                {/* 3. Category + Price (side by side) */}
                 <div className="form-row">
-                    <div className="form-group">
-                        <label>Price</label>
-                        <input 
-                            className={errors.price ? "error-input" : ""}
-                            type="text"
-                            value={formData.price}
-                            onChange={handleChange("price")}
-                        />
-                        {errors.price && <span className="error-text">{errors.price}</span>}
-                    </div>
                     <div className="form-group">
                         <label>Category</label>
                         <select
+                            className="category-select"
                             value={formData.category}
                             onChange={handleChange("category")}
                         >
@@ -129,47 +132,66 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                             ))}
                         </select>
                     </div>
+                    <div className="form-group">
+                        <label>Price</label>
+                        <input 
+                            className={`price-input ${errors.price ? "error" : ""}`}
+                            type="text"
+                            value={formData.price}
+                            onChange={handleChange("price")}
+                            placeholder="50"
+                        />
+                        {errors.price && <span className="error-message">{errors.price}</span>}
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label>Custom Category</label>
-                    <input
-                        value={formData.customCategory}
-                        onChange={handleChange("customCategory")}
-                        placeholder="Type a new category"
-                    />
+                {/* 4. In Stock Quantity + Add Image Link (side by side) */}
+                <div className="form-row">
+                    <div className="form-group">
+                        <label>In Stock Quantity</label>
+                        <input
+                            className={errors.stock ? "error" : ""}
+                            type="number"
+                            value={formData.stock}
+                            onChange={handleChange("stock")}
+                            placeholder="100"
+                        />
+                        {errors.stock && <span className="error-message">{errors.stock}</span>}
+                    </div>
+                    <div className="form-group">
+                        <label>Add Image Link</label>
+                        <div className="image-url-input">
+                            <input 
+                                className={errors.img_url ? "error" : ""}
+                                value={formData.img_url}
+                                onChange={handleChange("img_url")}
+                                placeholder="http://"
+                            />
+                            <button type="button" className="upload-button">Upload</button>
+                        </div>
+                        {errors.img_url && <span className="error-message">{errors.img_url}</span>}
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label>In Stock Quantity</label>
-                    <input
-                        className={errors.stock ? "error-input" : ""}
-                        type="number"
-                        value={formData.stock}
-                        onChange={handleChange("stock")}
-                    />
-                    {errors.stock && <span className="error-text">{errors.stock}</span>}
+                {/* 5. Image Preview */}
+                <div className="image-preview-section">
+                    <div className={`image-preview ${formData.img_url ? 'has-image' : ''}`}>
+                        {formData.img_url ? (
+                            <img src={formData.img_url} alt="Product preview" />
+                        ) : (
+                            <div className="preview-placeholder">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <p>image preview!</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label>Image URL</label>
-                    <input 
-                        className={errors.img_url ? "error-input" : ""}
-                        value={formData.img_url}
-                        onChange={handleChange("img_url")}
-                    />
-                    {errors.img_url && <span className="error-text">{errors.img_url}</span>}
-                </div>
-
-                <div className="form-group">
-                    <label>Description</label>
-                    <input 
-                        value={formData.description}
-                        onChange={handleChange("description")}
-                        row='4'
-                    />
-                </div>
-
+                {/* 6. Submit Button */}
                 <button type="submit" className="submit-button">{submitLabel}</button>
             </form>
         </div>

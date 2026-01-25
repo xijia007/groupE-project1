@@ -30,11 +30,23 @@ function Home() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                
+                // If token is invalid or expired, clear it
+                if (!res.ok) {
+                    localStorage.removeItem("accessToken");
+                    if (isMounted) {
+                        setUserInfo(null);
+                    }
+                    return;
+                }
+                
                 const data = await res.json();
                 if (isMounted) {
                     setUserInfo(data.user || null);
                 }
             } catch (err) {
+                // On error, clear the token
+                localStorage.removeItem("accessToken");
                 if (isMounted) setUserInfo(null);
             }
         };

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { 
     selectCartItems, 
     selectCartTotalItems, 
@@ -15,6 +16,19 @@ function Cart() {
     const cartItems = useSelector(selectCartItems);
     const totalItems = useSelector(selectCartTotalItems);
     const totalPrice = useSelector(selectCartTotalPrice);
+    
+    // Promotion code state
+    const [promoCode, setPromoCode] = useState("");
+    const [appliedPromo, setAppliedPromo] = useState(null);
+    const [promoError, setPromoError] = useState("");
+    
+    // Valid promotion codes
+    const validPromoCodes = {
+        "SAVE10": { type: "percentage", value: 10, description: "10% off" },
+        "SAVE20": { type: "percentage", value: 20, description: "20% off" },
+        "20DOLLAROFF": { type: "fixed", value: 20, description: "$20 off" },
+        "FREESHIP": { type: "fixed", value: 0, description: "Free shipping" }
+    };
     
     const handleClose = () => {
         console.log("cart closing");
@@ -41,9 +55,43 @@ function Cart() {
         dispatch(removeFromCart(productId));
     };
 
+    const handleApplyPromo = () => {
+        const code = promoCode.trim().toUpperCase();
+        
+        if (!code) {
+            setPromoError("Please enter a promo code");
+            return;
+        }
+        
+        if (validPromoCodes[code]) {
+            setAppliedPromo({ code, ...validPromoCodes[code] });
+            setPromoError("");
+        } else {
+            setPromoError("Invalid promo code");
+            setAppliedPromo(null);
+        }
+    };
+
+    const handleRemovePromo = () => {
+        setAppliedPromo(null);
+        setPromoCode("");
+        setPromoError("");
+    };
+
+    // Calculate prices
     const subtotal = totalPrice;
     const tax = subtotal * 0.1; // 10% tax
-    const discount = 0; // Can be implemented later
+    
+    // Calculate discount
+    let discount = 0;
+    if (appliedPromo) {
+        if (appliedPromo.type === "percentage") {
+            discount = subtotal * (appliedPromo.value / 100);
+        } else if (appliedPromo.type === "fixed") {
+            discount = appliedPromo.value;
+        }
+    }
+    
     const estimatedTotal = subtotal + tax - discount;
 
     return (
@@ -64,50 +112,65 @@ function Cart() {
                             cartItems.map((item) => (
                                 <div key={item.id} className="cart-item">
                                     <img src={item.img_url} alt={item.name} className="cart-item-image" />
-                                    <div className="cart-item-details">
-                                        <div className="cart-item-name">{item.name}</div>
-                                        <div className="cart-item-price">${item.price}</div>
+                                    <div className="cart-item-info">
+                                        <div className="cart-item-top-row">
+                                            <div className="cart-item-name">{item.name}</div>
+                                            <div className="cart-item-price">${item.price.toFixed(2)}</div>
+                                        </div>
+                                        <div className="cart-item-bottom-row">
+                                            <div className="cart-item-controls">
+                                                <button 
+                                                    className="qty-btn" 
+                                                    onClick={() => handleDecrement(item.id, item.quantity)}
+                                                >
+                                                    -
+                                                </button>
+                                                <span className="qty-value">{item.quantity}</span>
+                                                <button 
+                                                    className="qty-btn" 
+                                                    onClick={() => handleIncrement(item.id, item.quantity)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                            <button 
+                                                className="remove-btn"
+                                                onClick={() => handleRemove(item.id)}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="cart-item-controls">
-                                        <button 
-                                            className="qty-btn" 
-                                            onClick={() => handleDecrement(item.id, item.quantity)}
-                                        >
-                                            -
-                                        </button>
-                                        <span className="qty-value">{item.quantity}</span>
-                                        <button 
-                                            className="qty-btn" 
-                                            onClick={() => handleIncrement(item.id, item.quantity)}
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <div className="cart-item-total">
-                                        ${(item.price * item.quantity).toFixed(2)}
-                                    </div>
-                                    <button 
-                                        className="remove-btn"
-                                        onClick={() => handleRemove(item.id)}
-                                    >
-                                        ×
-                                    </button>
                                 </div>
                             ))
                         )}
                     </div>
+                </div>
+                <div className="cart-bottom">
                     <div className="discount-part">
                         <div className="discount-label">Apply Discount Code</div>
                         <div className="discount-body">
                             <input
-                                className="discount-input"
-                                placeholder="20 DOLLAR OFF"
+                                className={`discount-input ${promoError ? 'error' : ''}`}
+                                placeholder="Enter promo code"
+                                value={promoCode}
+                                onChange={(e) => setPromoCode(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleApplyPromo()}
+                                disabled={appliedPromo !== null}
                             />
-                            <button className='apply-button'>Apply</button>
+                            {appliedPromo ? (
+                                <button className='remove-promo-button' onClick={handleRemovePromo}>Remove</button>
+                            ) : (
+                                <button className='apply-button' onClick={handleApplyPromo}>Apply</button>
+                            )}
                         </div>
+                        {promoError && <div className="promo-error">{promoError}</div>}
+                        {appliedPromo && (
+                            <div className="promo-success">
+                                ✓ {appliedPromo.code} applied ({appliedPromo.description})
+                            </div>
+                        )}
                     </div>
-                </div>
-                <div className="cart-bottom">
                     <div className="numbers"> 
                         <div className="numbers-between">
                             <div>Subtotal</div> 
