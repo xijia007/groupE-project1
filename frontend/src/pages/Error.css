@@ -1,0 +1,58 @@
+.error-page {
+  min-height: 100vh;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.error-card {
+  background: #fff;
+  width: 100%;
+  max-width: 900px;
+  height: 450px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #eee;
+}
+.icon {
+  width: 64px;
+  height: 64px;
+  border: 3px solid #5b5ce2;
+  border-radius: 50%;
+
+  color: #5b5ce2;
+  font-size: 32px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 24px;
+}
+.error-card h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 32px;
+}
+.btn {
+  background: #5b5ce2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+}
+.btn:hover {
+  background: #4a4bd6;
+}

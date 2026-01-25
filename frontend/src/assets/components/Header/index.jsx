@@ -29,12 +29,12 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
             {isLoggedIn ? "Logout" : "Sign In"}
           </span>
         </div>
-        {isLoggedIn && (
+        {
           <div className="site-header-cart" onClick={onCartClick}>
             <MdOutlineShoppingCart className="cart-icon" />
             <span className="cart-price">$0.00</span>
           </div>
-        )}
+        }
       </div>
     </header>
   );

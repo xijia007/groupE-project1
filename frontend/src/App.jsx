@@ -1,5 +1,8 @@
 import Footer from "./assets/components/Footer/index.jsx";
 import Header from "./assets/components/Header/index.jsx";
+import SignIn from "./assets/components/SignModal/SignIn.jsx";
+import SignUp from "./assets/components/SignModal/SignUp.jsx";
+import Error from "./pages/Error.jsx";
 import {
   BrowserRouter,
   Navigate,
@@ -16,14 +19,16 @@ import Checkout from "./pages/Checkout.jsx";
 import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
+import CreateProduct from "./pages/CreateProduct.jsx";
+// import productsData from './assets/data/mock_products.json';
 
 function AppContent() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
+  // const [products, setProducts] = useState(productsData);
 
-  console.log("path:", location.pathname, "bg:", backgroundLocation?.pathname);
   const handleHomeClick = () => {
     navigate("/");
   };
@@ -40,14 +45,28 @@ function AppContent() {
     navigate("/signin", { state: { from: location } });
   };
 
+  // const handleCreateProduct = (newProduct) => {
+  //   const productWithId = {
+  //     ...newProduct,
+  //     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+  //   };
+  //   setProducts((prev) => [productWithId, ...prev]);
+  // };
+
+  // const handleUpdateProduct = (updatedProduct) => {
+  //   setProducts((prev) =>
+  //     prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
+  //   navigate("/signin", { state: { from: location } });
+  // };
+
   const handleCartClick = () => {
     if (location.pathname === "/cart") return;
     navigate("/cart", { state: { backgroundLocation: location } });
   };
 
   const requireAuth = (element) => {
-    if (isLoggedIn) return element;
-    return <Navigate to="/signin" replace state={{ from: location }} />;
+    if (isLoggedIn && isAdmin) return element;
+    return <Navigate to="/error" replace state={{ from: location }} />;
   };
 
   return (
@@ -61,23 +80,34 @@ function AppContent() {
       <main className="mainContainer">
         <>
           <Routes location={backgroundLocation || location}>
+            <Route
+              path="/error"
+              element={
+                <Error
+                  message={
+                    isLoggedIn ? "Access denied " : "Please sign in as Admin"
+                  }
+                />
+              }
+            />
             <Route path="/" element={<Home />} />
-
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
-
             <Route path="/SignIn" element={<Navigate to="/signin" replace />} />
             <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
-
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route
+              path="/createProduct"
+              element={requireAuth(<CreateProduct />)}
+            />
             <Route path="/products/:id/edit" element={<EditProduct />} />
-            <Route path="/cart" element={requireAuth(<Cart />)} />
-            <Route path="/checkout" element={requireAuth(<Checkout />)} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
 
           {backgroundLocation && (
             <Routes>
-              <Route path="/cart" element={requireAuth(<Cart />)} />
+              <Route path="/cart" element={<Cart />} />
             </Routes>
           )}
         </>
