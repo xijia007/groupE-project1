@@ -1,100 +1,175 @@
-.edit-product-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px;
+/* Edit Product Container */
+.edit-product {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  min-height: calc(100vh - 200px);
+  background: #f5f5f5;
 }
 
-.edit-product-frame {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
+.edit-product h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  text-align: left;
 }
 
-.edit-product-img, .edit-product-name, .edit-product-price, .edit-product-stock-status, .edit-product-description {
-    display: flex;
-    flex-direction: row;
-    width: 80%;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.edit-img-label, .edit-name-label, .edit-price-label, .edit-stock-label, .edit-description-label {
-    min-width: 150px;
-}
-
-.edit-img-detail, .edit-name-detail, .edit-price-detail, .edit-stock-detail , .edit-description-detail {
-    text-align: left;
-    margin-left: 30px;
-} 
-
-.edit-img-detail {
-    width: 200px;
-    height: 200px;
-}
-
+/* Edit Product Actions */
 .edit-product-actions {
-    margin-top: 16px;
+  max-width: 800px;
+  margin: 30px auto 0;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .delete-button {
-    background: #dc2626;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+  background: #dc2626;
 }
 
 .delete-error {
-    margin-top: 8px;
-    color: #b91c1c;
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px;
+  background: #fef2f2;
+  border-radius: 6px;
+  border-left: 4px solid #ef4444;
 }
 
+/* Delete Confirmation Modal */
 .edit-delete-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .edit-delete-modal {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    min-width: 280px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  background: white;
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .edit-delete-title {
-    font-size: 16px;
-    margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .edit-delete-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
+  display: flex;
+  gap: 12px;
+}
+
+.delete-confirm,
+.delete-cancel {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
 }
 
 .delete-confirm {
-    background: #dc2626;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
+  background: #ef4444;
+  color: white;
+}
+
+.delete-confirm:hover {
+  background: #dc2626;
 }
 
 .delete-cancel {
-    background: #e5e7eb;
-    color: #111827;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
+  background: #f3f4f6;
+  color: #1a1a1a;
+}
+
+.delete-cancel:hover {
+  background: #e5e7eb;
+}
+
+/* Loading State */
+.edit-product .loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 18px;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .edit-product {
+    padding: 30px 15px;
+  }
+
+  .edit-product h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .edit-delete-modal {
+    padding: 24px;
+  }
+
+  .edit-delete-title {
+    font-size: 16px;
+  }
+
+  .edit-delete-actions {
+    flex-direction: column;
+  }
 }

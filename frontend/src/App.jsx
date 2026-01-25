@@ -20,6 +20,7 @@ import Checkout from "./pages/Checkout.jsx";
 import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
+import { useCartSync } from "./hooks/useCartSync.js";
 import CreateProduct from "./pages/CreateProduct.jsx";
 // import productsData from './assets/data/mock_products.json';
 
@@ -29,6 +30,10 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
+  
+  // 🔄 自动同步购物车（登录/登出时）
+  useCartSync();
+  
   // const [products, setProducts] = useState(productsData);
 
 
