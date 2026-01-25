@@ -170,6 +170,9 @@ function Cart() {
                                 ✓ {appliedPromo.code} applied ({appliedPromo.description})
                             </div>
                         )}
+                        <div className="discount-total-preview" style={{ marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>
+                            Estimated Total: ${estimatedTotal.toFixed(2)}
+                        </div>
                     </div>
                     <div className="numbers"> 
                         <div className="numbers-between">
