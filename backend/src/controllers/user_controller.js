@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import db from "../routers.js/database.js";
+import db from "../routers/database.js";
 import buildErrorResponse from "../utils/errorResponse.js";
 
 export const me = async (req, res) => {

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import "./SignIn.css";
 
-function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
+function Forgot({ onClose, onSignIn, onAuthSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +16,7 @@ function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
   };
 
   // Check if email has error
-  const emailError = emailTouched && !isValidEmail(email);
+  const emailTypoError = emailTouched && !isValidEmail(email);
 
   // Check if password has error
   const passwordError = passwordTouched && password.trim() === "";
@@ -46,26 +45,30 @@ function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
     setSubmitError("");
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const derivedNameRaw = email.split("@")[0] || "user";
+      const name = derivedNameRaw.length >= 2 ? derivedNameRaw : "user";
+      const response = await fetch("/api/auth/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message || "Email or password is incorrect");
+        throw new Error(
+          data?.error?.message || data?.message || "Update password failed",
+        );
       }
 
       if (onAuthSuccess) onAuthSuccess(data?.accessToken);
 
       if (onClose) onClose();
     } catch (err) {
-      setSubmitError(err.message || "Email or password is incorrect");
+      setSubmitError(err.message || "Update password failed");
     } finally {
       setIsSubmitting(false);
     }
@@ -75,7 +78,7 @@ function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
     <div className="signin-page">
       <div className="signin-container">
         <button className="signin-close" onClick={onClose}></button>
-        <h2 className="signin-title">Sign in to your account</h2>
+        <h2 className="signin-title">Update Your Password</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="signin-form-group">
@@ -87,32 +90,25 @@ function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={handleEmailBlur}
-              className={emailError ? "input-error" : ""}
+              className={emailTypoError ? "input-error" : ""}
             />
-            {emailError && (
+            {emailTypoError && (
               <span className="error-message">Invalid Email input!</span>
             )}
           </div>
 
           <div className="signin-form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">New Password</label>
             <div className="password-input-wrapper">
               <input
-                type={showPassword ? "text" : "password"}
+                type="password"
                 id="password"
-                placeholder="Enter your password"
+                placeholder="Enter your new password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onBlur={handlePasswordBlur}
                 className={passwordError ? "input-error" : ""}
               />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
             </div>
             {passwordError && (
               <span className="error-message">Invalid password input!</span>
@@ -120,7 +116,7 @@ function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
           </div>
 
           <button type="submit" className="signin-button">
-            {isSubmitting ? "Signing In..." : "Sign In"}
+            {isSubmitting ? "Updating..." : "Update Password"}
           </button>
           {submitError && (
             <div className="signin-submit-error">{submitError}</div>
@@ -129,30 +125,21 @@ function SignIn({ onClose, onSignUp, onAuthSuccess, onForgotPassword }) {
 
         <div className="signin-footer">
           <span>
-            Don't have an account?{" "}
+            Already have an account?
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                if (onSignUp) onSignUp();
+                if (onSignIn) onSignIn();
               }}
             >
-              Sign up
+              Sign in
             </a>
           </span>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onForgotPassword) onForgotPassword();
-            }}
-          >
-            Forgot password?
-          </a>
         </div>
       </div>
     </div>
   );
 }
 
-export default SignIn;
+export default Forgot;

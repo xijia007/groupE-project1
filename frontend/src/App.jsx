@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
 import Footer from "./assets/components/Footer/index.jsx";
 import Header from "./assets/components/Header/index.jsx";
-import SignIn from "./assets/components/SignModal/SignIn.jsx";
-import SignUp from "./assets/components/SignModal/SignUp.jsx";
 import {
   BrowserRouter,
   Navigate,
@@ -22,21 +19,20 @@ import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useCartSync } from "./hooks/useCartSync.js";
 import { ToastProvider } from "./contexts/ToastContext.jsx";
+import ForgotPasswordPage from "./pages/forgot_Passoword.jsx";
 import CreateProduct from "./pages/CreateProduct.jsx";
 // import productsData from './assets/data/mock_products.json';
-
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
-  
+
   // 🔄 自动同步购物车（登录/登出时）
   useCartSync();
-  
-  // const [products, setProducts] = useState(productsData);
 
+  // const [products, setProducts] = useState(productsData);
 
   const handleHomeClick = () => {
     navigate("/");
@@ -51,7 +47,6 @@ function AppContent() {
     navigate("/signin", { state: { from: location } });
   };
 
-
   // const handleCreateProduct = (newProduct) => {
   //   const productWithId = {
   //     ...newProduct,
@@ -61,7 +56,7 @@ function AppContent() {
   // };
 
   // const handleUpdateProduct = (updatedProduct) => {
-  //   setProducts((prev) => 
+  //   setProducts((prev) =>
   //     prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
   //   navigate("/signin", { state: { from: location } });
   // };
@@ -69,11 +64,6 @@ function AppContent() {
   const handleCartClick = () => {
     if (location.pathname === "/cart") return;
     navigate("/cart", { state: { backgroundLocation: location } });
-  };
-
-  const requireAuth = (element) => {
-    if (isLoggedIn) return element;
-    return <Navigate to="/signin" replace state={{ from: location }} />;
   };
 
   return (
@@ -85,33 +75,27 @@ function AppContent() {
         isLoggedIn={isLoggedIn}
       />
       <main className="mainContainer">
-          <>
-            <Routes location={backgroundLocation || location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/signin" element={<SignInPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/SignIn" element={<Navigate to="/signin" replace />} />
-              <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
-              <Route 
-                path="/createProduct" 
-                element={<CreateProduct />} 
-              />
-              <Route 
-                path="/products/:id/edit" 
-                element={<EditProduct />} 
-              />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-          
-            </Routes>
+        <>
+          <Routes location={backgroundLocation || location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/signin" element={<SignInPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/SignIn" element={<Navigate to="/signin" replace />} />
+            <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/createProduct" element={<CreateProduct />} />
+            <Route path="/products/:id/edit" element={<EditProduct />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+          </Routes>
 
-            {backgroundLocation && (
-              <Routes>
-                <Route path="/cart" element={<Cart />} />
-              </Routes>
-            )}
-          </>
+          {backgroundLocation && (
+            <Routes>
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+          )}
+        </>
       </main>
       <Footer />
     </>

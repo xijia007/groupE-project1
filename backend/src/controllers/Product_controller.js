@@ -1,4 +1,4 @@
-import db from "../routers.js/database.js";
+import db from "../routers/database.js";
 import { ObjectId } from "mongodb";
 import buildErrorResponse from "../utils/errorResponse.js";
 import { success, z } from "zod";
@@ -155,11 +155,11 @@ export const GetProducts = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: products,
-    })
+    });
   } catch (error) {
     return res.status(500).json(
       buildErrorResponse({
-        code: 'INTERNAL_SERVER_ERROR',
+        code: "INTERNAL_SERVER_ERROR",
         message: error.message,
       }),
     );
@@ -170,7 +170,9 @@ export const GetProducts = async (req, res) => {
 export const GetProductById = async (req, res) => {
   try {
     const { productId } = req.params;
-    const product = await db.collection("Products").findOne({_id: new ObjectId(productId)});
+    const product = await db
+      .collection("Products")
+      .findOne({ _id: new ObjectId(productId) });
 
     if (!product) {
       return res.status(404).json(
