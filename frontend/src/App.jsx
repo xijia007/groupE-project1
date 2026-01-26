@@ -21,6 +21,7 @@ import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useCartSync } from "./hooks/useCartSync.js";
+import { ToastProvider } from "./contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct.jsx";
 // import productsData from './assets/data/mock_products.json';
 
@@ -119,7 +120,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </BrowserRouter>
   );
 }

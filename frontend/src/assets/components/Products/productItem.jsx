@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, updateQuantity, selectItemQuantity } from "../../../store/cartSlice";
+import { useToast } from "../../../contexts/ToastContext";
 import "./Product.css";
 
 function ProductItem({ product, userRole }) {
   const dispatch = useDispatch();
   const cartQuantity = useSelector(selectItemQuantity(product.id));
   const [quantity, setQuantity] = useState(cartQuantity);
+  const { showToast } = useToast();
 
   // Sync local state with cart state
   useEffect(() => {
@@ -15,11 +17,24 @@ function ProductItem({ product, userRole }) {
   }, [cartQuantity]);
 
   const handleAdd = () => {
+    const stock = Number(product.stock ?? 0);
+    if (stock <= 0) {
+      showToast("Out of stock!", "error");
+      return;
+    }
     dispatch(addToCart({ product, quantity: 1 }));
+    showToast("Added to cart", "success");
   };
 
   const handleIncrement = () => {
+    const stock = Number(product.stock ?? Infinity);
     const newQuantity = quantity + 1;
+    
+    if (stock !== Infinity && newQuantity > stock) {
+      showToast(`Cannot add more than ${stock} items`, "warning");
+      return;
+    }
+    
     dispatch(updateQuantity({ productId: product.id, quantity: newQuantity }));
   };
 

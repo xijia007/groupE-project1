@@ -8,6 +8,7 @@ import {
     updateQuantity,
     removeFromCart 
 } from "../store/cartSlice";
+import { useToast } from "../contexts/ToastContext";
 import "./Cart.css";
 
 function Cart() {
@@ -16,6 +17,7 @@ function Cart() {
     const cartItems = useSelector(selectCartItems);
     const totalItems = useSelector(selectCartTotalItems);
     const totalPrice = useSelector(selectCartTotalPrice);
+    const { showToast } = useToast();
     
     // Promotion code state
     const [promoCode, setPromoCode] = useState("");
@@ -39,7 +41,11 @@ function Cart() {
         navigate('/checkout');
     }
 
-    const handleIncrement = (productId, currentQuantity) => {
+    const handleIncrement = (productId, currentQuantity, stock) => {
+        if (stock !== undefined && currentQuantity >= stock) {
+            showToast(`Cannot add more than ${stock} items`, "warning");
+            return;
+        }
         dispatch(updateQuantity({ productId, quantity: currentQuantity + 1 }));
     };
 
@@ -128,7 +134,7 @@ function Cart() {
                                                 <span className="qty-value">{item.quantity}</span>
                                                 <button 
                                                     className="qty-btn" 
-                                                    onClick={() => handleIncrement(item.id, item.quantity)}
+                                                    onClick={() => handleIncrement(item.id, item.quantity, item.stock)}
                                                 >
                                                     +
                                                 </button>
