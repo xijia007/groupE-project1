@@ -75,13 +75,29 @@ const cartSlice = createSlice({
     addToCart: (state, action) => {
       const { product, quantity = 1 } = action.payload;
       const existingItem = state.items.find((item) => item.id === product.id);
+      const stock = Number(product.stock ?? Infinity);
 
       if (existingItem) {
-        // 如果商品已存在，增加数量
-        existingItem.quantity += quantity;
+        // 如果商品已存在，检查库存后再增加数量
+        const newQuantity = existingItem.quantity + quantity;
+        
+        // 检查是否超过库存
+        if (stock !== Infinity && newQuantity > stock) {
+          // 超过库存，设置为最大库存数量
+          existingItem.quantity = stock;
+        } else {
+          existingItem.quantity = newQuantity;
+        }
+        
+        // 更新其它可能变化的属性
+        if (product.stock !== undefined) existingItem.stock = product.stock;
+        if (product.price !== undefined) existingItem.price = product.price;
+        if (product.name !== undefined) existingItem.name = product.name;
+        if (product.img_url !== undefined) existingItem.img_url = product.img_url;
       } else {
-        // 如果是新商品，添加到购物车
-        state.items.push({ ...product, quantity });
+        // 如果是新商品，检查库存后添加到购物车
+        const initialQuantity = stock !== Infinity && quantity > stock ? stock : quantity;
+        state.items.push({ ...product, quantity: initialQuantity });
       }
 
       // 保存到 localStorage
@@ -98,7 +114,15 @@ const cartSlice = createSlice({
       } else {
         const item = state.items.find((item) => item.id === productId);
         if (item) {
-          item.quantity = quantity;
+          const stock = Number(item.stock ?? Infinity);
+          
+          // 检查是否超过库存
+          if (stock !== Infinity && quantity > stock) {
+            // 超过库存，设置为最大库存数量
+            item.quantity = stock;
+          } else {
+            item.quantity = quantity;
+          }
         }
       }
 

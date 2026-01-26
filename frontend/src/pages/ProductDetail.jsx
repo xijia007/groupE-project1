@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, updateQuantity, selectItemQuantity } from "../store/cartSlice";
+import { useToast } from "../contexts/ToastContext";
 import './ProductDetail.css';
 
 function ProductDetail() {
@@ -12,6 +13,7 @@ function ProductDetail() {
     const token = localStorage.getItem("accessToken");
     const dispatch = useDispatch();
     const cartQuantity = useSelector(selectItemQuantity(id));
+    const { showToast } = useToast();
 
     useEffect(() => {
         let isMounted = true;
@@ -75,12 +77,23 @@ function ProductDetail() {
 
     const handleAddToCart = () => {
         if (product) {
+            const stock = Number(product.stock ?? 0);
+            if (stock <= 0) {
+                showToast("Out of stock!", "error");
+                return;
+            }
             dispatch(addToCart({ product, quantity: 1 }));
+            showToast("Added to cart", "success");
         }
     };
 
     const handleIncrement = () => {
         if (product) {
+            const stock = Number(product.stock ?? 0);
+            if (cartQuantity >= stock) {
+                showToast(`Cannot add more than ${stock} items`, "warning");
+                return;
+            }
             dispatch(updateQuantity({ 
                 productId: product._id || product.id, 
                 quantity: cartQuantity + 1 
