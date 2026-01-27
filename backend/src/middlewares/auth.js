@@ -3,6 +3,7 @@ import buildErrorResponse from "../utils/errorResponse.js";
 import config from "../config.js";
 
 export const requireAuth = (req, res, next) => {
+  console.log(`🔒 [Auth Middleware] Checking auth for: ${req.method} ${req.path}`);
   try {
     const authHeader = req.headers.authorization || "";
     const [schema, token] = authHeader.split(" ");

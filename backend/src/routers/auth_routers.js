@@ -10,6 +10,12 @@ import { me } from "../controllers/user_controller.js";
 import express from "express";
 const router = express.Router();
 
+// Debug middleware for auth routes
+router.use((req, res, next) => {
+  console.log(`➡️ [Auth Router] Hit: ${req.method} ${req.path}`);
+  next();
+});
+
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", requireAuth, logout);

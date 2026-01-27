@@ -64,9 +64,11 @@ function Forgot({ onClose, onSignIn, onAuthSuccess }) {
         );
       }
 
-      if (onAuthSuccess) onAuthSuccess(data?.accessToken);
-
-      if (onClose) onClose();
+      if (onAuthSuccess) {
+        onAuthSuccess(data?.accessToken);
+      } else if (onClose) {
+        onClose();
+      }
     } catch (err) {
       setSubmitError(err.message || "Update password failed");
     } finally {
