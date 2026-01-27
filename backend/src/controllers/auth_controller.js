@@ -4,7 +4,7 @@ import { email, z } from "zod";
 import User from "../models/User.js";
 import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
 import buildErrorResponse from "../utils/errorResponse.js";
-import db from "../routers.js/database.js";
+import db from "../routers/database.js";
 import { ObjectId } from "mongodb";
 
 const registerSchema = z.object({
@@ -146,8 +146,8 @@ export const logout = async (req, res) => {
 };
 
 const updatePasswordSchema = z.object({
-  oldPassword: z.string().min(6).max(100),
-  newPassword: z.string().min(6).max(100),
+  email: z.string().email(),
+  password: z.string().min(6).max(100),
 });
 
 export const UpdatePassword = async (req, res) => {
@@ -162,11 +162,8 @@ export const UpdatePassword = async (req, res) => {
         }),
       );
     }
-    const { oldPassword, newPassword } = parsed.data;
-    const userId = req.user.userId;
-    const user = await db
-      .collection("Users")
-      .findOne({ _id: new ObjectId(userId) });
+    const { email, password: newPassword } = parsed.data;
+    const user = await db.collection("Users").findOne({ email });
     if (!user) {
       return res.status(404).json(
         buildErrorResponse({
@@ -175,20 +172,11 @@ export const UpdatePassword = async (req, res) => {
         }),
       );
     }
-    const isOldPasswordValid = await bcrpyt.compare(oldPassword, user.password);
-    if (!isOldPasswordValid) {
-      return res.status(401).json(
-        buildErrorResponse({
-          code: "INVALID_OLD_PASSWORD",
-          message: "Old password is incorrect",
-        }),
-      );
-    }
     const hashedNewPassword = await bcrpyt.hash(newPassword, 10);
     await db
       .collection("Users")
       .updateOne(
-        { _id: new ObjectId(userId) },
+        { _id: new ObjectId(user._id) },
         { $set: { password: hashedNewPassword } },
       );
     res.status(200).json({

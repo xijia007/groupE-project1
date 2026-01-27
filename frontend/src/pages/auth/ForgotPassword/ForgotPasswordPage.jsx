@@ -1,24 +1,23 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import SignIn from "../../../components/auth/SignInModal/SignInModal.jsx";
+import Forgot from "../../../components/auth/SignInModal/Forgot_Pass.jsx";
 import { useAuth } from "../../../features/auth/contexts/AuthContext.jsx";
 
-function SignInPage() {
+function ForgotPasswordPage() {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const fromPath = location.state?.from?.pathname || "/";
+
   const goBackAfterAuth = () => {
-    navigate("/", { replace: true });
+    navigate(fromPath, { replace: true });
   };
 
   return (
-    <SignIn
+    <Forgot
       onClose={goBackAfterAuth}
-      onSignUp={() =>
-        navigate("/signup", { state: { from: location.state?.from } })
-      }
-      onForgotPassword={() =>
-        navigate("/forgot-password", { state: { from: location.state?.from } })
+      onSignIn={() =>
+        navigate("/signin", { state: { from: location.state?.from } })
       }
       onAuthSuccess={(accessToken) => {
         if (accessToken) auth.login(accessToken);
@@ -28,4 +27,4 @@ function SignInPage() {
   );
 }
 
-export default SignInPage;
+export default ForgotPasswordPage;
