@@ -1,9 +1,13 @@
 import "./Header.css";
 import { useEffect, useRef, useState } from "react";
+import {
+  clearSearch,
+  searchProducts,
+  setQuery,
+} from "../../../features/products/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { FaRegUser, FaSearch } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { useSelector } from "react-redux";
 import {
   selectCartTotalItems,
   selectCartTotalPrice,
