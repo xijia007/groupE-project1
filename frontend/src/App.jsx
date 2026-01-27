@@ -1,17 +1,7 @@
 import { useEffect, useState } from "react";
 import Footer from "./components/layout/Footer/index.jsx";
 import Header from "./components/layout/Header/index.jsx";
-import SignIn from "./components/auth/SignInModal/SignInModal.jsx";
-import SignUp from "./components/auth/SignUpModal/SignUpModal.jsx";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Home from "./pages/Home/Home.jsx";
 import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct/EditProduct.jsx";
@@ -24,6 +14,7 @@ import { useAuth } from "./features/auth/contexts/AuthContext.jsx";
 import { useCartSync } from "./features/cart/hooks/useCartSync.js";
 import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
@@ -74,6 +65,7 @@ function AppContent() {
             <Route path="/products/:id/edit" element={<EditProduct />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path='/profile' element={<Profile />} />
           </Routes>
 
           {backgroundLocation && (
