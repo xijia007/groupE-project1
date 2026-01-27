@@ -22,6 +22,7 @@ import { useAuth } from "./features/auth/contexts/AuthContext.jsx";
 import { useCartSync } from "./features/cart/hooks/useCartSync.js";
 import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
@@ -72,6 +73,7 @@ function AppContent() {
             <Route path="/products/:id/edit" element={<EditProduct />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path='/profile' element={<Profile />} />
           </Routes>
 
           {backgroundLocation && (
