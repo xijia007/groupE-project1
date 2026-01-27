@@ -27,19 +27,24 @@ export function useCartSync() {
   useEffect(() => {
     const syncCart = async () => {
       if (isLoggedIn) {
-        // 用户登录，先合并本地购物车
-        dispatch(syncCartOnLogin());
+        // 检查是否有访客购物车数据
+        const guestCartJson = localStorage.getItem('cart_guest');
+        const guestCart = guestCartJson ? JSON.parse(guestCartJson) : [];
+
+        if (guestCart.length > 0) {
+          // 如果有访客数据，先同步（合并）到后端
+          await dispatch(syncCartToBackend(guestCart));
+          
+          // 同步成功后，清除访客数据，避免重复同步
+          localStorage.removeItem('cart_guest');
+        } 
         
-        // 获取合并后的本地购物车
-        const localCart = JSON.parse(localStorage.getItem(`cart_user_${getCurrentUserId()}`) || '[]');
-        
-        // 如果本地有购物车数据，同步到后端
-        if (localCart.length > 0) {
-          await dispatch(syncCartToBackend(localCart));
-        } else {
-          // 如果本地没有数据，从后端加载
-          await dispatch(loadCartFromBackend());
-        }
+        // 无论是否同步过，最后都从后端拉取最新完全状态
+        await dispatch(loadCartFromBackend());
+
+        // 注意：syncCartOnLogin 主要是用于合并本地 Redux State，但既然我们已经决定
+        // 以后端为准，并只处理访客数据，那么 Redux State 最终会被 loadCartFromBackend 覆盖。
+        // 所以这里其实不需要再调用 syncCartOnLogin 了，或者只需要它来清理本地状态。
       } else {
         // 用户登出，切换到访客购物车
         dispatch(syncCartOnLogout());

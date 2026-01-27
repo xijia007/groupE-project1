@@ -3,18 +3,22 @@ import { FaRegUser, FaSearch } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { selectCartTotalItems, selectCartTotalPrice } from "../../../features/cart/slices/cartSlice";
-// import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
   const totalItems = useSelector(selectCartTotalItems);
   const totalPrice = useSelector(selectCartTotalPrice);
   
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const location = useLocation();
 
   // const handleCartClick = () => {
   //   navigate('/cart', { state: { backgroundLocation: location }});
   // };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
 
   return (
     <header className="site-header">
@@ -28,9 +32,9 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
         <FaSearch className="search-icon" />
       </div>
       <div className="site-header-right">
-        <div className="site-header-userAuth" onClick={onSignInClick}>
-          <FaRegUser className="site-header-image" />
-          <span className="site-header-login">
+        <div className="site-header-userAuth">
+          <FaRegUser className="site-header-image" onClick={handleProfileClick}/>
+          <span className="site-header-login" onClick={onSignInClick}>
             {isLoggedIn ? "Logout" : "Sign In"}
           </span>
         </div>

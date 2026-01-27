@@ -9,6 +9,7 @@ import {
     updateCartBackend
 } from "../../features/cart/slices/cartSlice";
 import { useToast } from "../../features/toast/contexts/ToastContext";
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 import './ProductDetail.css';
 
 function ProductDetail() {
@@ -16,11 +17,10 @@ function ProductDetail() {
     const [userInfo, setUserInfo] = useState(null);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const token = localStorage.getItem("accessToken");
     const dispatch = useDispatch();
     const cartQuantity = useSelector(selectItemQuantity(id));
     const { showToast } = useToast();
-    const isLoggedIn = !!token;
+    const { isLoggedIn } = useAuth(); // 使用 AuthContext 获取实时登录状态
 
     useEffect(() => {
         let isMounted = true;
@@ -85,6 +85,7 @@ function ProductDetail() {
     const handleAddToCart = () => {
         if (product) {
             const stock = Number(product.stock ?? 0);
+            
             if (stock <= 0) {
                 showToast("Out of stock!", "error");
                 return;
