@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import "./index.css";
 import App from "./App.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { store } from "./store/store.js";
+import { AuthProvider } from "./features/auth/contexts/AuthContext.jsx";
+import { store } from "./assets/app/store.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
