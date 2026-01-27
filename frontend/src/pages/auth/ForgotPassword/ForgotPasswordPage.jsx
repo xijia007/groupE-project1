@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Forgot from "../../../components/auth/SignInModal/Forgot_Pass.jsx";
+import Auth from "../../../components/auth/Auth.jsx";
 import { useAuth } from "../../../features/auth/contexts/AuthContext.jsx";
 
 function ForgotPasswordPage() {
@@ -14,8 +14,9 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <Forgot
+    <Auth
       onClose={goBackAfterAuth}
+      Status="ForgotPassword"
       onSignIn={() =>
         navigate("/signin", { state: { from: location.state?.from } })
       }
@@ -24,8 +25,10 @@ function ForgotPasswordPage() {
           auth.login(accessToken);
         } else {
           // Password updated, redirect to sign in
-          navigate("/signin", { 
-            state: { message: "Password updated successfully. Please sign in." } 
+          navigate("/signin", {
+            state: {
+              message: "Password updated successfully. Please sign in.",
+            },
           });
         }
       }}

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Footer from "./components/layout/Footer/index.jsx";
 import Header from "./components/layout/Header/index.jsx";
-import SignIn from "./components/auth/SignInModal/SignInModal.jsx";
-import SignUp from "./components/auth/SignUpModal/SignUpModal.jsx";
 import {
   BrowserRouter,
   Navigate,

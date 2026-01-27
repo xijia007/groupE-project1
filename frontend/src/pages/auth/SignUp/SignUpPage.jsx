@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import SignUp from "../../../components/auth/SignUpModal/SignUpModal.jsx";
+import Auth from "../../../components/auth/Auth.jsx";
 import { useAuth } from "../../../features/auth/contexts/AuthContext.jsx";
 
 function SignUpPage() {
@@ -14,7 +14,7 @@ function SignUpPage() {
   };
 
   return (
-    <SignUp
+    <Auth
       onClose={goBackAfterAuth}
       onSignIn={() =>
         navigate("/signin", { state: { from: location.state?.from } })
@@ -23,6 +23,7 @@ function SignUpPage() {
         if (accessToken) auth.login(accessToken);
         else auth.refreshFromStorage();
       }}
+      Status="SignUp"
     />
   );
 }
