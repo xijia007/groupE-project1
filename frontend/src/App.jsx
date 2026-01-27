@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import Footer from "./components/layout/Footer/index.jsx";
 import Header from "./components/layout/Header/index.jsx";
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import Home from "./pages/Home/Home.jsx";
 import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct/EditProduct.jsx";
