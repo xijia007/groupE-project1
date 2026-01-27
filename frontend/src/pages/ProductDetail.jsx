@@ -1,13 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { 
-    addToCart, 
-    updateQuantity, 
-    selectItemQuantity,
-    addToCartBackend,
-    updateCartBackend
-} from "../store/cartSlice";
+import { addToCart, updateQuantity, selectItemQuantity } from "../store/cartSlice";
 import { useToast } from "../contexts/ToastContext";
 import './ProductDetail.css';
 
@@ -20,7 +14,6 @@ function ProductDetail() {
     const dispatch = useDispatch();
     const cartQuantity = useSelector(selectItemQuantity(id));
     const { showToast } = useToast();
-    const isLoggedIn = !!token;
 
     useEffect(() => {
         let isMounted = true;
@@ -89,18 +82,7 @@ function ProductDetail() {
                 showToast("Out of stock!", "error");
                 return;
             }
-            
-            // 如果用户已登录，同步到后端
-            if (isLoggedIn) {
-                dispatch(addToCartBackend({ 
-                    productId: product._id || product.id, 
-                    quantity: 1 
-                }));
-            } else {
-                // 未登录，只更新本地
-                dispatch(addToCart({ product, quantity: 1 }));
-            }
-            
+            dispatch(addToCart({ product, quantity: 1 }));
             showToast("Added to cart", "success");
         }
     };
@@ -112,42 +94,19 @@ function ProductDetail() {
                 showToast(`Cannot add more than ${stock} items`, "warning");
                 return;
             }
-            
-            const newQuantity = cartQuantity + 1;
-            
-            // 如果用户已登录，同步到后端
-            if (isLoggedIn) {
-                dispatch(updateCartBackend({ 
-                    productId: product._id || product.id, 
-                    quantity: newQuantity 
-                }));
-            } else {
-                // 未登录，只更新本地
-                dispatch(updateQuantity({ 
-                    productId: product._id || product.id, 
-                    quantity: newQuantity 
-                }));
-            }
+            dispatch(updateQuantity({ 
+                productId: product._id || product.id, 
+                quantity: cartQuantity + 1 
+            }));
         }
     };
 
     const handleDecrement = () => {
         if (product && cartQuantity > 0) {
-            const newQuantity = cartQuantity - 1;
-            
-            // 如果用户已登录，同步到后端
-            if (isLoggedIn) {
-                dispatch(updateCartBackend({ 
-                    productId: product._id || product.id, 
-                    quantity: newQuantity 
-                }));
-            } else {
-                // 未登录，只更新本地
-                dispatch(updateQuantity({ 
-                    productId: product._id || product.id, 
-                    quantity: newQuantity 
-                }));
-            }
+            dispatch(updateQuantity({ 
+                productId: product._id || product.id, 
+                quantity: cartQuantity - 1 
+            }));
         }
     };
 
