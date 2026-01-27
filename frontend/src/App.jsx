@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Footer from "./assets/components/Footer/index.jsx";
-import Header from "./assets/components/Header/index.jsx";
-import SignIn from "./assets/components/SignModal/SignIn.jsx";
-import SignUp from "./assets/components/SignModal/SignUp.jsx";
+import Footer from "./components/layout/Footer/index.jsx";
+import Header from "./components/layout/Header/index.jsx";
+import SignIn from "./components/auth/SignInModal/SignInModal.jsx";
+import SignUp from "./components/auth/SignUpModal/SignUpModal.jsx";
 import {
   BrowserRouter,
   Navigate,
@@ -12,18 +12,19 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import Home from "./pages/Home.jsx";
-import ProductDetail from "./pages/ProductDetail.jsx";
-import EditProduct from "./pages/EditProduct.jsx";
-import Cart from "./pages/Cart.jsx";
-import Checkout from "./pages/Checkout.jsx";
-import SignInPage from "./pages/SignInPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
-import { useAuth } from "./context/AuthContext.jsx";
-import { useCartSync } from "./hooks/useCartSync.js";
-import { ToastProvider } from "./contexts/ToastContext.jsx";
-import CreateProduct from "./pages/CreateProduct.jsx";
+import Home from "./pages/Home/Home.jsx";
+import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
+import EditProduct from "./pages/EditProduct/EditProduct.jsx";
+import Cart from "./pages/Cart/Cart.jsx";
+import Checkout from "./pages/Checkout/Checkout.jsx";
+import SignInPage from "./pages/auth/SignIn/SignInPage.jsx";
+import SignUpPage from "./pages/auth/SignUp/SignUpPage.jsx";
+import { useAuth } from "./features/auth/contexts/AuthContext.jsx";
+import { useCartSync } from "./features/cart/hooks/useCartSync.js";
+import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
+import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
 // import productsData from './assets/data/mock_products.json';
+
 
 
 function AppContent() {
@@ -50,21 +51,6 @@ function AppContent() {
     }
     navigate("/signin", { state: { from: location } });
   };
-
-
-  // const handleCreateProduct = (newProduct) => {
-  //   const productWithId = {
-  //     ...newProduct,
-  //     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-  //   };
-  //   setProducts((prev) => [productWithId, ...prev]);
-  // };
-
-  // const handleUpdateProduct = (updatedProduct) => {
-  //   setProducts((prev) => 
-  //     prev.map((item) => (item.id === updatedProduct.id ? updatedProduct : item)));
-  //   navigate("/signin", { state: { from: location } });
-  // };
 
   const handleCartClick = () => {
     if (location.pathname === "/cart") return;
