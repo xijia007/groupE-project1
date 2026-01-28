@@ -106,7 +106,7 @@ function Home() {
                 <label className="product-label">Products</label>
                 {userInfo && (
                     <div className="user-info">
-                        Welcome,  {userInfo.email} ({userInfo.role})
+                        Welcome,  {userInfo.name} ({userInfo.role})
                     </div>
                 )}
                 {userInfo?.role === "admin" && (
