@@ -165,6 +165,31 @@ export const GetProducts = async (req, res) => {
     );
   }
 };
+export const SearchProducts = async (req, res) => {
+  try {
+    const queryRaw = (req.query.name ?? "").trim();
+    if (queryRaw.length < 3) {
+      return res.status(200).json({ success: true, data: [] });
+    }
+    const escaped = queryRaw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp("^" + escaped, "i");
+    const products = await db
+      .collection("Products")
+      .find({ name: regex })
+      .toArray();
+    return res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    return res.status(500).json(
+      buildErrorResponse({
+        code: "INTERNAL_SERVER_ERROR",
+        message: error.message,
+      }),
+    );
+  }
+};
 
 // get product by Id
 export const GetProductById = async (req, res) => {
@@ -178,7 +203,7 @@ export const GetProductById = async (req, res) => {
       return res.status(404).json(
         buildErrorResponse({
           code: "PRODUCT_NOT_FOUND",
-          message: "Product not Found",
+          message: "Product not found",
         }),
       );
     }
