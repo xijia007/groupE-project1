@@ -245,7 +245,7 @@
   .product-detail-header {
     flex-direction: column;
     gap: 15px;
-    align-items: flex-start;
+    align-items: center; /* Center the label on mobile */
   }
 
   .product-detail-header h1 {
@@ -261,13 +261,22 @@
   }
 
   .product-button {
-    flex-direction: column;
+    flex-direction: row; /* Put buttons on same row */
+    gap: 12px;
+  }
+  
+  .product-button > a, 
+  .product-button > .add-button,
+  .product-button > .product-qty-controls {
+    flex: 1; /* Share width equally */
+    min-width: 0;
   }
 
   .product-qty-controls,
   .add-button,
   .edit-button {
-    width: 100%;
+    width: 100%; /* Fill their flex container */
     justify-content: center;
+    min-width: 0; /* Allow shrinking */
   }
 }

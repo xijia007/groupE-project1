@@ -175,9 +175,7 @@ function ProductDetail() {
         <div className="product-detail">
             <div className="product-detail-header">
                 <h1>Products Detail</h1>
-                <Link className="back-to-home" to='/'>
-                    <button>Back To Home Page</button>
-                </Link>
+
             </div>
             
             <div className="product-frame">

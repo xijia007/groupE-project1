@@ -18,9 +18,9 @@
 
 @media (max-width: 640px) {
   .product-list-grid {
-    /* 手机端改成双列 */
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
+    /* 手机端改成单列 */
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 }
 

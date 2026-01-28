@@ -145,7 +145,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                     </div>
                 </div>
 
-                {/* 4. In Stock Quantity + Add Image Link (side by side) */}
+                {/* 4. Stock + Image Link (side by side) */}
                 <div className="form-row">
                     <div className="form-group">
                         <label>In Stock Quantity</label>

@@ -41,18 +41,24 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-sizing: border-box; /* Force border-box strictly */
   width: 180px; /* 统一特定宽度 */
+  margin: 0;
+  line-height: normal;
+  vertical-align: middle;
 }
 
 .sort-dropdown {
+  display: block;
+  /* line-height should be roughly height - border*2 for vertical center in simple blocks */
+  line-height: 42px; 
+  /* height: 44px; */
   background: white;
   border: 1px solid #e5e7eb;
   color: #1a1a1a;
-  appearance: none; /* 去除原生丑陋样式，可能需要补个箭头背景图，或者用 padding-right 顶一下 */
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
   /* 简单的自定义箭头（如果不想引入 SVG 背景图，可以只用 border） */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
@@ -64,8 +70,11 @@
 .add-button {
   background: #5b5fc7;
   color: white;
-  border: none;
+  border: 1px solid transparent; /* Match the 1px border of the dropdown */
   transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-button:hover {
@@ -86,18 +95,23 @@
   .product-header {
     flex-direction: column;
     gap: 15px;
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .product-header-controls {
+    width: 100%;
+    flex-direction: row; /* Keep on same row */
+    justify-content: center;
   }
 
   .product-label {
     font-size: 24px;
   }
 
-  .add-product {
-    width: 100%;
-  }
-
+  .sort-dropdown,
   .add-button {
-    width: 100%;
+    width: auto;
+    flex: 1; /* Share width equally */
+    min-width: 0; /* Allow shrinking if needed */
   }
 }
