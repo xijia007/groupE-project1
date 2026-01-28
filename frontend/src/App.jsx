@@ -22,7 +22,7 @@ import { useAuth } from "./features/auth/contexts/AuthContext.jsx";
 import { useCartSync } from "./features/cart/hooks/useCartSync.js";
 import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
-import Profile from "./pages/Profile/Profile.jsx";
+import Profile from "./pages/UserProfile/Profile.jsx";
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();

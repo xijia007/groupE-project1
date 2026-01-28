@@ -4,9 +4,10 @@ import {
   logout,
   UpdatePassword,
   refreshToken,
+  changePassword,
 } from "../controllers/auth_controller.js";
 import { requireAuth } from "../middlewares/auth.js";
-import { me } from "../controllers/user_controller.js";
+import { me, updateProfile } from "../controllers/user_controller.js";
 import express from "express";
 const router = express.Router();
 
@@ -19,8 +20,10 @@ router.use((req, res, next) => {
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", requireAuth, logout);
-router.post("/update", UpdatePassword);
+router.post("/update", UpdatePassword); // Forgot Password (no auth, no old pass)
+router.post("/change-password", requireAuth, changePassword); // Update Password (auth + old pass)
 router.get("/me", requireAuth, me);
 router.post("/refresh", refreshToken);
+router.put("/profile", requireAuth, updateProfile);
 
 export default router;
