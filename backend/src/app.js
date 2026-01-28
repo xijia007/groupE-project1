@@ -3,6 +3,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import auth_routers from "./routers/auth_routers.js";
 import product_routers from "./routers/product_routers.js";
 import cart_routers from "./routers/cart_routers.js";
+import Coupon_routers from "./routers/Coupon_routers.js";
 import config from "./config.js";
 import db from "./routers/database.js";
 
@@ -19,6 +20,7 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", auth_routers);
 app.use("/api/products", product_routers);
 app.use("/api/cart", cart_routers);
+app.use("/api/coupons", Coupon_routers);
 
 app.use(errorHandler);
 
