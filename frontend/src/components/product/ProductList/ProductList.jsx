@@ -1,5 +1,5 @@
 import ProductItem from "../ProductItem/ProductItem";
-import "../ProductItem/ProductItem.css";
+import "./ProductList.css"; /* Import own layout styles */
 import { useSelector } from "react-redux";
 
 function ProductList({ products, userRole }) {

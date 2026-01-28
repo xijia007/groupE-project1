@@ -4,15 +4,15 @@
     padding: 0 1rem;
     display: grid;
     grid-template-columns: 300px 1fr; /* 左侧侧边栏/概览，右侧详细内容 */
-    gap: 2rem;
+    gap: var(--spacing-lg);
 }
 
 /* 左侧概览卡片 */
 .profile-sidebar {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: var(--bg-card);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
     text-align: center;
     height: fit-content;
 }
@@ -20,22 +20,22 @@
 .avatar-placeholder {
     width: 100px;
     height: 100px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
     border-radius: 50%;
     margin: 0 auto 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--color-text-white);
     font-size: 2.5rem;
     font-weight: bold;
 }
 
 .user-role-badge {
-    background: #e2e8f0;
-    color: #4a5568;
+    background: var(--color-border);
+    color: var(--color-text-secondary);
     padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     font-size: 0.875rem;
     margin-top: 0.5rem;
     display: inline-block;
@@ -45,20 +45,20 @@
 .profile-content {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--spacing-md);
 }
 
 .section-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: var(--bg-card);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
 .section-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-md);
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--color-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,41 +66,58 @@
 
 /* 表单样式 */
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #4a5568;
+    color: var(--color-text-secondary);
     font-weight: 500;
 }
 
 .form-input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
-    transition: border-color 0.2s;
+    border: 1px solid var(--color-border-hover);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--color-primary-light);
+    box-shadow: var(--shadow-focus);
 }
 
-.btn-primary {
-    background: #667eea;
-    color: white;
+.btn-primary, .save-button, .update-password-button {
+    background: var(--color-primary);
+    color: var(--color-text-white);
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     font-weight: 600;
     transition: background 0.2s;
 }
 
-.btn-primary:hover {
-    background: #5a67d8;
+.btn-primary:hover, .save-button:hover, .update-password-button:hover {
+    background: var(--color-primary-hover);
+}
+
+/* 补充 Sign Out 按钮样式 */
+.sign-out-button {
+    padding: 0.75rem 1.5rem;
+    background-color: transparent;
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.sign-out-button:hover {
+    background-color: var(--color-danger);
+    color: var(--color-text-white);
 }

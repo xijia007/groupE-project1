@@ -4,15 +4,15 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   padding: 20px 40px;
-  background: #2c3e50;
-  border-top: 1px solid #34495e;
-  gap: 20px;
+  background: #000000; /* 改为纯黑 */
+  border-top: 1px solid #333333;
+  gap: var(--spacing-lg);
 }
 
 .site-footer-copyright {
   font-size: 13px;
   font-weight: 400;
-  color: white;
+  color: var(--color-text-white);
   order: 1;
   flex: 0 0 auto;
   text-align: left;
@@ -21,7 +21,7 @@
 .site-footer-social {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: var(--spacing-lg);
   order: 2;
   justify-content: center;
   flex: 0 0 auto;
@@ -29,7 +29,7 @@
 
 .social-icon {
   font-size: 24px;
-  color: white;
+  color: var(--color-text-white);
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: var(--spacing-lg);
   order: 3;
   justify-content: flex-end;
   flex: 0 0 auto;
@@ -51,7 +51,7 @@
 .footer-link {
   font-size: 13px;
   font-weight: 400;
-  color: white;
+  color: var(--color-text-white);
   text-decoration: none;
   cursor: pointer;
   transition: opacity 0.3s ease;

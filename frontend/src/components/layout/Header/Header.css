@@ -5,22 +5,21 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   padding: 12px 32px;
-  background: #2c3e50;
-  border-bottom: 1px solid #34495e;
-  gap: 12px;
+  background: #000000; /* 改为纯黑 */
+  border-bottom: 1px solid #333333; /* 边框也调深一点配合黑色 */
+  gap: var(--spacing-sm);
 }
 
 /* Brand Section */
 .site-header-brand {
   display: flex;
   align-items: baseline;
-  gap: 8px;
-  color: white;
+  gap: var(--spacing-sm);
+  color: var(--color-text-white);
   cursor: pointer;
   transition: opacity 0.3s ease;
-  flex: 1 1 0;
-  min-width: 0;
-  order: 1;
+  flex: 0 0 auto; 
+  margin-right: var(--spacing-lg);
 }
 
 .site-header-brand:hover {
@@ -30,7 +29,7 @@
 .brand-title {
   font-size: 24px;
   font-weight: 700;
-  color: white;
+  color: var(--color-text-white);
   white-space: nowrap;
 }
 
@@ -38,48 +37,52 @@
   display: none;
   font-size: 24px;
   font-weight: 700;
-  color: white;
+  color: var(--color-text-white);
   white-space: nowrap;
 }
 
 .brand-subtitle {
   font-size: 14px;
   font-weight: 400;
-  color: #e5e7eb;
+  color: #e5e7eb; 
   white-space: nowrap;
 }
 
 /* Search Section */
 .site-header-search {
   position: relative;
-  flex: 0 0 500px;
-  max-width: 500px;
-  min-width: 320px;
-  margin: 0 auto;
-  order: 2;
+  flex: 1 1 auto; /* 让它占据剩余空间 */
+  max-width: 600px; /* 减小最大宽度 */
+  margin: 0 var(--spacing-lg); /* 给左右一点间距 */
 }
 
 .site-header-search input {
   width: 100%;
-  padding: 8px 40px 8px 16px;
+  padding: 7px 30px 7px 16px; /* 减小高度 */
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-md); /* 改回用中等圆角 */
   font-size: 14px;
-  background: white;
-  color: #131826;
+  background: var(--bg-surface);
+  color: var(--color-text-main);
+  transition: all 0.2s;
+}
+
+.site-header-search input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
 .site-header-search input::placeholder {
-  color: #95a5a6;
+  color: var(--color-text-light);
 }
 
 .search-icon {
   position: absolute;
-  right: 12px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  color: #7f8c8d;
-  font-size: 16px;
+  color: var(--color-text-light);
+  font-size: 18px;
   pointer-events: none;
 }
 
@@ -87,10 +90,10 @@
 .site-header-right {
   display: flex;
   align-items: center;
-  gap: 24px;
-  flex: 1 1 0;
-  order: 3;
-  margin-left: auto;
+  gap: var(--spacing-lg);
+  /* 移除 order: 3 和 flex: 1 1 0 */
+  flex: 0 0 auto;
+  margin-left: auto; /* 确保靠右 */
   justify-content: flex-end;
 }
 
@@ -98,8 +101,8 @@
 .site-header-userAuth {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: white;
+  gap: var(--spacing-sm);
+  color: var(--color-text-white);
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
@@ -110,21 +113,21 @@
 
 .site-header-image {
   font-size: 18px;
-  color: white;
+  color: var(--color-text-white);
 }
 
 .site-header-login {
   font-size: 14px;
   font-weight: 500;
-  color: white;
+  color: var(--color-text-white);
 }
 
 /* Cart Section */
 .site-header-cart {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: white;
+  gap: var(--spacing-sm);
+  color: var(--color-text-white);
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
@@ -141,15 +144,15 @@
 
 .cart-icon {
   font-size: 22px;
-  color: white;
+  color: var(--color-text-white);
 }
 
 .cart-badge {
   position: absolute;
   top: -8px;
   right: -10px;
-  background: #e74c3c;
-  color: white;
+  background: var(--color-danger);
+  color: var(--color-text-white);
   font-size: 11px;
   font-weight: 700;
   min-width: 18px;

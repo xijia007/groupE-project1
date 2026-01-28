@@ -8,12 +8,15 @@
 }
 
 /* Header Section */
+/* Header Section */
 .product-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
+  flex-wrap: wrap; /* 允许小屏幕换行 */
+  gap: 20px;
 }
 
 .product-label {
@@ -23,20 +26,45 @@
   margin: 0;
 }
 
-/* Add Product Button */
-.add-product {
-  margin-right: 0;
+/* Control Buttons (Sort & Add) */
+.product-header-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.sort-dropdown, 
+.add-button {
+  height: 44px; /* 统一高度 */
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px; /* 统一特定宽度 */
+}
+
+.sort-dropdown {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #1a1a1a;
+  appearance: none; /* 去除原生丑陋样式，可能需要补个箭头背景图，或者用 padding-right 顶一下 */
+  /* 简单的自定义箭头（如果不想引入 SVG 背景图，可以只用 border） */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 32px; /* 给箭头留位 */
 }
 
 .add-button {
   background: #5b5fc7;
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
   transition: background-color 0.2s;
 }
 
