@@ -4,12 +4,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../features/products/slices/productsSlice";
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 
 function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const [userInfo, setUserInfo] = useState(null);
+  const { user: userInfo } = useAuth(); // 使用 Context 中的 user
   const dispatch = useDispatch();
 
   const { allItems, searchItems, mode } = useSelector(
@@ -20,53 +21,6 @@ function Home() {
     ...item,
     id: item.id || item._id,
   }));
-
-  useEffect(() => {
-    let isMounted = true;
-    const token = localStorage.getItem("accessToken");
-
-    if (!token) {
-      if (isMounted) {
-        setUserInfo(null);
-      }
-      return () => {
-        isMounted = false;
-      };
-    }
-
-    const fetchMe = async () => {
-      try {
-        const res = await fetch("/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        // If token is invalid or expired, clear it
-        if (!res.ok) {
-          localStorage.removeItem("accessToken");
-          if (isMounted) {
-            setUserInfo(null);
-          }
-          return;
-        }
-
-        const data = await res.json();
-        if (isMounted) {
-          setUserInfo(data.user || null);
-        }
-      } catch (err) {
-        // On error, clear the token
-        localStorage.removeItem("accessToken");
-        if (isMounted) setUserInfo(null);
-      }
-    };
-    fetchMe();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [location.key]);
 
   useEffect(() => {
     setLoading(true);
@@ -93,7 +47,7 @@ function Home() {
         <label className="product-label">Products</label>
         {userInfo && (
           <div className="user-info">
-            Welcome, {userInfo.email} ({userInfo.role})
+            Welcome, {userInfo.name} ({userInfo.role})
           </div>
         )}
         {userInfo?.role === "admin" && (
