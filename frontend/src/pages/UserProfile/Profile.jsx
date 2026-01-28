@@ -14,6 +14,37 @@ function Profile() {
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    // 修改密码相关状态
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [passwordData, setPasswordData] = useState({ oldPassword: "", newPassword: "" });
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('accessToken');
+            const res = await fetch('/api/auth/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(passwordData)
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast('Password updated successfully', 'success');
+                setShowPasswordForm(false);
+                setPasswordData({ oldPassword: "", newPassword: "" });
+            } else {
+                showToast(data.message || 'Update failed', 'error');
+            }
+        } catch (error) {
+            showToast('Server Error', 'error');
+        }
+    };
+
     const fetchUserDate = async () => {
         try {
             const token = localStorage.getItem('accessToken');
@@ -131,8 +162,62 @@ function Profile() {
                     <div className="section-header">
                         <h3>Security</h3>
                     </div>
-                    <p>Want to change your password?</p>
-                    <button className="update-password-button">Update Password</button>
+                    {/* 修改密码表单区域 */}
+                    {!showPasswordForm ? (
+                        <>
+                            <p>Want to change your password?</p>
+                            <button 
+                                className="update-password-button"
+                                onClick={() => setShowPasswordForm(true)}
+                            >
+                                Update Password
+                            </button>
+                        </>
+                    ) : (
+                        <form onSubmit={handleChangePassword} style={{marginTop: '1rem'}}>
+                            <div className="form-group">
+                                <label>Current Password</label>
+                                <input 
+                                    type="password" 
+                                    className="form-input"
+                                    required
+                                    value={passwordData.oldPassword}
+                                    onChange={(e) => setPasswordData({...passwordData, oldPassword: e.target.value})}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>New Password</label>
+                                <input 
+                                    type="password" 
+                                    className="form-input"
+                                    required
+                                    value={passwordData.newPassword}
+                                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                                />
+                            </div>
+                            <div style={{display: 'flex', gap: '1rem'}}>
+                                <button type="submit" className="save-button">
+                                    Change Password
+                                </button>
+                                <button 
+                                    type="button" 
+                                    onClick={() => {
+                                        setShowPasswordForm(false);
+                                        setPasswordData({ oldPassword: "", newPassword: "" });
+                                    }}
+                                    style={{
+                                        padding: '0.75rem 1.5rem',
+                                        border: '1px solid #cbd5e0',
+                                        borderRadius: '6px',
+                                        background: 'white',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </div>
             </div>
 
