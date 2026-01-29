@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useToast } from "../../features/toast/contexts/ToastContext";
 import "./Profile.css";
 
 function Profile() {
+    const navigate = useNavigate();
     const { isLoggedIn, logout, user, fetchUser } = useAuth(); // 获取 fetchUser 和 user
     const { showToast } = useToast();
     const [userInfo, setUserInfo] = useState({
@@ -93,6 +95,15 @@ function Profile() {
         }
     }
 
+    // Redirect if not logged in
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/signin");
+        }
+    }, [isLoggedIn, navigate]);
+
+    if (!isLoggedIn) return null;
+
     if (loading) {
         return <div>Loading...</div>
     }
@@ -112,7 +123,10 @@ function Profile() {
                 <button 
                     className="sign-out-button" 
                     style={{marginTop: '2rem', width: '100%'}} 
-                    onClick={logout}
+                    onClick={() => {
+                        logout();
+                        navigate("/signin");
+                    }}
                 >
                     Sign Out
                 </button>
