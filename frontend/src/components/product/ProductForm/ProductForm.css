@@ -107,25 +107,34 @@
 /* Image URL Input with Upload Button */
 .image-url-input {
   display: flex;
-  gap: 12px;
-  align-items: stretch;
+  gap: 0;
+  align-items: center;
+  position: relative; /* Context for absolute positioning */
+  width: 100%;
 }
 
 .image-url-input input {
-  flex: 1;
+  width: 100%;
+  padding-right: 100px !important; /* Space for the button */
 }
 
 .upload-button {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
   background: #5b5fc7;
   color: white;
   border: none;
-  padding: 0 24px;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 6px 16px; /* Smaller padding */
+  border-radius: 4px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
   white-space: nowrap;
+  height: auto;
+  line-height: normal;
 }
 
 .upload-button:hover {
@@ -237,12 +246,11 @@
     gap: 24px;
   }
 
-  .image-url-input {
-    flex-direction: column;
-  }
+  /* .image-url-input removed as it needs no override */
 
   .upload-button {
-    width: 100%;
+    /* Keep button compact */
+    width: auto;
   }
 
   .submit-button {
