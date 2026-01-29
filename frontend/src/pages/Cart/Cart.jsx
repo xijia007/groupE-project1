@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import {
@@ -7,25 +7,32 @@ import {
   selectCartTotalPrice,
   updateQuantity,
   removeFromCart,
+  updateCartBackend,
+  removeFromCartBackend,
+  setAppliedPromo,
+  removeAppliedPromo,
+  selectAppliedPromo
 } from "../../features/cart/slices/cartSlice";
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useToast } from "../../features/toast/contexts/ToastContext";
 import "./Cart.css";
 
 function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoggedIn } = useAuth();
   const cartItems = useSelector(selectCartItems);
   const totalItems = useSelector(selectCartTotalItems);
   const totalPrice = useSelector(selectCartTotalPrice);
+  const appliedPromo = useSelector(selectAppliedPromo);
   const { showToast } = useToast();
 
-  // Promotion code state
+  // Promotion code state (input only)
   const [promoCode, setPromoCode] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState(null);
+  // const [appliedPromo, setAppliedPromo] = useState(null); // Moved to Redux
   const [promoError, setPromoError] = useState("");
 
   const handleClose = () => {
-    console.log("cart closing");
     navigate(-1);
   };
 
@@ -38,19 +45,43 @@ function Cart() {
       showToast(`Cannot add more than ${stock} items`, "warning");
       return;
     }
+    // Optimistic UI update
     dispatch(updateQuantity({ productId, quantity: currentQuantity + 1 }));
+    
+    // Backend sync if logged in
+    if (isLoggedIn) {
+      dispatch(updateCartBackend({ productId, quantity: currentQuantity + 1 }));
+    }
   };
 
   const handleDecrement = (productId, currentQuantity) => {
     if (currentQuantity > 1) {
+      // Optimistic UI update
       dispatch(updateQuantity({ productId, quantity: currentQuantity - 1 }));
+      
+      // Backend sync
+      if (isLoggedIn) {
+         dispatch(updateCartBackend({ productId, quantity: currentQuantity - 1 }));
+      }
     } else {
+      // Optimistic UI update
       dispatch(removeFromCart(productId));
+      
+      // Backend sync
+      if (isLoggedIn) {
+        dispatch(removeFromCartBackend(productId));
+      }
     }
   };
 
   const handleRemove = (productId) => {
+    // Optimistic UI update
     dispatch(removeFromCart(productId));
+    
+    // Backend sync
+    if (isLoggedIn) {
+      dispatch(removeFromCartBackend(productId));
+    }
   };
 
   const handleApplyPromo = async () => {
@@ -61,12 +92,14 @@ function Cart() {
         throw new Error(errorData.message || "Failed to verify coupon");
       }
       const data = await response.json();
-      setAppliedPromo({
+      
+      dispatch(setAppliedPromo({
         code: promoCode,
         type: "percentage",
         value: data.discountPercentage,
         description: `${data.discountPercentage}% off`,
-      });
+      }));
+
       setPromoError("");
       showToast(`Promo code ${promoCode} applied!`, "success");
     } catch (error) {
@@ -76,7 +109,7 @@ function Cart() {
   };
 
   const handleRemovePromo = () => {
-    setAppliedPromo(null);
+    dispatch(removeAppliedPromo());
     setPromoCode("");
     setPromoError("");
   };

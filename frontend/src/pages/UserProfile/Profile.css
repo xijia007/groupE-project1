@@ -17,6 +17,10 @@
     height: fit-content;
 }
 
+.user-profile-label {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
 .avatar-placeholder {
     width: 100px;
     height: 100px;

@@ -3,23 +3,9 @@ import { useNavigate } from "react-router-dom";
 import ProductForm from "../../components/product/ProductForm/ProductForm";
 
 function CreateProduct() {
-    console.log("CreateProduct rendered");
-    const navigate = useNavigate();
-    const [categories, setCategories] = useState([]);
-    const [authLoading, setAuthLoading] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    // const handleSubmit = (data) => {
-    //     onCreateProduct(data);
-    //     navigate("/");
-    // };
     const handleSubmit = async (data) => {
         try {
             const token = localStorage.getItem("accessToken");
-            console.log("handleSubmit start");
-            console.log("token:", token);
-            console.log("payload:", data);
-            console.log("about to fetch");
             const res = await fetch("/api/products/add", {
                 method: 'POST',
                 headers: {
@@ -30,10 +16,7 @@ function CreateProduct() {
                 body: JSON.stringify(data),
                 
             });
-            console.log("token:", token);
-            console.log("payload:", data);
             const result = await res.json();
-            console.log("create response:", res.status, result);
             if (!res.ok) {
                 return;
             }
@@ -41,7 +24,6 @@ function CreateProduct() {
         } catch (err) {
             return;
         }
-        console.log("payload", data);
     };
 
     useEffect(() => {
@@ -82,22 +64,6 @@ function CreateProduct() {
         };
     }, [navigate]);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const res = await fetch("/api/products");
-                const result = await res.json();
-                const list = (result.data || [])
-                    .map((product) => product.category)
-                    .filter(Boolean);
-                setCategories(Array.from(new Set(list)));
-            } catch (err) {
-                setCategories([]);
-            }
-        };
-        fetchCategories();
-    }, []);
-
     if (authLoading) {
         return <div>Loading...</div>;
     }
@@ -113,7 +79,6 @@ function CreateProduct() {
                 initialValues={null}
                 submitLabel="Add Product"
                 onSubmit={handleSubmit}
-                categories={categories}
             />
         </div>
     )

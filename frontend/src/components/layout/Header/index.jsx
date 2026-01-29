@@ -83,28 +83,12 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
             />
             {isLoggedIn && user?.role === 'admin' && (
                 <FaStar 
-                    style={{ 
-                        position: 'absolute', 
-                        bottom: '-6px', 
-                        right: '-6px', 
-                        color: '#f59e0b', 
-                        fontSize: '12px',
-                        filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5))',
-                        pointerEvents: 'none'
-                    }} 
+                    className="user-badge user-badge-admin"
                 />
             )}
             {isLoggedIn && (user?.role === 'regular' || user?.role === 'user') && (
                 <FaLeaf 
-                    style={{ 
-                        position: 'absolute', 
-                        bottom: '-6px', 
-                        right: '-6px', 
-                        color: '#10b981', 
-                        fontSize: '12px',
-                        filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5))',
-                        pointerEvents: 'none'
-                    }} 
+                    className="user-badge user-badge-regular"
                 />
             )}
           </div>

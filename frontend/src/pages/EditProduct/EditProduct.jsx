@@ -9,7 +9,6 @@ function EditProduct() {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
   const [deleteError, setDeleteError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -36,21 +35,6 @@ function EditProduct() {
     };
   }, [id]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("/api/products");
-        const result = await res.json();
-        const list = (result.data || [])
-          .map((item) => item.category)
-          .filter(Boolean);
-        setCategories(Array.from(new Set(list)));
-      } catch (err) {
-        setCategories([]);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   if (loading) return <h1>Loading...</h1>;
 
@@ -91,7 +75,6 @@ function EditProduct() {
       <ProductForm
         initialValues={product}
         submitLabel="Update Product"
-        categories={categories}
         onSubmit={async (data) => {
           try {
             const token = localStorage.getItem("accessToken");

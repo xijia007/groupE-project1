@@ -242,12 +242,25 @@ const mergeCarts = (guestCart, userCart) => {
 const initialState = {
   items: loadCartFromStorage(),
   userId: getCurrentUserId(),
+  appliedPromo: null, // { code, type, value, description }
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
+    // ... existing reducers ...
+    
+    // 设置已应用的优惠码
+    setAppliedPromo: (state, action) => {
+      state.appliedPromo = action.payload;
+    },
+
+    // 移除优惠码
+    removeAppliedPromo: (state) => {
+      state.appliedPromo = null;
+    },
+
     // 添加商品到购物车
     addToCart: (state, action) => {
       const { product, quantity = 1 } = action.payload;
@@ -316,6 +329,7 @@ const cartSlice = createSlice({
     // 清空购物车
     clearCart: (state) => {
       state.items = [];
+      state.appliedPromo = null; // Clear promo on cart clear? Usually yes.
       saveCartToStorage(state.items);
     },
 
@@ -358,6 +372,7 @@ const cartSlice = createSlice({
       // 清空当前购物车
       state.items = [];
       state.userId = null;
+      state.appliedPromo = null; // Reset promo on logout
       
       // 加载访客购物车
       try {
@@ -421,6 +436,8 @@ export const {
   clearCart,
   syncCartOnLogin,
   syncCartOnLogout,
+  setAppliedPromo,
+  removeAppliedPromo
 } = cartSlice.actions;
 
 // Selectors - 用于从 state 中获取数据
@@ -438,6 +455,8 @@ export const selectItemQuantity = (productId) => (state) => {
 };
 
 export const selectCartUserId = (state) => state.cart.userId;
+
+export const selectAppliedPromo = (state) => state.cart.appliedPromo;
 
 // 导出 reducer
 export default cartSlice.reducer;
