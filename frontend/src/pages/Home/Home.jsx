@@ -1,24 +1,37 @@
 import ProductList from "../../components/product/ProductList/ProductList";
+import Pagination from "../../components/product/Pagination/Pagination.jsx";
 import "./Home.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, use } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../features/products/slices/productsSlice";
 import { useAuth } from "../../features/auth/contexts/AuthContext";
 
 function Home() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const { user: userInfo } = useAuth(); // 使用 Context 中的 user
   const dispatch = useDispatch();
 
-  const [sortOrder, setSortOrder] = useState('last_added');
+  const [sortOrder, setSortOrder] = useState("last_added");
 
   const { allItems, searchItems, mode } = useSelector(
     (state) => state.products,
   );
-  
+
+  function isMoblie(breakpoint = 768) {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
+    useEffect(() => {
+      const onResize = () => setIsMobile(window.innerWidth < breakpoint);
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }, [breakpoint]);
+    return isMobile;
+  }
+  const isMobileView = isMoblie(768);
+  const ItemsPerPage = isMobileView ? 3 : 8;
   // Prepare raw products
   const rawProducts = useMemo(() => {
     const items = mode === "search" ? searchItems : allItems;
@@ -32,15 +45,15 @@ function Home() {
   const sortedProducts = useMemo(() => {
     // Create a shallow copy to avoid mutating original array
     const sorted = [...rawProducts];
-    
+
     switch (sortOrder) {
-      case 'price_low_high':
+      case "price_low_high":
         sorted.sort((a, b) => a.price - b.price);
         break;
-      case 'price_high_low':
+      case "price_high_low":
         sorted.sort((a, b) => b.price - a.price);
         break;
-      case 'last_added':
+      case "last_added":
       default:
         // Assume _id desc or createdAt desc for 'last added'
         // If items contain createdAt, rely on that:
@@ -48,17 +61,21 @@ function Home() {
         // Fallback: reverse the list if default is oldest first, or sort by _id descending
         // Let's assume sorting by _id (which contains timestamp) descending is safest for MongoDB
         sorted.sort((a, b) => {
-           const idA = a.id || '';
-           const idB = b.id || '';
-           if (idA < idB) return 1;
-           if (idA > idB) return -1;
-           return 0;
+          const idA = a.id || "";
+          const idB = b.id || "";
+          if (idA < idB) return 1;
+          if (idA > idB) return -1;
+          return 0;
         });
         break;
     }
     return sorted;
   }, [rawProducts, sortOrder]);
 
+  const totalPage = Math.ceil(sortedProducts.length / ItemsPerPage);
+  const startIndex = (currentPage - 1) * ItemsPerPage;
+  const endIndex = startIndex + ItemsPerPage;
+  const productsToDisplay = sortedProducts.slice(startIndex, endIndex);
 
   useEffect(() => {
     setLoading(true);
@@ -69,6 +86,9 @@ function Home() {
       })
       .finally(() => setLoading(false));
   }, [dispatch, location.key]);
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page on sort order change
+  }, [mode, searchItems, allItems, sortOrder]);
 
   const handleCreateProduct = () => {
     navigate("/createProduct");
@@ -78,39 +98,45 @@ function Home() {
   if (loading) {
     return <div>Loading</div>;
   }
-
   return (
     <div className="product-main">
       <div className="product-header">
         <label className="product-label">Products</label>
-        
-        <div className="product-header-controls">
-            <select 
-              className="sort-dropdown"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-            >
-              <option value="last_added">Last added</option>
-              <option value="price_low_high">Price: low to high</option>
-              <option value="price_high_low">Price: high to low</option>
-            </select>
 
-            {userInfo && (
-             <div className="user-info" style={{ display: 'none' }}> {/* Optional: hide user info here if header already has it */}
+        <div className="product-header-controls">
+          <select
+            className="sort-dropdown"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="last_added">Last added</option>
+            <option value="price_low_high">Price: low to high</option>
+            <option value="price_high_low">Price: high to low</option>
+          </select>
+
+          {userInfo && (
+            <div className="user-info" style={{ display: "none" }}>
+              {" "}
+              {/* Optional: hide user info here if header already has it */}
               Welcome, {userInfo.name} ({userInfo.role})
-             </div>
-            )}
-            
-            {userInfo?.role === "admin" && (
-                <button className="add-button" onClick={handleCreateProduct}>
-                  Add Product
-                </button>
-            )}
+            </div>
+          )}
+
+          {userInfo?.role === "admin" && (
+            <button className="add-button" onClick={handleCreateProduct}>
+              Add Product
+            </button>
+          )}
         </div>
       </div>
       <div className="product-list">
-        <ProductList products={sortedProducts} userRole={userInfo?.role} />
+        <ProductList products={productsToDisplay} userRole={userInfo?.role} />
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPage}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </div>
   );
 }
