@@ -12,7 +12,19 @@ const defaultValues = {
     customCategory: ""
 };
 
+const PREDEFINED_CATEGORIES = [
+    "Category1",
+    "Category2",
+    "Category3",
+    "Category4",
+    "Category5",
+    "Category6",
+];
+
 function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
+    // Determine which categories to query
+    const categoryOptions = PREDEFINED_CATEGORIES;
+
     // State to manage form input values
     const [formData, setFormData] = useState(defaultValues);
     // State to store validation error messages
@@ -125,7 +137,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                             onChange={handleChange("category")}
                         >
                             <option value="">Select category</option>
-                            {(categories || []).map((category) => (
+                            {categoryOptions.map((category) => (
                                 <option key={category} value={category}>
                                     {category}
                                 </option>
