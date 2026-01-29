@@ -95,8 +95,6 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
             // Execute the parent-provided submission logic if valid
             onSubmit(cleanedData);
         }
-        console.log("form submit", formData);
-        
     };
 
     return (

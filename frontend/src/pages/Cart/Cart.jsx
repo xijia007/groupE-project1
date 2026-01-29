@@ -25,7 +25,6 @@ function Cart() {
   const [promoError, setPromoError] = useState("");
 
   const handleClose = () => {
-    console.log("cart closing");
     navigate(-1);
   };
 

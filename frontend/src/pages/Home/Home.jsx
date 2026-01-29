@@ -72,7 +72,6 @@ function Home() {
 
   const handleCreateProduct = () => {
     navigate("/createProduct");
-    console.log("Add Product clicked");
   };
 
   if (loading) {
