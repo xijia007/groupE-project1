@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductForm from "../../components/product/ProductForm/ProductForm";
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 
 function CreateProduct() {
+    const navigate = useNavigate();
+    const { isLoggedIn, user } = useAuth();
+
     const handleSubmit = async (data) => {
         try {
             const token = localStorage.getItem("accessToken");
@@ -11,10 +15,8 @@ function CreateProduct() {
                 headers: {
                     "Content-Type": "application/json",
                     ...(token ? { Authorization: `Bearer ${token}`} : {}),
-
                 },
                 body: JSON.stringify(data),
-                
             });
             const result = await res.json();
             if (!res.ok) {
@@ -27,49 +29,17 @@ function CreateProduct() {
     };
 
     useEffect(() => {
-        let isMounted = true;
-        const token = localStorage.getItem("accessToken");
-
-        if (!token) {
+        if (!isLoggedIn) {
             navigate("/signin", { replace: true });
             return;
         }
+        if (user && user.role !== "admin") {
+            navigate("/", { replace: true });
+        }
+    }, [isLoggedIn, user, navigate]);
 
-        const fetchMe = async () => {
-            try {
-                const res = await fetch("/api/auth/me", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const data = await res.json();
-                const role = data?.user?.role;
-                if (isMounted) {
-                    setIsAdmin(role === "admin");
-                    setAuthLoading(false);
-                }
-                if (role !== "admin") {
-                    navigate("/", { replace: true });
-                }
-            } catch (err) {
-                if (isMounted) setAuthLoading(false);
-                navigate("/signin", { replace: true });
-            }
-        };
-
-        fetchMe();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [navigate]);
-
-    if (authLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!isAdmin) {
-        return null;
+    if (!isLoggedIn || (user && user.role !== "admin")) {
+        return null; 
     }
 
     return (

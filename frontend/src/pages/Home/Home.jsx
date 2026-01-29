@@ -31,7 +31,7 @@ function Home() {
     return isMobile;
   }
   const isMobileView = isMoblie(768);
-  const ItemsPerPage = isMobileView ? 3 : 8;
+  const ItemsPerPage = isMobileView ? 3 : 10;
   // Prepare raw products
   const rawProducts = useMemo(() => {
     const items = mode === "search" ? searchItems : allItems;
