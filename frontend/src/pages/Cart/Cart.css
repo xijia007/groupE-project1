@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  bottom: 300px;
+  bottom: 0;
   width: min(450px, 90vw);
   background: white;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
@@ -389,9 +389,17 @@
 }
 
 /* Responsive Design */
-@media (max-width: 480px) {
+/* Responsive Design */
+@media (max-width: 640px) {
   .cart-popup {
     width: 100vw;
+    /* Calculated based on 12px padding + 40px row1 + 16px gap + 36px row2 + 12px padding = ~116px */
+    top: 116px;   
+    /* Calculated based on 20px padding + 24px icon + 16px gap + 20px link + 16px gap + 16px copy + 20px padding = ~132px */
+    bottom: 136px; 
+    right: 0;
+    left: 0;
+    border-radius: 0;
   }
 
   .cart-item {

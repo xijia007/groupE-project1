@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   selectCartItems,
   selectCartTotalItems,
@@ -97,9 +97,57 @@ function Cart() {
 
   const estimatedTotal = subtotal + tax - discount;
 
+  // Calculate dynamic heights for mobile view
+  const [popupStyle, setPopupStyle] = useState({});
+
+  useEffect(() => {
+    const calculatePositions = () => {
+      // Typically the header is <header class="site-header"> or logic may vary
+      // Based on previous files, we can query selector
+      const header = document.querySelector('.site-header');
+      const footer = document.querySelector('.site-footer');
+      
+      if (window.innerWidth <= 640 && header && footer) { 
+         const headerRect = header.getBoundingClientRect();
+         const footerRect = footer.getBoundingClientRect();
+         
+         const topVal = Math.max(0, headerRect.bottom);
+         const bottomVal = Math.max(0, window.innerHeight - footerRect.top);
+
+         setPopupStyle({
+            top: `${topVal}px`,
+            bottom: `${bottomVal}px`
+         });
+      } else {
+         setPopupStyle({}); 
+      }
+    };
+
+    // Use requestAnimationFrame for smooth updates during scroll
+    let rafId;
+    const handleUpdate = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(calculatePositions);
+    };
+
+    calculatePositions();
+    window.addEventListener('resize', handleUpdate);
+    window.addEventListener('scroll', handleUpdate, { passive: true });
+    
+    return () => {
+      window.removeEventListener('resize', handleUpdate);
+      window.removeEventListener('scroll', handleUpdate);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
     <div className="cart-overlay" onClick={handleClose}>
-      <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="cart-popup" 
+        onClick={(e) => e.stopPropagation()}
+        style={popupStyle}
+      >
         <div className="cart-header">
           <h1>Cart ({totalItems})</h1>
           <button onClick={handleClose}>X</button>

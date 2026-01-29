@@ -185,3 +185,32 @@
     font-size: 13px;
   }
 }
+
+@media (max-width: 640px) {
+  /* Phone view: Add/Edit buttons on same row, equal width */
+  .product-card-button {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* Target the direct children: either the Add Button, Qty Control, or the Edit Link */
+  .product-card-button > * {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Ensure the Edit Link fills its flex space and the button inside fills the link */
+  .product-card-button a {
+    display: flex; /* Or block, but flex helps separate if needed */
+  }
+  
+  .product-card-edit {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 13px;
+    height: 100%; /* Match height if needed */
+  }
+}

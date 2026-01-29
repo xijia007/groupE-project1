@@ -105,6 +105,10 @@
     background: var(--color-primary-hover);
 }
 
+.update-password-button {
+    margin-top: 10px;
+}
+
 /* 补充 Sign Out 按钮样式 */
 .sign-out-button {
     padding: 0.75rem 1.5rem;

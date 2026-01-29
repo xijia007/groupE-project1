@@ -130,7 +130,7 @@ function Profile() {
                     </div>
                     <form onSubmit={handleUpdateProfile}>
                         <div className="form-group">
-                            <label>Full Name</label>
+                            <label>User Name</label>
                                 <input 
                                     type='text'
                                     className="form-input"

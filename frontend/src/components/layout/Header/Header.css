@@ -176,6 +176,9 @@
 @media (max-width: 640px) {
   .site-header {
     flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1100; /* Ensure over cart overlap if any */
   }
 
   .site-header-brand {
