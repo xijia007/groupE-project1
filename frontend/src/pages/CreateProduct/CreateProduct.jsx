@@ -111,7 +111,7 @@ function CreateProduct() {
             <h1>Create Product</h1>
             <ProductForm 
                 initialValues={null}
-                submitLabel="Create Product"
+                submitLabel="Add Product"
                 onSubmit={handleSubmit}
                 categories={categories}
             />

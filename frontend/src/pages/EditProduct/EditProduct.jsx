@@ -86,62 +86,63 @@ function EditProduct() {
   };
 
   return (
-  <>
-    <ProductForm
-      initialValues={product}
-      submitLabel="Update Product"
-      categories={categories}
-      onSubmit={async (data) => {
-        try {
-          const token = localStorage.getItem("accessToken");
-          const res = await fetch(`/api/products/${id}/edit`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-            body: JSON.stringify(data),
-          });
+    <div className="create-product">
+      <h1>Edit Product</h1>
+      <ProductForm
+        initialValues={product}
+        submitLabel="Update Product"
+        categories={categories}
+        onSubmit={async (data) => {
+          try {
+            const token = localStorage.getItem("accessToken");
+            const res = await fetch(`/api/products/${id}/edit`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: JSON.stringify(data),
+            });
 
-          if (!res.ok) return;
-          navigate("/");
-        } catch (err) {
-          // optional: error handling
-        }
-      }}
-    />
-    <div className="edit-product-actions">
-      <button type="button" className="delete-button" onClick={handleDelete}>
-        Delete Product
-      </button>
-      {deleteError && <div className="delete-error">{deleteError}</div>}
-    </div>
-    {showDeleteConfirm && (
-      <div className="edit-delete-overlay">
-        <div className="edit-delete-modal">
-          <div className="edit-delete-title">
-            Are you sure to delete this product?
-          </div>
-          <div className="edit-delete-actions">
-            <button
-              type="button"
-              className="delete-confirm"
-              onClick={handleDeleteConfirm}
-            >
-              Yes
-            </button>
-            <button
-              type="button"
-              className="delete-cancel"
-              onClick={() => setShowDeleteConfirm(false)}
-            >
-              No
-            </button>
+            if (!res.ok) return;
+            navigate("/");
+          } catch (err) {
+            // optional: error handling
+          }
+        }}
+      />
+      <div className="edit-product-actions">
+        <button type="button" className="delete-button" onClick={handleDelete}>
+          Delete Product
+        </button>
+        {deleteError && <div className="delete-error">{deleteError}</div>}
+      </div>
+      {showDeleteConfirm && (
+        <div className="edit-delete-overlay">
+          <div className="edit-delete-modal">
+            <div className="edit-delete-title">
+              Are you sure to delete this product?
+            </div>
+            <div className="edit-delete-actions">
+              <button
+                type="button"
+                className="delete-confirm"
+                onClick={handleDeleteConfirm}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                className="delete-cancel"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                No
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
-  </>
+      )}
+    </div>
   );
 }
 
