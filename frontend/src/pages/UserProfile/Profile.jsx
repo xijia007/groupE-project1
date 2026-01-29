@@ -110,15 +110,17 @@ function Profile() {
 
     return (
         <div className="profile-container">
+       
             <div className="profile-sidebar">
+                <div className="user-profile-label">User profile</div>
                 <div className="user-name">
-                    <h2>{userInfo.name}</h2>
+                    <h2>Name: {userInfo.name}</h2>
                 </div>
                 <div className="user-role-badge">
-                    {userInfo.role || "User"}
+                    Role: {userInfo.role || "User"}
                 </div>
                 <p style={{marginTop: '1rem', color: '#718096'}}>
-                    {userInfo.email}
+                    Email: {userInfo.email}
                 </p>
                 <button 
                     className="sign-out-button" 

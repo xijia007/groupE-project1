@@ -172,7 +172,23 @@
   white-space: nowrap;
 }
 
+/* User Badges */
+.user-badge {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    font-size: 12px;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
+    pointer-events: none;
+}
 
+.user-badge-admin {
+    color: #f59e0b;
+}
+
+.user-badge-regular {
+    color: #10b981;
+}
 @media (max-width: 640px) {
   .site-header {
     flex-wrap: wrap;
