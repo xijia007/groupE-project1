@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import {
@@ -9,6 +9,9 @@ import {
   removeFromCart,
   updateCartBackend,
   removeFromCartBackend,
+  setAppliedPromo,
+  removeAppliedPromo,
+  selectAppliedPromo
 } from "../../features/cart/slices/cartSlice";
 import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useToast } from "../../features/toast/contexts/ToastContext";
@@ -21,11 +24,12 @@ function Cart() {
   const cartItems = useSelector(selectCartItems);
   const totalItems = useSelector(selectCartTotalItems);
   const totalPrice = useSelector(selectCartTotalPrice);
+  const appliedPromo = useSelector(selectAppliedPromo);
   const { showToast } = useToast();
 
-  // Promotion code state (existing)
+  // Promotion code state (input only)
   const [promoCode, setPromoCode] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState(null);
+  // const [appliedPromo, setAppliedPromo] = useState(null); // Moved to Redux
   const [promoError, setPromoError] = useState("");
 
   const handleClose = () => {
@@ -88,12 +92,14 @@ function Cart() {
         throw new Error(errorData.message || "Failed to verify coupon");
       }
       const data = await response.json();
-      setAppliedPromo({
+      
+      dispatch(setAppliedPromo({
         code: promoCode,
         type: "percentage",
         value: data.discountPercentage,
         description: `${data.discountPercentage}% off`,
-      });
+      }));
+
       setPromoError("");
       showToast(`Promo code ${promoCode} applied!`, "success");
     } catch (error) {
@@ -103,7 +109,7 @@ function Cart() {
   };
 
   const handleRemovePromo = () => {
-    setAppliedPromo(null);
+    dispatch(removeAppliedPromo());
     setPromoCode("");
     setPromoError("");
   };
