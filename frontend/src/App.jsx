@@ -9,7 +9,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-
 import Home from "./pages/Home/Home.jsx";
 import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct/EditProduct.jsx";
@@ -23,6 +22,7 @@ import { useCartSync } from "./features/cart/hooks/useCartSync.js";
 import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
 import Profile from "./pages/UserProfile/Profile.jsx";
+import NotFound from "./pages/NotFound/NotFound.jsx";
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
@@ -73,7 +73,8 @@ function AppContent() {
             <Route path="/products/:id/edit" element={<EditProduct />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
 
           {backgroundLocation && (
