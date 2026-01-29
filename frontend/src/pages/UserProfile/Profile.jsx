@@ -1,18 +1,33 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useToast } from "../../features/toast/contexts/ToastContext";
 import "./Profile.css";
 
 function Profile() {
-    const { isLoggedIn, logout } = useAuth();
+    const navigate = useNavigate();
+    const { isLoggedIn, logout, user, fetchUser } = useAuth(); // 获取 fetchUser 和 user
     const { showToast } = useToast();
     const [userInfo, setUserInfo] = useState({
         name: "",
         email: "",
         role: "",
     })
+    
+    // 当全局 user 变化时，更新本地表单 state
+    useEffect(() => {
+        if (user) {
+            setUserInfo({
+                name: user.name || "",
+                email: user.email || "",
+                role: user.role || ""
+            });
+            setLoading(false);
+        }
+    }, [user]);
+
     const [isEditing, setIsEditing] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(!user); // 如果没有 user，则 loading
 
     // 修改密码相关状态
     const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -45,29 +60,14 @@ function Profile() {
         }
     };
 
-    const fetchUserDate = async () => {
-        try {
-            const token = localStorage.getItem('accessToken');
-            const res = await fetch('/api/auth/me', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            if (res.ok) {
-                setUserInfo(data.user);
-            }
-        } catch (error) {
-            console.error(error);
-            showToast('Failed to load profile', 'error');
-        } finally {
-            setLoading(false);
-        }
-    }
-
+    // 删除 fetchUserDate，完全依赖 AuthContext
+    
     useEffect(() => {
-        if (isLoggedIn) {
-            fetchUserDate();
+        // 如果已登录但没有用户数据（例如刚刷新页面），尝试 fetch
+        if (isLoggedIn && !user) {
+            fetchUser();
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, user, fetchUser]);
 
     const handleUpdateProfile = async(e) => {
         e.preventDefault();
@@ -85,7 +85,8 @@ function Profile() {
             if (res.ok) {
                 showToast('Profile updated successfully', 'success');
                 setIsEditing(false);
-                fetchUserDate();
+                // 刷新全局状态，这将触发上面的 useEffect 更新本地 userInfo
+                await fetchUser(); 
             } else {
                 showToast('Update failed', 'error');
             }
@@ -93,6 +94,15 @@ function Profile() {
             showToast('Server Error', 'error');
         }
     }
+
+    // Redirect if not logged in
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/signin");
+        }
+    }, [isLoggedIn, navigate]);
+
+    if (!isLoggedIn) return null;
 
     if (loading) {
         return <div>Loading...</div>
@@ -113,7 +123,10 @@ function Profile() {
                 <button 
                     className="sign-out-button" 
                     style={{marginTop: '2rem', width: '100%'}} 
-                    onClick={logout}
+                    onClick={() => {
+                        logout();
+                        navigate("/signin");
+                    }}
                 >
                     Sign Out
                 </button>
@@ -131,7 +144,7 @@ function Profile() {
                     </div>
                     <form onSubmit={handleUpdateProfile}>
                         <div className="form-group">
-                            <label>Full Name</label>
+                            <label>User Name</label>
                                 <input 
                                     type='text'
                                     className="form-input"

@@ -6,7 +6,8 @@ import {
   setQuery,
 } from "../../../features/products/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { FaRegUser, FaSearch } from "react-icons/fa";
+import { useAuth } from "../../../features/auth/contexts/AuthContext";
+import { FaRegUser, FaSearch, FaStar, FaLeaf } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import {
   selectCartTotalItems,
@@ -18,6 +19,8 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const debounceRef = useRef(null);
+  const { user } = useAuth(); // 获取用户信息
+
   useEffect(() => {
     return () => {
       if (debounceRef.current) {
@@ -50,11 +53,6 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
   const totalPrice = useSelector(selectCartTotalPrice);
 
   const navigate = useNavigate();
-  // const location = useLocation();
-
-  // const handleCartClick = () => {
-  //   navigate('/cart', { state: { backgroundLocation: location }});
-  // };
 
   const handleProfileClick = () => {
     navigate("/profile");
@@ -78,10 +76,38 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
       </div>
       <div className="site-header-right">
         <div className="site-header-userAuth">
-          <FaRegUser
-            className="site-header-image"
-            onClick={handleProfileClick}
-          />
+          <div className="user-icon-container" style={{ position: 'relative' }}>
+            <FaRegUser
+              className="site-header-image"
+              onClick={handleProfileClick}
+            />
+            {isLoggedIn && user?.role === 'admin' && (
+                <FaStar 
+                    style={{ 
+                        position: 'absolute', 
+                        bottom: '-6px', 
+                        right: '-6px', 
+                        color: '#f59e0b', 
+                        fontSize: '12px',
+                        filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5))',
+                        pointerEvents: 'none'
+                    }} 
+                />
+            )}
+            {isLoggedIn && (user?.role === 'regular' || user?.role === 'user') && (
+                <FaLeaf 
+                    style={{ 
+                        position: 'absolute', 
+                        bottom: '-6px', 
+                        right: '-6px', 
+                        color: '#10b981', 
+                        fontSize: '12px',
+                        filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5))',
+                        pointerEvents: 'none'
+                    }} 
+                />
+            )}
+          </div>
           <span className="site-header-login" onClick={onSignInClick}>
             {isLoggedIn ? "Logout" : "Sign In"}
           </span>

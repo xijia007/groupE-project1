@@ -4,7 +4,7 @@
   margin: 0 auto;
   padding: 40px 20px;
   min-height: calc(100vh - 200px);
-  background: white;
+  background: var(--bg-surface);
 }
 
 /* Header Section */
@@ -19,16 +19,16 @@
 .product-detail-header h1 {
   font-size: 28px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text-main);
   margin: 0;
 }
 
 .back-to-home button {
-  background: #5b5fc7;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text-white);
   border: none;
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -36,24 +36,24 @@
 }
 
 .back-to-home button:hover {
-  background: #4a4db3;
+  background: var(--color-primary-hover);
 }
 
 /* Product Frame - Left Image, Right Info */
 .product-frame {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1fr 1fr; /* 平分或者 1.2fr 0.8fr */
+  gap: 80px; /* 增加间距 */
   align-items: flex-start;
+  margin-top: 20px;
 }
 
-/* Ensure image is first (left) */
+/* Ensure image is left */
 .product-img-frame {
-  grid-column: 1;
   width: 100%;
-  aspect-ratio: 1;
-  background: #f3f4f6;
-  border-radius: 8px;
+  aspect-ratio: 4/3; /* 使用 4:3 比例，更适合展示大图 */
+  background: #f9fafb; /* 极浅灰底 */
+  border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -63,33 +63,34 @@
 .product-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* 保证完整显示 */
+  mix-blend-mode: multiply;
 }
 
-/* Ensure content is second (right) */
+/* Ensure content is right */
 .product-body {
-  grid-column: 2;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-md);
+  padding-top: 20px; /* 稍微下移一点，对齐视觉中心 */
 }
 
 /* Category Badge */
 .product-category {
   display: inline-block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-text-light); /* 灰色小字 */
   width: fit-content;
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 /* Product Name */
 .product-name {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1.2;
+  font-size: 36px; /* 更大 */
+  font-weight: 800;
+  color: var(--color-text-main);
+  line-height: 1.1;
   margin: 0;
 }
 
@@ -103,9 +104,9 @@
 }
 
 .product-price {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text-main);
   padding: 0;
 }
 
@@ -114,8 +115,9 @@
   color: #dc2626;
   border-radius: 4px;
   padding: 4px 12px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .stock-status.in-stock {
@@ -125,91 +127,101 @@
 
 /* Product Description */
 .product-description {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
-  color: #6b7280;
-  margin: 12px 0 24px 0;
+  color: var(--color-text-light);
+  margin: 12px 0 32px 0;
+  max-width: 90%; /* 控制行长，便于阅读 */
 }
 
 /* Product Buttons */
 .product-button {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 16px;
   margin-top: 8px;
+  align-items: center;
 }
 
 .add-button {
-  background: #5b5fc7;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text-white);
   border: none;
-  padding: 14px 32px;
-  border-radius: 6px;
-  font-size: 15px;
+  padding: 12px 32px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
+  min-width: 140px; /* 按钮宽一点 */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-button:hover {
-  background: #4a4db3;
+  background: var(--color-primary-hover);
 }
 
 /* Quantity Controls */
 .product-qty-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: white;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 8px 16px;
+  gap: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 4px 16px;
+  height: 48px; /* 与 Add 按钮同高 */
 }
 
 .product-qty-controls .qty-btn {
-  background: #5b5fc7;
-  color: white;
+  background: transparent;
+  color: var(--color-primary);
   border: none;
   border-radius: 4px;
   width: 32px;
   height: 32px;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  transition: color 0.2s;
 }
 
 .product-qty-controls .qty-btn:hover {
-  background: #4a4db3;
+  background: #f3f4f6;
 }
 
 .product-qty-controls .qty-value {
   min-width: 40px;
   text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-main);
 }
 
 /* Edit Button */
 .edit-button {
-  background: white;
-  color: #1a1a1a;
-  border: 1px solid #d1d5db;
-  padding: 14px 28px;
-  border-radius: 6px;
-  font-size: 15px;
+  background: var(--bg-surface);
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border);
+  padding: 12px 32px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  height: 48px;
+  min-width: 100px;
 }
 
 .edit-button:hover {
   background: #f9fafb;
-  border-color: #9ca3af;
+  border-color: var(--color-border-hover);
 }
 
 /* Responsive Design */
@@ -233,7 +245,7 @@
   .product-detail-header {
     flex-direction: column;
     gap: 15px;
-    align-items: flex-start;
+    align-items: center; /* Center the label on mobile */
   }
 
   .product-detail-header h1 {
@@ -249,13 +261,22 @@
   }
 
   .product-button {
-    flex-direction: column;
+    flex-direction: row; /* Put buttons on same row */
+    gap: 12px;
+  }
+  
+  .product-button > a, 
+  .product-button > .add-button,
+  .product-button > .product-qty-controls {
+    flex: 1; /* Share width equally */
+    min-width: 0;
   }
 
   .product-qty-controls,
   .add-button,
   .edit-button {
-    width: 100%;
+    width: 100%; /* Fill their flex container */
     justify-content: center;
+    min-width: 0; /* Allow shrinking */
   }
 }

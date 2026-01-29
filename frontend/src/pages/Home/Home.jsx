@@ -1,72 +1,64 @@
 import ProductList from "../../components/product/ProductList/ProductList";
 import "./Home.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../features/products/slices/productsSlice";
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 
 function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const [userInfo, setUserInfo] = useState(null);
+  const { user: userInfo } = useAuth(); // 使用 Context 中的 user
   const dispatch = useDispatch();
+
+  const [sortOrder, setSortOrder] = useState('last_added');
 
   const { allItems, searchItems, mode } = useSelector(
     (state) => state.products,
   );
-  const rawProducts = mode === "search" ? searchItems : allItems;
-  const products = (rawProducts || []).map((item) => ({
-    ...item,
-    id: item.id || item._id,
-  }));
+  
+  // Prepare raw products
+  const rawProducts = useMemo(() => {
+    const items = mode === "search" ? searchItems : allItems;
+    return (items || []).map((item) => ({
+      ...item,
+      id: item.id || item._id,
+    }));
+  }, [mode, searchItems, allItems]);
 
-  useEffect(() => {
-    let isMounted = true;
-    const token = localStorage.getItem("accessToken");
-
-    if (!token) {
-      if (isMounted) {
-        setUserInfo(null);
-      }
-      return () => {
-        isMounted = false;
-      };
-    }
-
-    const fetchMe = async () => {
-      try {
-        const res = await fetch("/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+  // Apply sorting
+  const sortedProducts = useMemo(() => {
+    // Create a shallow copy to avoid mutating original array
+    const sorted = [...rawProducts];
+    
+    switch (sortOrder) {
+      case 'price_low_high':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'price_high_low':
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case 'last_added':
+      default:
+        // Assume _id desc or createdAt desc for 'last added'
+        // If items contain createdAt, rely on that:
+        // sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // Fallback: reverse the list if default is oldest first, or sort by _id descending
+        // Let's assume sorting by _id (which contains timestamp) descending is safest for MongoDB
+        sorted.sort((a, b) => {
+           const idA = a.id || '';
+           const idB = b.id || '';
+           if (idA < idB) return 1;
+           if (idA > idB) return -1;
+           return 0;
         });
+        break;
+    }
+    return sorted;
+  }, [rawProducts, sortOrder]);
 
-        // If token is invalid or expired, clear it
-        if (!res.ok) {
-          localStorage.removeItem("accessToken");
-          if (isMounted) {
-            setUserInfo(null);
-          }
-          return;
-        }
-
-        const data = await res.json();
-        if (isMounted) {
-          setUserInfo(data.user || null);
-        }
-      } catch (err) {
-        // On error, clear the token
-        localStorage.removeItem("accessToken");
-        if (isMounted) setUserInfo(null);
-      }
-    };
-    fetchMe();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [location.key]);
 
   useEffect(() => {
     setLoading(true);
@@ -91,21 +83,33 @@ function Home() {
     <div className="product-main">
       <div className="product-header">
         <label className="product-label">Products</label>
-        {userInfo && (
-          <div className="user-info">
-            Welcome, {userInfo.email} ({userInfo.role})
-          </div>
-        )}
-        {userInfo?.role === "admin" && (
-          <div className="add-product">
-            <button className="add-button" onClick={handleCreateProduct}>
-              Add Product
-            </button>
-          </div>
-        )}
+        
+        <div className="product-header-controls">
+            <select 
+              className="sort-dropdown"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+            >
+              <option value="last_added">Last added</option>
+              <option value="price_low_high">Price: low to high</option>
+              <option value="price_high_low">Price: high to low</option>
+            </select>
+
+            {userInfo && (
+             <div className="user-info" style={{ display: 'none' }}> {/* Optional: hide user info here if header already has it */}
+              Welcome, {userInfo.name} ({userInfo.role})
+             </div>
+            )}
+            
+            {userInfo?.role === "admin" && (
+                <button className="add-button" onClick={handleCreateProduct}>
+                  Add Product
+                </button>
+            )}
+        </div>
       </div>
       <div className="product-list">
-        <ProductList products={products} userRole={userInfo?.role} />
+        <ProductList products={sortedProducts} userRole={userInfo?.role} />
       </div>
     </div>
   );

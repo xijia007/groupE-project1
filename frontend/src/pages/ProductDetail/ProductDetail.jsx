@@ -161,13 +161,13 @@ function ProductDetail() {
     }
 
     const stockValue = Number(product.stock ?? 0);
-    const isAdmin = userInfo?.role === "admin";
+    // const isAdmin = userInfo?.role === "admin"; // 不再需要单独判断 Admin
     let stockText = "";
-    if (isAdmin) {
-        stockText = stockValue > 0 ? `Stock: ${stockValue}` : "Stock: Out of Stock";
-    } else {
-        if (stockValue <= 0) stockText = "Stock: Out of Stock";
-        else if (stockValue < 10) stockText = "Low Stock";
+    
+    if (stockValue <= 0) {
+        stockText = "Out of Stock";
+    } else if (stockValue < 10) {
+        stockText = "Low Stock";
     }
 
 
@@ -175,9 +175,7 @@ function ProductDetail() {
         <div className="product-detail">
             <div className="product-detail-header">
                 <h1>Products Detail</h1>
-                <Link className="back-to-home" to='/'>
-                    <button>Back To Home Page</button>
-                </Link>
+
             </div>
             
             <div className="product-frame">

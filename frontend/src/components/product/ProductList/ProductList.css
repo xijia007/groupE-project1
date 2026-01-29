@@ -1,0 +1,32 @@
+/* Product List Container - Grid Layout */
+.product-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* 基础卡片宽度 */
+  gap: var(--spacing-lg);
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .product-list-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 640px) {
+  .product-list-grid {
+    /* 手机端改成单列 */
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 380px) {
+  .product-list-grid {
+    /* 特小屏幕单列 */
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,6 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Brand Colors */
+  --color-primary: #5b5fc7;      /* 主按钮颜色 */
+  --color-primary-hover: #4a4db3; 
+  --color-primary-light: #667eea; /* Profile按钮等 */
+  --color-secondary: #2c3e50;    /* Header背景 */
+  
+  /* Text Colors */
+  --color-text-main: #1a1a1a;
+  --color-text-light: #718096;
+  --color-text-white: #ffffff;
+  
+  /* Functional Colors */
+  --color-danger: #e74c3c;       /* 购物车徽章 */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+
+  /* Backgrounds */
+  --bg-body: #f9fafb;
+  --bg-surface: #ffffff;
+  --bg-input: #ffffff;
+
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e0;
+
+  /* Spacing System (8px base) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 40px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-focus: 0 0 0 3px rgba(91, 95, 199, 0.3); /* 基于 primary color */
+}
+
 *,
 *::before,
 *::after {
