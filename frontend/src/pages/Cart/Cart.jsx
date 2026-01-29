@@ -7,19 +7,23 @@ import {
   selectCartTotalPrice,
   updateQuantity,
   removeFromCart,
+  updateCartBackend,
+  removeFromCartBackend,
 } from "../../features/cart/slices/cartSlice";
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useToast } from "../../features/toast/contexts/ToastContext";
 import "./Cart.css";
 
 function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoggedIn } = useAuth();
   const cartItems = useSelector(selectCartItems);
   const totalItems = useSelector(selectCartTotalItems);
   const totalPrice = useSelector(selectCartTotalPrice);
   const { showToast } = useToast();
 
-  // Promotion code state
+  // Promotion code state (existing)
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [promoError, setPromoError] = useState("");
@@ -37,19 +41,43 @@ function Cart() {
       showToast(`Cannot add more than ${stock} items`, "warning");
       return;
     }
+    // Optimistic UI update
     dispatch(updateQuantity({ productId, quantity: currentQuantity + 1 }));
+    
+    // Backend sync if logged in
+    if (isLoggedIn) {
+      dispatch(updateCartBackend({ productId, quantity: currentQuantity + 1 }));
+    }
   };
 
   const handleDecrement = (productId, currentQuantity) => {
     if (currentQuantity > 1) {
+      // Optimistic UI update
       dispatch(updateQuantity({ productId, quantity: currentQuantity - 1 }));
+      
+      // Backend sync
+      if (isLoggedIn) {
+         dispatch(updateCartBackend({ productId, quantity: currentQuantity - 1 }));
+      }
     } else {
+      // Optimistic UI update
       dispatch(removeFromCart(productId));
+      
+      // Backend sync
+      if (isLoggedIn) {
+        dispatch(removeFromCartBackend(productId));
+      }
     }
   };
 
   const handleRemove = (productId) => {
+    // Optimistic UI update
     dispatch(removeFromCart(productId));
+    
+    // Backend sync
+    if (isLoggedIn) {
+      dispatch(removeFromCartBackend(productId));
+    }
   };
 
   const handleApplyPromo = async () => {
