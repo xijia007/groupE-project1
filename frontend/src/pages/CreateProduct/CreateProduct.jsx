@@ -5,7 +5,6 @@ import ProductForm from "../../components/product/ProductForm/ProductForm";
 function CreateProduct() {
     console.log("CreateProduct rendered");
     const navigate = useNavigate();
-    const [categories, setCategories] = useState([]);
     const [authLoading, setAuthLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -82,22 +81,6 @@ function CreateProduct() {
         };
     }, [navigate]);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const res = await fetch("/api/products");
-                const result = await res.json();
-                const list = (result.data || [])
-                    .map((product) => product.category)
-                    .filter(Boolean);
-                setCategories(Array.from(new Set(list)));
-            } catch (err) {
-                setCategories([]);
-            }
-        };
-        fetchCategories();
-    }, []);
-
     if (authLoading) {
         return <div>Loading...</div>;
     }
@@ -113,7 +96,6 @@ function CreateProduct() {
                 initialValues={null}
                 submitLabel="Add Product"
                 onSubmit={handleSubmit}
-                categories={categories}
             />
         </div>
     )
