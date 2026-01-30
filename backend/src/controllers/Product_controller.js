@@ -76,10 +76,13 @@ export const DeleteProduct = async (req, res) => {
   }
   try {
     const { productId } = req.params;
-    const result = await db
+    
+    // Check ownership
+    const product = await db
       .collection("Products")
-      .deleteOne({ _id: new ObjectId(productId) });
-    if (result.deletedCount === 0) {
+      .findOne({ _id: new ObjectId(productId) });
+
+    if (!product) {
       return res.status(404).json(
         buildErrorResponse({
           code: "PRODUCT_NOT_FOUND",
@@ -87,6 +90,21 @@ export const DeleteProduct = async (req, res) => {
         }),
       );
     }
+    
+    // Compare as strings to ensure matching
+    if (product.createdBy.toString() !== req.user.userId) {
+       return res.status(403).json(
+         buildErrorResponse({
+            code: "FORBIDDEN",
+            message: "You can only delete products created by you.",
+         })
+       );
+    }
+
+    const result = await db
+      .collection("Products")
+      .deleteOne({ _id: new ObjectId(productId) });
+
     return res.status(200).json({
       success: true,
       message: "Product deleted successfully",
@@ -102,7 +120,7 @@ export const DeleteProduct = async (req, res) => {
 };
 
 export const EditProduct = async (req, res) => {
-  if (req.user.role !== "admin" && req.user.userId !== req.body.createdBy) {
+  if (req.user.role !== "admin") {
     return res.status(403).json(
       buildErrorResponse({
         code: "FORBIDDEN",
@@ -112,6 +130,30 @@ export const EditProduct = async (req, res) => {
   }
   try {
     const { productId } = req.params;
+    
+    // Check ownership before parsing body or attempting update
+    const product = await db
+      .collection("Products")
+      .findOne({ _id: new ObjectId(productId) });
+
+    if (!product) {
+       return res.status(404).json(
+         buildErrorResponse({
+           code: "PRODUCT_NOT_FOUND",
+           message: "Product not found",
+         }),
+       );
+    }
+
+    if (product.createdBy.toString() !== req.user.userId) {
+        return res.status(403).json(
+          buildErrorResponse({
+             code: "FORBIDDEN",
+             message: "You can only edit products created by you.",
+          })
+        );
+    }
+
     const parsed = newProductSchema.partial().safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json(
@@ -126,14 +168,7 @@ export const EditProduct = async (req, res) => {
     const result = await db
       .collection("Products")
       .updateOne({ _id: new ObjectId(productId) }, { $set: updateData });
-    if (result.matchedCount === 0) {
-      return res.status(404).json(
-        buildErrorResponse({
-          code: "PRODUCT_NOT_FOUND",
-          message: "Product not found",
-        }),
-      );
-    }
+
     return res.status(200).json({
       success: true,
       message: "Product updated successfully",

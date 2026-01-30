@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { updateProductInCart } from "../../features/cart/slices/cartSlice";
 import './EditProduct.css';
 import ProductForm from '../../components/product/ProductForm/ProductForm';
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 
 
 function EditProduct() {
@@ -38,6 +39,9 @@ function EditProduct() {
     };
   }, [id]);
 
+
+  const { user } = useAuth();
+  const isOwner = product && user && (product.createdBy === user.userId || product.createdBy === user._id || product.createdBy === user.id);
 
   if (loading) return <h1>Loading...</h1>;
 
@@ -75,10 +79,13 @@ function EditProduct() {
   return (
     <div className="create-product">
       <h1>Edit Product</h1>
+      {!isOwner && <div style={{color: 'orange', marginBottom: '10px'}}>You are viewing this product in read-only mode because you are not the creator.</div>}
       <ProductForm
         initialValues={product}
         submitLabel="Update Product"
+        readOnly={!isOwner}
         onSubmit={async (data) => {
+          if (!isOwner) return; 
           try {
             const token = localStorage.getItem("accessToken");
             const res = await fetch(`/api/products/${id}/edit`, {
@@ -109,12 +116,14 @@ function EditProduct() {
           }
         }}
       />
-      <div className="edit-product-actions">
-        <button type="button" className="delete-button" onClick={handleDelete}>
-          Delete Product
-        </button>
-        {deleteError && <div className="delete-error">{deleteError}</div>}
-      </div>
+      {isOwner && (
+        <div className="edit-product-actions">
+          <button type="button" className="delete-button" onClick={handleDelete}>
+            Delete Product
+          </button>
+          {deleteError && <div className="delete-error">{deleteError}</div>}
+        </div>
+      )}
       {showDeleteConfirm && (
         <div className="edit-delete-overlay">
           <div className="edit-delete-modal">
