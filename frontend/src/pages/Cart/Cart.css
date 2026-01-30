@@ -412,4 +412,8 @@
     text-align: left;
     margin-top: 8px;
   }
+
+  .cart-body {
+    flex: 0 0 32%;
+  }
 }
