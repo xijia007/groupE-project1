@@ -5,7 +5,7 @@ export function ForgotPassword() {
   return (
     <div className="relative bg-white rounded-lg p-[clamp(28px,5vw,56px)] flex flex-col items-center justify-center text-center gap-5">
       <img
-        src="../../../public/Mail.png"
+        src="../../../Mail.png"
         alt="Mail Icon"
         className="w-[88px] h-[88px] object-contain block"
       />
