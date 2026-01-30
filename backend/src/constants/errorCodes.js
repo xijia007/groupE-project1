@@ -15,19 +15,19 @@ const ERROR_CODES = {
   };
 
 const DEFAULT_MESSAGES = {
-    [ERROR_CODES.BAD_REQUEST]: "请求参数有误",
-    [ERROR_CODES.VALIDATION_ERROR]: "请检查输入内容",
-    [ERROR_CODES.AUTH_UNAUTHORIZED]: "请先登录",
-    [ERROR_CODES.AUTH_INVALID_CREDENTIALS]: "账号或密码错误",
-    [ERROR_CODES.PERMISSION_DENIED]: "权限不足",
-    [ERROR_CODES.RESOURCE_NOT_FOUND]: "资源不存在",
-    [ERROR_CODES.PRODUCT_NOT_FOUND]: "未找到该商品",
-    [ERROR_CODES.CART_ITEM_NOT_FOUND]: "购物车中未找到该商品",
-    [ERROR_CODES.OUT_OF_STOCK]: "库存不足",
-    [ERROR_CODES.PROMO_INVALID]: "优惠码无效",
-    [ERROR_CODES.PROMO_EXPIRED]: "优惠码已过期",
-    [ERROR_CODES.INTERNAL_ERROR]: "系统繁忙，请稍后再试",
-    [ERROR_CODES.SERVICE_UNAVAILABLE]: "服务暂不可用"
+    [ERROR_CODES.BAD_REQUEST]: "Bad request parameters",
+    [ERROR_CODES.VALIDATION_ERROR]: "Please check your input",
+    [ERROR_CODES.AUTH_UNAUTHORIZED]: "Please login first",
+    [ERROR_CODES.AUTH_INVALID_CREDENTIALS]: "Incorrect username or password",
+    [ERROR_CODES.PERMISSION_DENIED]: "Permission denied",
+    [ERROR_CODES.RESOURCE_NOT_FOUND]: "Resource not found",
+    [ERROR_CODES.PRODUCT_NOT_FOUND]: "Product not found",
+    [ERROR_CODES.CART_ITEM_NOT_FOUND]: "Item not found in cart",
+    [ERROR_CODES.OUT_OF_STOCK]: "Out of stock",
+    [ERROR_CODES.PROMO_INVALID]: "Invalid promo code",
+    [ERROR_CODES.PROMO_EXPIRED]: "Promo code expired",
+    [ERROR_CODES.INTERNAL_ERROR]: "System busy, please try again later",
+    [ERROR_CODES.SERVICE_UNAVAILABLE]: "Service unavailable"
   };
 
   export { ERROR_CODES, DEFAULT_MESSAGES };
