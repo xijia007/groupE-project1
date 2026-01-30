@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateProductInCart } from "../../features/cart/slices/cartSlice";
 import './EditProduct.css';
 import ProductForm from '../../components/product/ProductForm/ProductForm';
 
@@ -7,6 +9,7 @@ import ProductForm from '../../components/product/ProductForm/ProductForm';
 function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteError, setDeleteError] = useState("");
@@ -88,6 +91,18 @@ function EditProduct() {
             });
 
             if (!res.ok) return;
+
+            // Update local cart state immediately so user sees changes without refresh
+            // Ensure ID type matches what's in the store (handling potential string/number mismatch)
+            // We use the ID from the URL but try to cast if existing product has number ID.
+            // A safer bet is to use the ID from the fetched product state if available.
+            const productId = product?.id || id;
+            
+            dispatch(updateProductInCart({ 
+              id: productId, 
+              updates: data 
+            }));
+
             navigate("/");
           } catch (err) {
             // optional: error handling

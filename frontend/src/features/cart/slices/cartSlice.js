@@ -382,6 +382,17 @@ const cartSlice = createSlice({
         console.error('Error loading guest cart:', error);
       }
     },
+
+    // 更新购物车中的商品详情（例如价格变动）
+    updateProductInCart: (state, action) => {
+       const { id, updates } = action.payload;
+       const item = state.items.find(item => item.id === id);
+       if (item) {
+           // Merge updates keys into item
+           Object.assign(item, updates);
+           saveCartToStorage(state.items);
+       }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -437,7 +448,8 @@ export const {
   syncCartOnLogin,
   syncCartOnLogout,
   setAppliedPromo,
-  removeAppliedPromo
+  removeAppliedPromo,
+  updateProductInCart
 } = cartSlice.actions;
 
 // Selectors - 用于从 state 中获取数据
