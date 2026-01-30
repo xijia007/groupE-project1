@@ -16,6 +16,10 @@
   max-width: min(480px, 95vw);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.mail-icon {
+  width: 24px;
+  height: 24px;
+}
 
 .signin-close {
   position: absolute;
