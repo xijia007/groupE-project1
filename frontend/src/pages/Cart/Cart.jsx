@@ -262,22 +262,15 @@ function Cart() {
                 </button>
               )}
             </div>
+            <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '8px', marginBottom: '8px', fontStyle: 'italic' }}>
+               Tip: use code <strong>GLOBAL2026</strong> for 25% off!
+            </div>
             {promoError && <div className="promo-error">{promoError}</div>}
             {appliedPromo && (
               <div className="promo-success">
                 ✓ {appliedPromo.code} applied ({appliedPromo.description})
               </div>
             )}
-            <div
-              className="discount-total-preview"
-              style={{
-                marginTop: "10px",
-                fontSize: "14px",
-                fontWeight: "bold",
-              }}
-            >
-              Estimated Total: ${estimatedTotal.toFixed(2)}
-            </div>
           </div>
           <div className="numbers">
             <div className="numbers-between">
