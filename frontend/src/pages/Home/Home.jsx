@@ -32,14 +32,29 @@ function Home() {
   }
   const isMobileView = isMoblie(768);
   const ItemsPerPage = isMobileView ? 3 : 10;
+  const [filterByCreator, setFilterByCreator] = useState(false);
+
   // Prepare raw products
   const rawProducts = useMemo(() => {
-    const items = mode === "search" ? searchItems : allItems;
-    return (items || []).map((item) => ({
+    let items = mode === "search" ? searchItems : allItems;
+    items = items || [];
+    
+    // Admin Edit Mode Filter
+    if (filterByCreator && userInfo?.role === 'admin') {
+      items = items.filter(item => {
+         // handle various potential ID field names for compatibility
+         const creatorId = item.createdBy; 
+         // userId from context might be .userId, .id, or ._id depending on backend response standard
+         const myId = userInfo.userId || userInfo.id || userInfo._id;
+         return creatorId === myId;
+      });
+    }
+
+    return items.map((item) => ({
       ...item,
       id: item.id || item._id,
     }));
-  }, [mode, searchItems, allItems]);
+  }, [mode, searchItems, allItems, filterByCreator, userInfo]);
 
   // Apply sorting
   const sortedProducts = useMemo(() => {
@@ -88,7 +103,7 @@ function Home() {
   }, [dispatch, location.key]);
   useEffect(() => {
     setCurrentPage(1); // Reset to first page on sort order change
-  }, [mode, searchItems, allItems, sortOrder]);
+  }, [mode, searchItems, allItems, sortOrder, filterByCreator]);
 
   const handleCreateProduct = () => {
     navigate("/createProduct");
@@ -103,6 +118,25 @@ function Home() {
         <label className="product-label">Products</label>
 
         <div className="product-header-controls">
+          {userInfo?.role === "admin" && (
+             <button
+               className={`edit-mode-button ${filterByCreator ? 'active' : ''}`}
+               onClick={() => setFilterByCreator(!filterByCreator)}
+               title="Show only my created products"
+               style={{ 
+                  marginRight: '10px',
+                  padding: '8px 16px',
+                  backgroundColor: filterByCreator ? '#007bff' : '#f0f0f0',
+                  color: filterByCreator ? 'white' : 'black',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+               }}
+             >
+               Edit Mode {filterByCreator ? '(On)' : '(Off)'}
+             </button>
+          )}
+
           <select
             className="sort-dropdown"
             value={sortOrder}

@@ -28,19 +28,7 @@ function CreateProduct() {
         }
     };
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            navigate("/signin", { replace: true });
-            return;
-        }
-        if (user && user.role !== "admin") {
-            navigate("/", { replace: true });
-        }
-    }, [isLoggedIn, user, navigate]);
 
-    if (!isLoggedIn || (user && user.role !== "admin")) {
-        return null; 
-    }
 
     return (
         <div className="create-product">

@@ -95,14 +95,7 @@ function Profile() {
         }
     }
 
-    // Redirect if not logged in
-    useEffect(() => {
-        if (!isLoggedIn) {
-            navigate("/signin");
-        }
-    }, [isLoggedIn, navigate]);
 
-    if (!isLoggedIn) return null;
 
     if (loading) {
         return <div>Loading...</div>

@@ -21,7 +21,7 @@ const PREDEFINED_CATEGORIES = [
     "Category6",
 ];
 
-function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
+function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnly = false }) {
     // Determine which categories to query
     const categoryOptions = PREDEFINED_CATEGORIES;
 
@@ -111,6 +111,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                         value={formData.name}
                         onChange={handleChange("name")}
                         placeholder="iWatch"
+                        disabled={readOnly}
                     />
                     {errors.name && <span className="error-message">{errors.name}</span>}
                 </div>
@@ -122,6 +123,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                         value={formData.description}
                         onChange={handleChange("description")}
                         rows="4"
+                        disabled={readOnly}
                     />
                 </div>
 
@@ -133,6 +135,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                             className="category-select"
                             value={formData.category}
                             onChange={handleChange("category")}
+                            disabled={readOnly}
                         >
                             <option value="">Select category</option>
                             {categoryOptions.map((category) => (
@@ -150,6 +153,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                             value={formData.price}
                             onChange={handleChange("price")}
                             placeholder="50"
+                            disabled={readOnly}
                         />
                         {errors.price && <span className="error-message">{errors.price}</span>}
                     </div>
@@ -165,6 +169,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                             value={formData.stock}
                             onChange={handleChange("stock")}
                             placeholder="100"
+                            disabled={readOnly}
                         />
                         {errors.stock && <span className="error-message">{errors.stock}</span>}
                     </div>
@@ -176,8 +181,9 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                                 value={formData.img_url}
                                 onChange={handleChange("img_url")}
                                 placeholder="http://"
+                                disabled={readOnly}
                             />
-                            <button type="button" className="upload-button">Upload</button>
+                            {!readOnly && <button type="button" className="upload-button">Upload</button>}
                         </div>
                         {errors.img_url && <span className="error-message">{errors.img_url}</span>}
                     </div>
@@ -197,8 +203,8 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories }) {
                     </div>
                 </div>
 
-                {/* 6. Submit Button */}
-                <button type="submit" className="submit-button">{submitLabel}</button>
+                {/* 6. Submit Button - Only show if not readOnly */}
+                {!readOnly && <button type="submit" className="submit-button">{submitLabel}</button>}
             </form>
         </div>
     )

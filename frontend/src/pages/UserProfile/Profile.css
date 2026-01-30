@@ -125,7 +125,40 @@
     transition: all 0.2s;
 }
 
+/* 现有的桌面端样式... */
+
 .sign-out-button:hover {
     background-color: var(--color-danger);
     color: var(--color-text-white);
+}
+
+/* =========================================
+   移动端响应式适配
+   ========================================= */
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr; /* 切换为单列 */
+        margin: 1rem auto;
+        padding: 0 var(--spacing-md);
+        gap: var(--spacing-md);
+    }
+
+    .profile-sidebar {
+        /* 可选：在手机上把 Sidebar 变得更紧凑一些，或者保持原样 */
+        padding: var(--spacing-md);
+    }
+
+    .user-profile-label {
+        font-size: 24px; /* 标题稍微调小 */
+    }
+
+    .btn-primary, .save-button, .update-password-button, .sign-out-button {
+        width: 100%; /* 按钮在手机上占满宽度，更容易点击 */
+        display: block;
+        margin-top: 1rem;
+    }
+    
+    .update-password-button {
+        margin-top: 1rem;
+    }
 }

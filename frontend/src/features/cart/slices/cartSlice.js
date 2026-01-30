@@ -221,18 +221,32 @@ const saveCartToStorage = (cartItems) => {
 };
 
 // 合并两个购物车（用于登录时合并访客购物车）
+// 合并两个购物车（用于登录时合并访客购物车）
 const mergeCarts = (guestCart, userCart) => {
   const merged = [...userCart];
   
   guestCart.forEach(guestItem => {
     const existingIndex = merged.findIndex(item => item.id === guestItem.id);
+    const stock = Number(guestItem.stock ?? Infinity);
     
     if (existingIndex >= 0) {
       // 商品已存在，合并数量
-      merged[existingIndex].quantity += guestItem.quantity;
+      const currentQty = merged[existingIndex].quantity;
+      const newQty = currentQty + guestItem.quantity;
+      
+      // 检查是否超过库存
+      if (stock !== Infinity && newQty > stock) {
+         merged[existingIndex].quantity = stock;
+      } else {
+         merged[existingIndex].quantity = newQty;
+      }
     } else {
-      // 新商品，添加到购物车
-      merged.push(guestItem);
+      // 新商品，添加到购物车，同样需要检查初始数量是否超标(虽然 guestCart 本身应该已校验，但在合并时再次确认更安全)
+      let initialQty = guestItem.quantity;
+      if (stock !== Infinity && initialQty > stock) {
+          initialQty = stock;
+      }
+      merged.push({ ...guestItem, quantity: initialQty });
     }
   });
   
@@ -382,6 +396,17 @@ const cartSlice = createSlice({
         console.error('Error loading guest cart:', error);
       }
     },
+
+    // 更新购物车中的商品详情（例如价格变动）
+    updateProductInCart: (state, action) => {
+       const { id, updates } = action.payload;
+       const item = state.items.find(item => item.id === id);
+       if (item) {
+           // Merge updates keys into item
+           Object.assign(item, updates);
+           saveCartToStorage(state.items);
+       }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -437,7 +462,8 @@ export const {
   syncCartOnLogin,
   syncCartOnLogout,
   setAppliedPromo,
-  removeAppliedPromo
+  removeAppliedPromo,
+  updateProductInCart
 } = cartSlice.actions;
 
 // Selectors - 用于从 state 中获取数据

@@ -9,7 +9,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-
 import Home from "./pages/Home/Home.jsx";
 import ProductDetail from "./pages/ProductDetail/ProductDetail.jsx";
 import EditProduct from "./pages/EditProduct/EditProduct.jsx";
@@ -23,6 +22,11 @@ import { useCartSync } from "./features/cart/hooks/useCartSync.js";
 import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
 import Profile from "./pages/UserProfile/Profile.jsx";
+import NotFound from "./pages/NotFound/NotFound.jsx";
+
+import ProtectedRoute from "./components/layout/ProtectedRoute.jsx";
+
+// ... (imports remain)
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
@@ -62,6 +66,7 @@ function AppContent() {
       <main className="mainContainer">
         <>
           <Routes location={backgroundLocation || location}>
+            {/* === Public Routes === */}
             <Route path="/" element={<Home />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
@@ -69,11 +74,22 @@ function AppContent() {
             <Route path="/SignIn" element={<Navigate to="/signin" replace />} />
             <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
             <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/createProduct" element={<CreateProduct />} />
-            <Route path="/products/:id/edit" element={<EditProduct />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path='/profile' element={<Profile />} />
+            
+            {/* === Authenticated Routes (Regular User & Admin) === */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/checkout" element={<Checkout />} />
+            </Route>
+
+            {/* === Admin Only Routes === */}
+            <Route element={<ProtectedRoute requiredRole="admin" />}>
+              <Route path="/createProduct" element={<CreateProduct />} />
+              <Route path="/products/:id/edit" element={<EditProduct />} />
+            </Route>
+
+            {/* === 404 === */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
 
           {backgroundLocation && (

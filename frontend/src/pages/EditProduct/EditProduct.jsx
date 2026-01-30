@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateProductInCart } from "../../features/cart/slices/cartSlice";
 import './EditProduct.css';
 import ProductForm from '../../components/product/ProductForm/ProductForm';
+import { useAuth } from "../../features/auth/contexts/AuthContext";
 
 
 function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteError, setDeleteError] = useState("");
@@ -35,6 +39,9 @@ function EditProduct() {
     };
   }, [id]);
 
+
+  const { user } = useAuth();
+  const isOwner = product && user && (product.createdBy === user.userId || product.createdBy === user._id || product.createdBy === user.id);
 
   if (loading) return <h1>Loading...</h1>;
 
@@ -72,10 +79,13 @@ function EditProduct() {
   return (
     <div className="create-product">
       <h1>Edit Product</h1>
+      {!isOwner && <div style={{color: 'orange', marginBottom: '10px'}}>You are viewing this product in read-only mode because you are not the creator.</div>}
       <ProductForm
         initialValues={product}
         submitLabel="Update Product"
+        readOnly={!isOwner}
         onSubmit={async (data) => {
+          if (!isOwner) return; 
           try {
             const token = localStorage.getItem("accessToken");
             const res = await fetch(`/api/products/${id}/edit`, {
@@ -88,18 +98,32 @@ function EditProduct() {
             });
 
             if (!res.ok) return;
+
+            // Update local cart state immediately so user sees changes without refresh
+            // Ensure ID type matches what's in the store (handling potential string/number mismatch)
+            // We use the ID from the URL but try to cast if existing product has number ID.
+            // A safer bet is to use the ID from the fetched product state if available.
+            const productId = product?.id || id;
+            
+            dispatch(updateProductInCart({ 
+              id: productId, 
+              updates: data 
+            }));
+
             navigate("/");
           } catch (err) {
             // optional: error handling
           }
         }}
       />
-      <div className="edit-product-actions">
-        <button type="button" className="delete-button" onClick={handleDelete}>
-          Delete Product
-        </button>
-        {deleteError && <div className="delete-error">{deleteError}</div>}
-      </div>
+      {isOwner && (
+        <div className="edit-product-actions">
+          <button type="button" className="delete-button" onClick={handleDelete}>
+            Delete Product
+          </button>
+          {deleteError && <div className="delete-error">{deleteError}</div>}
+        </div>
+      )}
       {showDeleteConfirm && (
         <div className="edit-delete-overlay">
           <div className="edit-delete-modal">
