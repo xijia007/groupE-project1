@@ -38,7 +38,7 @@ const productsSlice = createSlice({
     setQuery(state, action) {
       state.query = action.payload;
       const trimmed = state.query.trim();
-      if (trimmed.length >= 3) {
+      if (trimmed.length >= 1) {
         state.mode = "search";
       } else {
         state.mode = "all";

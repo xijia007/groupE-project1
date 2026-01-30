@@ -1,6 +1,21 @@
 import { useState } from "react";
 import "./Auth.css";
 
+export function ForgotPassword() {
+  return (
+    <div className="relative bg-white rounded-lg p-[clamp(28px,5vw,56px)] flex flex-col items-center justify-center text-center gap-5">
+      <img
+        src="../../../public/Mail.png"
+        alt="Mail Icon"
+        className="w-[88px] h-[88px] object-contain block"
+      />
+      <h2 className="forgot-password__title">
+        We have send the update password link to your email, please check that !
+      </h2>
+    </div>
+  );
+}
+
 function Auth({
   Status,
   onClose,
@@ -179,9 +194,6 @@ function Auth({
         {Status === "SignUp" && (
           <h2 className="signin-title">Sign Up an account</h2>
         )}
-        {Status === "ForgotPassword" && (
-          <h2 className="signin-title">Update Password</h2>
-        )}
         {Status === "SignIn" && (
           <form onSubmit={handleLogin}>
             <div className="signin-form-group">
@@ -291,57 +303,7 @@ function Auth({
             )}
           </form>
         )}
-        {Status === "ForgotPassword" && (
-          <form onSubmit={handleUpdatePassword}>
-            <div className="signin-form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="text"
-                id="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={handleEmailBlur}
-                className={emailError ? "input-error" : ""}
-              />
-              {emailError && (
-                <span className="error-message">Invalid Email input!</span>
-              )}
-            </div>
-
-            <div className="signin-form-group">
-              <label htmlFor="password">Password</label>
-              <div className="password-input-wrapper">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onBlur={handlePasswordBlur}
-                  className={passwordError ? "input-error" : ""}
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-              {passwordError && (
-                <span className="error-message">Invalid password input!</span>
-              )}
-            </div>
-
-            <button type="submit" className="signin-button">
-              {isSubmitting ? "Updating password..." : "Update Password"}
-            </button>
-            {submitError && (
-              <div className="signin-submit-error">{submitError}</div>
-            )}
-          </form>
-        )}
+        {Status === "ForgotPassword" && <ForgotPassword />}
 
         <div className="signin-footer">
           <span>

@@ -41,10 +41,10 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
       dispatch(clearSearch());
       return;
     }
-    if (trimmed.length < 3) {
-      dispatch(clearSearch());
-      return;
-    }
+    // if (trimmed.length < 1) {
+    //   dispatch(clearSearch());
+    //   return;
+    // }
     debounceRef.current = setTimeout(() => {
       dispatch(searchProducts(trimmed));
     }, 300);
@@ -76,21 +76,18 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
       </div>
       <div className="site-header-right">
         <div className="site-header-userAuth">
-          <div className="user-icon-container" style={{ position: 'relative' }}>
+          <div className="user-icon-container" style={{ position: "relative" }}>
             <FaRegUser
               className="site-header-image"
               onClick={handleProfileClick}
             />
-            {isLoggedIn && user?.role === 'admin' && (
-                <FaStar 
-                    className="user-badge user-badge-admin"
-                />
+            {isLoggedIn && user?.role === "admin" && (
+              <FaStar className="user-badge user-badge-admin" />
             )}
-            {isLoggedIn && (user?.role === 'regular' || user?.role === 'user') && (
-                <FaLeaf 
-                    className="user-badge user-badge-regular"
-                />
-            )}
+            {isLoggedIn &&
+              (user?.role === "regular" || user?.role === "user") && (
+                <FaLeaf className="user-badge user-badge-regular" />
+              )}
           </div>
           <span className="site-header-login" onClick={onSignInClick}>
             {isLoggedIn ? "Logout" : "Sign In"}
