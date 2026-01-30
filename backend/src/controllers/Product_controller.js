@@ -10,6 +10,8 @@ const newProductSchema = z.object({
   stock: z.coerce.number().min(0).optional().default(1),
   img_url: z.string().url().optional(),
   category: z.string().min(2).max(100).optional(),
+  PromotionCode: z.string().optional(),
+  discountPercentage: z.number().min(0).max(100).optional(),
 });
 export const createProduct = async (req, res) => {
   if (req.user.role !== "admin") {
@@ -31,7 +33,16 @@ export const createProduct = async (req, res) => {
         }),
       );
     }
-    const { name, description, price, stock, img_url, category } = parsed.data;
+    const {
+      name,
+      description,
+      price,
+      stock,
+      img_url,
+      category,
+      PromotionCode,
+      discountPercentage,
+    } = parsed.data;
     const newProduct = {
       name,
       description,
@@ -39,6 +50,8 @@ export const createProduct = async (req, res) => {
       stock,
       img_url,
       category,
+      PromotionCode,
+      discountPercentage,
       createdBy: new ObjectId(req.user.userId),
     };
     if (await db.collection("Products").findOne({ name })) {
@@ -168,7 +181,7 @@ export const GetProducts = async (req, res) => {
 export const SearchProducts = async (req, res) => {
   try {
     const queryRaw = (req.query.name ?? "").trim();
-    if (queryRaw.length < 3) {
+    if (queryRaw.length < 1) {
       return res.status(200).json({ success: true, data: [] });
     }
     const escaped = queryRaw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
