@@ -5,7 +5,7 @@ export function ForgotPassword() {
   return (
     <div className="relative bg-white rounded-lg p-[clamp(28px,5vw,56px)] flex flex-col items-center justify-center text-center gap-5">
       <img
-        src="../../../public/Mail.png"
+        src="../../../Mail.png"
         alt="Mail Icon"
         className="w-[88px] h-[88px] object-contain block"
       />
@@ -29,9 +29,10 @@ function Auth({
   const [showPassword, setShowPassword] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
+  const [roleTouched, setRoleTouched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState("");
 
   // Email validation function
   const isValidEmail = (email) => {
@@ -39,11 +40,22 @@ function Auth({
     return emailRegex.test(email);
   };
 
+  // Password validation function (min 6 chars)
+  const isValidPassword = (pwd) => {
+    return pwd && pwd.length >= 6;
+  };
+
+  // Role validation function
+  const isValidRole = (r) => r === "regular" || r === "admin";
+
   // Check if email has error
   const emailError = emailTouched && !isValidEmail(email);
 
   // Check if password has error
-  const passwordError = passwordTouched && password.trim() === "";
+  const passwordError = passwordTouched && !isValidPassword(password);
+
+  // Check if role has error (only for SignUp)
+  const roleError = Status === "SignUp" && roleTouched && !isValidRole(role);
 
   const handleEmailBlur = () => {
     setEmailTouched(true);
@@ -52,15 +64,21 @@ function Auth({
   const handlePasswordBlur = () => {
     setPasswordTouched(true);
   };
+
+  const handleRoleBlur = () => {
+    setRoleTouched(true);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
     // Mark all fields as touched
     setEmailTouched(true);
     setPasswordTouched(true);
+    setRoleTouched(true);
 
     // Validate before submit
-    if (!isValidEmail(email) || password.trim() === "") {
+    if (!isValidEmail(email) || !isValidPassword(password) || !isValidRole(role)) {
       return;
     }
 
@@ -233,7 +251,7 @@ function Auth({
                 </button>
               </div>
               {passwordError && (
-                <span className="error-message">Invalid password input!</span>
+                <span className="error-message">{Status === "SignUp" ? "Password must be at least 6 characters!" : "Invalid password input!"}</span>
               )}
             </div>
 
@@ -269,7 +287,7 @@ function Auth({
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  placeholder="Enter your password"
+                  placeholder="Enter your password (min 6 chars)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onBlur={handlePasswordBlur}
@@ -284,15 +302,29 @@ function Auth({
                 </button>
               </div>
               {passwordError && (
-                <span className="error-message">Invalid password input!</span>
+                <span className="error-message">Password must be at least 6 characters!</span>
               )}
-              <select required onChange={(e) => setRole(e.target.value)}>
-                <option value="" disabled selected hidden>
-                  Please select a role
-                </option>
-                <option value="regular">Regular</option>
-                <option value="admin">Admin</option>
-              </select>
+              
+              <div style={{ marginTop: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', color: '#1a1a1a' }}>Role</label>
+                <select 
+                    required 
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    onBlur={handleRoleBlur}
+                    className={roleError ? "input-error" : ""}
+                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: roleError ? '1px solid #e74c3c' : '1px solid #ccc' }}
+                >
+                    <option value="" disabled hidden>
+                    Please select a role
+                    </option>
+                    <option value="regular">Regular</option>
+                    <option value="admin">Admin</option>
+                </select>
+                {roleError && (
+                    <span className="error-message">Please select a role!</span>
+                )}
+              </div>
             </div>
 
             <button type="submit" className="signin-button">

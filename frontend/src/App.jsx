@@ -72,15 +72,17 @@ function AppContent() {
             <Route path="/SignUp" element={<Navigate to="/signup" replace />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
-            
+
             {/* === Authenticated Routes (Regular User & Admin) === */}
-            <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute router_to="/signin" />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/checkout" element={<Checkout />} />
             </Route>
 
             {/* === Admin Only Routes === */}
-            <Route element={<ProtectedRoute requiredRole="admin" />}>
+            <Route
+              element={<ProtectedRoute requiredRole="admin" router_to="/*" />}
+            >
               <Route path="/createProduct" element={<CreateProduct />} />
               <Route path="/products/:id/edit" element={<EditProduct />} />
             </Route>

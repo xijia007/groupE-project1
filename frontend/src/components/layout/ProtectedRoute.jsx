@@ -2,7 +2,7 @@ import { Navigate, useLocation, Outlet } from "react-router-dom";
 import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useEffect, useState } from "react";
 
-function ProtectedRoute({ requiredRole }) {
+function ProtectedRoute({ requiredRole, router_to }) {
   const { isLoggedIn, user, accessToken } = useAuth();
   const location = useLocation();
   const [isChecking, setIsChecking] = useState(true);
@@ -21,21 +21,23 @@ function ProtectedRoute({ requiredRole }) {
       return;
     }
   }, [accessToken, user]);
-  
-  
+
   if (!isLoggedIn) {
-     return <Navigate to="/signin" state={{ from: location }} replace />;
+    return <Navigate to={router_to} state={{ from: location }} replace />;
   }
 
   // The token exists, but the user hasn't returned yet; displaying Loading...
   if (isLoggedIn && !user) {
-      return <div style={{ padding: "50px", textAlign: "center" }}>Loading user data...</div>;
+    return (
+      <div style={{ padding: "50px", textAlign: "center" }}>
+        Loading user data...
+      </div>
+    );
   }
 
   // Check user role
   if (requiredRole && user.role !== requiredRole) {
-    // If a regular user tries to access the admin page, redirect them back to the homepage.
-    return <Navigate to="/" replace />;
+    return <Navigate to={router_to} replace />;
   }
 
   return <Outlet />;
