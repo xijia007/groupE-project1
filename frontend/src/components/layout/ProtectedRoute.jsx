@@ -2,7 +2,7 @@ import { Navigate, useLocation, Outlet } from "react-router-dom";
 import { useAuth } from "../../features/auth/contexts/AuthContext";
 import { useEffect, useState } from "react";
 
-function ProtectedRoute({ requiredRole }) {
+function ProtectedRoute({ requiredRole, router_to }) {
   const { isLoggedIn, user, accessToken } = useAuth();
   const location = useLocation();
   const [isChecking, setIsChecking] = useState(true);
@@ -30,24 +30,28 @@ function ProtectedRoute({ requiredRole }) {
     // 简化起见，如果 user 还是 null，我们暂时认为还在 loading
     // 实际项目中 AuthContext 最好暴露一个 `isLoadingUser` 状态
   }, [accessToken, user]);
-  
+
   // 临时修复：为了配合现有的 AuthContext，
   // 我们简单判断：如果 isLoggedIn 为 false，那就肯定是没登录。
   // 如果 isLoggedIn 为 true，但 user 是 null，我们显示 loading。
-  
+
   if (!isLoggedIn) {
-     return <Navigate to="/signin" state={{ from: location }} replace />;
+    return <Navigate to={router_to} state={{ from: location }} replace />;
   }
 
   // 有 token 但 user 还没回来，显示 Loading...
   if (isLoggedIn && !user) {
-      return <div style={{ padding: "50px", textAlign: "center" }}>Loading user data...</div>;
+    return (
+      <div style={{ padding: "50px", textAlign: "center" }}>
+        Loading user data...
+      </div>
+    );
   }
 
   // 检查角色权限
   if (requiredRole && user.role !== requiredRole) {
     // 如果是普通用户想访问 admin 页面，踢回首页
-    return <Navigate to="/" replace />;
+    return <Navigate to={router_to} replace />;
   }
 
   return <Outlet />;
