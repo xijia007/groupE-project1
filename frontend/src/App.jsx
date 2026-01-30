@@ -23,10 +23,7 @@ import { ToastProvider } from "./features/toast/contexts/ToastContext.jsx";
 import CreateProduct from "./pages/CreateProduct/CreateProduct.jsx";
 import Profile from "./pages/UserProfile/Profile.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
-
 import ProtectedRoute from "./components/layout/ProtectedRoute.jsx";
-
-// ... (imports remain)
 
 function AppContent() {
   const { isLoggedIn, logout } = useAuth();
@@ -34,7 +31,7 @@ function AppContent() {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
 
-  // 🔄 自动同步购物车（登录/登出时）
+  // Automatically sync shopping cart (when logging in/out)
   useCartSync();
 
   const handleHomeClick = () => {

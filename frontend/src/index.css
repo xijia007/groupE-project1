@@ -4,10 +4,10 @@
 
 :root {
   /* Brand Colors */
-  --color-primary: #5b5fc7;      /* 主按钮颜色 */
+  --color-primary: #5b5fc7;      
   --color-primary-hover: #4a4db3; 
-  --color-primary-light: #667eea; /* Profile按钮等 */
-  --color-secondary: #2c3e50;    /* Header背景 */
+  --color-primary-light: #667eea;
+  --color-secondary: #2c3e50;   
   
   /* Text Colors */
   --color-text-main: #1a1a1a;
@@ -15,7 +15,7 @@
   --color-text-white: #ffffff;
   
   /* Functional Colors */
-  --color-danger: #e74c3c;       /* 购物车徽章 */
+  --color-danger: #e74c3c;     
   --color-success: #10b981;
   --color-warning: #f59e0b;
 
@@ -46,7 +46,7 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-focus: 0 0 0 3px rgba(91, 95, 199, 0.3); /* 基于 primary color */
+  --shadow-focus: 0 0 0 3px rgba(91, 95, 199, 0.3); 
 }
 
 *,

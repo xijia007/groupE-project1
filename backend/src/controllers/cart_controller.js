@@ -2,12 +2,12 @@ import db from "../routers/database.js";
 import { ObjectId } from "mongodb";
 import buildErrorResponse from "../utils/errorResponse.js";
 
-// 获取用户购物车
+// Get user cart
 export const getCart = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    // 使用原生 MongoDB 驱动查询用户
+    // Query user using native MongoDB driver
     const user = await db.collection("Users").findOne({ 
       _id: new ObjectId(userId) 
     });
@@ -19,7 +19,7 @@ export const getCart = async (req, res) => {
       });
     }
 
-    // 如果购物车为空，直接返回
+    // If cart is empty, return immediately
     if (!user.cart || user.cart.length === 0) {
       return res.status(200).json({
         success: true,
@@ -27,19 +27,19 @@ export const getCart = async (req, res) => {
       });
     }
 
-    // 获取购物车中所有产品的详细信息
+    // Get details for all products in the cart
     const productIds = user.cart.map(item => new ObjectId(item.productId));
     const products = await db.collection("Products").find({
       _id: { $in: productIds }
     }).toArray();
 
-    // 创建产品 ID 到产品对象的映射
+    // Create mapping from product ID to product object
     const productMap = {};
     products.forEach(product => {
       productMap[product._id.toString()] = product;
     });
 
-    // 过滤掉已删除的商品，并格式化购物车数据
+    // Filter out deleted items and format cart data
     const validCart = [];
     const cartItems = [];
 
@@ -47,7 +47,7 @@ export const getCart = async (req, res) => {
       const product = productMap[item.productId.toString()];
       
       if (product) {
-        // 产品存在，添加到有效购物车
+        // Product exists, add to valid cart
         validCart.push(item);
         
         cartItems.push({
@@ -64,7 +64,7 @@ export const getCart = async (req, res) => {
       }
     });
 
-    // 如果购物车有变化（有商品被删除），更新数据库
+    // If cart has changed (items deleted), update database
     if (validCart.length !== user.cart.length) {
       await db.collection("Users").updateOne(
         { _id: new ObjectId(userId) },
@@ -86,7 +86,7 @@ export const getCart = async (req, res) => {
   }
 };
 
-// 添加商品到购物车
+// Add item to cart
 export const addToCart = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -99,7 +99,7 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // 验证商品是否存在
+    // Verify product exists
     const product = await db.collection("Products").findOne({
       _id: new ObjectId(productId)
     });
@@ -111,7 +111,7 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // 检查库存
+    // Check stock
     if (product.stock < quantity) {
       return res.status(400).json({
         success: false,
@@ -130,26 +130,26 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // 初始化购物车（如果不存在）
+    // Initialize cart (if not exists)
     const cart = user.cart || [];
 
-    // 检查商品是否已在购物车中
+    // Check if item is already in cart
     const existingItemIndex = cart.findIndex(
       (item) => item.productId.toString() === productId
     );
 
     if (existingItemIndex > -1) {
-      // 商品已存在，更新数量
+      // Item exists, update quantity
       const newQuantity = cart[existingItemIndex].quantity + quantity;
 
-      // 检查新数量是否超过库存
+      // Check if new quantity exceeds stock
       if (newQuantity > product.stock) {
         cart[existingItemIndex].quantity = product.stock;
       } else {
         cart[existingItemIndex].quantity = newQuantity;
       }
     } else {
-      // 新商品，添加到购物车
+      // New item, add to cart
       cart.push({
         productId: new ObjectId(productId),
         quantity: Math.min(quantity, product.stock),
@@ -157,13 +157,13 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // 更新用户购物车
+    // Update user cart
     await db.collection("Users").updateOne(
       { _id: new ObjectId(userId) },
       { $set: { cart: cart } }
     );
 
-    // 获取更新后的购物车（包含产品详情）
+    // Get updated cart (with product details)
     const productIds = cart.map(item => new ObjectId(item.productId));
     const products = await db.collection("Products").find({
       _id: { $in: productIds }
@@ -206,7 +206,7 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// 更新购物车商品数量
+// Update cart item quantity
 export const updateCartItem = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -243,11 +243,11 @@ export const updateCartItem = async (req, res) => {
       });
     }
 
-    // 如果数量为 0，删除商品
+    // If quantity is 0, delete item
     if (quantity === 0) {
       cart.splice(itemIndex, 1);
     } else {
-      // 验证库存
+      // Validate stock
       const product = await db.collection("Products").findOne({
         _id: new ObjectId(productId)
       });
@@ -259,13 +259,13 @@ export const updateCartItem = async (req, res) => {
       }
     }
 
-    // 更新购物车
+    // Update cart
     await db.collection("Users").updateOne(
       { _id: new ObjectId(userId) },
       { $set: { cart: cart } }
     );
 
-    // 获取更新后的购物车（包含产品详情）
+    // Get updated cart (with product details)
     if (cart.length === 0) {
       return res.status(200).json({
         success: true,
@@ -316,7 +316,7 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
-// 从购物车删除商品
+// Remove item from cart
 export const removeFromCart = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -337,13 +337,13 @@ export const removeFromCart = async (req, res) => {
       (item) => item.productId.toString() !== productId
     );
 
-    // 更新购物车
+    // Update cart
     await db.collection("Users").updateOne(
       { _id: new ObjectId(userId) },
       { $set: { cart: cart } }
     );
 
-    // 获取更新后的购物车（包含产品详情）
+    // Get updated cart (with product details)
     if (cart.length === 0) {
       return res.status(200).json({
         success: true,
@@ -394,7 +394,7 @@ export const removeFromCart = async (req, res) => {
   }
 };
 
-// 清空购物车
+// Clear cart
 export const clearCart = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -410,7 +410,7 @@ export const clearCart = async (req, res) => {
       });
     }
 
-    // 清空购物车
+    // Clear cart
     await db.collection("Users").updateOne(
       { _id: new ObjectId(userId) },
       { $set: { cart: [] } }
@@ -431,11 +431,11 @@ export const clearCart = async (req, res) => {
   }
 };
 
-// 同步本地购物车到服务器（用于登录后合并）
+// Sync local cart to server (merge after login)
 export const syncCart = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { cartItems } = req.body; // 前端传来的本地购物车
+    const { cartItems } = req.body; // Local cart from frontend
 
     if (!Array.isArray(cartItems)) {
       return res.status(400).json({
@@ -455,14 +455,14 @@ export const syncCart = async (req, res) => {
       });
     }
 
-    // 初始化购物车
+    // Initialize cart
     const cart = user.cart || [];
 
-    // 合并本地购物车和服务器购物车
+    // Merge local cart and server cart
     for (const localItem of cartItems) {
       const { id, quantity } = localItem;
 
-      // 验证商品是否存在
+      // Verify product exists
       const product = await db.collection("Products").findOne({
         _id: new ObjectId(id)
       });
@@ -474,14 +474,14 @@ export const syncCart = async (req, res) => {
       );
 
       if (existingItemIndex > -1) {
-        // 商品已存在，合并数量
+        // Item exists, merge quantity
         const newQuantity = cart[existingItemIndex].quantity + quantity;
         cart[existingItemIndex].quantity = Math.min(
           newQuantity,
           product.stock
         );
       } else {
-        // 新商品，添加到购物车
+        // New item, add to cart
         cart.push({
           productId: new ObjectId(id),
           quantity: Math.min(quantity, product.stock),
@@ -490,13 +490,13 @@ export const syncCart = async (req, res) => {
       }
     }
 
-    // 更新购物车
+    // Update cart
     await db.collection("Users").updateOne(
       { _id: new ObjectId(userId) },
       { $set: { cart: cart } }
     );
 
-    // 获取合并后的购物车（包含产品详情）
+    // Get merged cart (with product details)
     if (cart.length === 0) {
       return res.status(200).json({
         success: true,

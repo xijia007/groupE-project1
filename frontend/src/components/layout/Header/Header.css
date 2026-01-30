@@ -5,8 +5,8 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   padding: 12px 32px;
-  background: #000000; /* 改为纯黑 */
-  border-bottom: 1px solid #333333; /* 边框也调深一点配合黑色 */
+  background: #000000; 
+  border-bottom: 1px solid #333333;
   gap: var(--spacing-sm);
 }
 
@@ -51,16 +51,16 @@
 /* Search Section */
 .site-header-search {
   position: relative;
-  flex: 1 1 auto; /* 让它占据剩余空间 */
-  max-width: 600px; /* 减小最大宽度 */
-  margin: 0 var(--spacing-lg); /* 给左右一点间距 */
+  flex: 1 1 auto; 
+  max-width: 600px;
+  margin: 0 var(--spacing-lg);
 }
 
 .site-header-search input {
   width: 100%;
-  padding: 7px 30px 7px 16px; /* 减小高度 */
+  padding: 7px 30px 7px 16px; 
   border: none;
-  border-radius: var(--radius-md); /* 改回用中等圆角 */
+  border-radius: var(--radius-md); 
   font-size: 14px;
   background: var(--bg-surface);
   color: var(--color-text-main);
@@ -91,9 +91,8 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
-  /* 移除 order: 3 和 flex: 1 1 0 */
   flex: 0 0 auto;
-  margin-left: auto; /* 确保靠右 */
+  margin-left: auto; 
   justify-content: flex-end;
 }
 

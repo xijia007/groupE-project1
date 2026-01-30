@@ -11,25 +11,25 @@ import { requireAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// 所有购物车路由都需要认证
+// All cart routes require authentication
 router.use(requireAuth);
 
-// 获取购物车
+// Get cart
 router.get("/", getCart);
 
-// 添加商品到购物车
+// Add item to cart
 router.post("/", addToCart);
 
-// 同步本地购物车（登录后合并）
+// Sync local cart (merge after login)
 router.post("/sync", syncCart);
 
-// 更新购物车商品数量
+// Update cart item quantity
 router.put("/:productId", updateCartItem);
 
-// 从购物车删除商品
+// Remove item from cart
 router.delete("/:productId", removeFromCart);
 
-// 清空购物车
+// Clear cart
 router.delete("/", clearCart);
 
 export default router;

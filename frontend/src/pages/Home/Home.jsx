@@ -12,7 +12,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user: userInfo } = useAuth(); // 使用 Context 中的 user
+  const { user: userInfo } = useAuth(); // Use user from Context
   const dispatch = useDispatch();
 
   const [sortOrder, setSortOrder] = useState("last_added");
@@ -32,6 +32,9 @@ function Home() {
   }
   const isMobileView = isMoblie(768);
   const ItemsPerPage = isMobileView ? 3 : 10;
+  
+  // State for Admin Edit Mode (persist in sessionStorage)
+  // Allows admins to filter and see only products they created
   const [filterByCreator, setFilterByCreator] = useState(() => {
     return sessionStorage.getItem('adminEditMode') === 'true';
   });
@@ -40,7 +43,10 @@ function Home() {
     sessionStorage.setItem('adminEditMode', filterByCreator);
   }, [filterByCreator]);
 
-  // Prepare raw products
+  // Prepare raw products list
+  // 1. Selects source (search results vs all products)
+  // 2. Applies 'Edit Mode' filter if enabled (Admin only)
+  // 3. Normalizes ID field
   const rawProducts = useMemo(() => {
     let items = mode === "search" ? searchItems : allItems;
     items = items || [];
@@ -62,7 +68,7 @@ function Home() {
     }));
   }, [mode, searchItems, allItems, filterByCreator, userInfo]);
 
-  // Apply sorting
+  // Apply sorting strategy based on 'sortOrder' state
   const sortedProducts = useMemo(() => {
     // Create a shallow copy to avoid mutating original array
     const sorted = [...rawProducts];
@@ -76,11 +82,7 @@ function Home() {
         break;
       case "last_added":
       default:
-        // Assume _id desc or createdAt desc for 'last added'
-        // If items contain createdAt, rely on that:
-        // sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        // Fallback: reverse the list if default is oldest first, or sort by _id descending
-        // Let's assume sorting by _id (which contains timestamp) descending is safest for MongoDB
+        // Sort by ID descending (proxy for creation time in MongoDB)
         sorted.sort((a, b) => {
           const idA = a.id || "";
           const idB = b.id || "";
@@ -93,9 +95,11 @@ function Home() {
     return sorted;
   }, [rawProducts, sortOrder]);
 
+  // Pagination Logic
   const totalPage = Math.ceil(sortedProducts.length / ItemsPerPage);
   const startIndex = (currentPage - 1) * ItemsPerPage;
   const endIndex = startIndex + ItemsPerPage;
+  // Slice products for current page
   const productsToDisplay = sortedProducts.slice(startIndex, endIndex);
 
   useEffect(() => {

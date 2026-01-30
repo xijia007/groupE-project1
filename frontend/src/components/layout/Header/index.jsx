@@ -19,7 +19,7 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const debounceRef = useRef(null);
-  const { user } = useAuth(); // 获取用户信息
+  const { user } = useAuth();
 
   useEffect(() => {
     return () => {
@@ -41,10 +41,7 @@ function Header({ onSignInClick, onHomeClick, onCartClick, isLoggedIn }) {
       dispatch(clearSearch());
       return;
     }
-    // if (trimmed.length < 1) {
-    //   dispatch(clearSearch());
-    //   return;
-    // }
+
     debounceRef.current = setTimeout(() => {
       dispatch(searchProducts(trimmed));
     }, 300);

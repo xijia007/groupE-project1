@@ -13,6 +13,10 @@ const newProductSchema = z.object({
   PromotionCode: z.string().optional(),
   discountPercentage: z.number().min(0).max(100).optional(),
 });
+
+// Create new product
+// Requires Admin role
+// Validates input against newProductSchema
 export const createProduct = async (req, res) => {
   if (req.user.role !== "admin") {
     return res.status(403).json(
@@ -78,6 +82,9 @@ export const createProduct = async (req, res) => {
     );
   }
 };
+
+// Delete product
+// Requires Admin role AND ownership of the product (createdBy must match)
 export const DeleteProduct = async (req, res) => {
   if (req.user.role !== "admin") {
     return res.status(403).json(
@@ -132,6 +139,9 @@ export const DeleteProduct = async (req, res) => {
   }
 };
 
+// Edit product details
+// Requires Admin role AND ownership (createdBy must match)
+// Validates updates against partial schema
 export const EditProduct = async (req, res) => {
   if (req.user.role !== "admin") {
     return res.status(403).json(
@@ -213,6 +223,9 @@ export const GetProducts = async (req, res) => {
     );
   }
 };
+
+// Search products by name (prefix search)
+// Uses regex for case-insensitive matching
 export const SearchProducts = async (req, res) => {
   try {
     const queryRaw = (req.query.name ?? "").trim();

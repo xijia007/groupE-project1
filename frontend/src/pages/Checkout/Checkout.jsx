@@ -16,9 +16,7 @@ function Checkout() {
   const totalItems = useSelector(selectCartTotalItems);
   const subtotal = useSelector(selectCartTotalPrice);
 
-  // 表单状态
   const [formData, setFormData] = useState({
-    // 配送信息
     firstName: '',
     lastName: '',
     email: '',
@@ -28,43 +26,39 @@ function Checkout() {
     state: '',
     zipCode: '',
     country: 'United States',
-    
-    // 支付信息
     cardNumber: '',
     cardName: '',
     expiryDate: '',
     cvv: '',
-    
-    // 其他
     saveInfo: false,
   });
 
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // 计算价格
-  const tax = subtotal * 0.1; // 10% 税
-  const shipping = subtotal > 100 ? 0 : 10; // 满 $100 免运费
+  // calculate the price
+  const tax = subtotal * 0.1; // 10% tax
+  const shipping = subtotal > 100 ? 0 : 10; // free shipping above $100
   const total = subtotal + tax + shipping;
 
-  // 处理输入变化
+  // handle input change
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
-    // 清除该字段的错误
+    // Clear the error for this field
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-  // 表单验证
+  // Form validation
   const validateForm = () => {
     const newErrors = {};
 
-    // 配送信息验证
+    // Delivery information verification
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
     if (!formData.email.trim()) {
@@ -78,7 +72,7 @@ function Checkout() {
     if (!formData.state.trim()) newErrors.state = 'State is required';
     if (!formData.zipCode.trim()) newErrors.zipCode = 'ZIP code is required';
 
-    // 支付信息验证
+    // Payment information verification
     if (!formData.cardNumber.trim()) {
       newErrors.cardNumber = 'Card number is required';
     } else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) {
@@ -100,7 +94,7 @@ function Checkout() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // 处理提交
+  // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -115,17 +109,17 @@ function Checkout() {
 
     setIsProcessing(true);
 
-    // 模拟支付处理
+    // Simulated payment processing
     setTimeout(() => {
       setIsProcessing(false);
       
-      // 清空购物车
+      // clear shopping cart
       dispatch(clearCart());
       
-      // 显示成功消息
+      // Display success message
       alert('Order placed successfully! 🎉');
       
-      // 跳转到首页
+      // jump to Home page
       navigate('/');
     }, 2000);
   };
@@ -154,7 +148,7 @@ function Checkout() {
       </div>
 
       <div className="checkout-content">
-        {/* 左侧：订单摘要 */}
+        {/* Left side: Order summary */}
         <div className="checkout-summary">
           <h2>Order Summary</h2>
           
@@ -199,10 +193,10 @@ function Checkout() {
           )}
         </div>
 
-        {/* 右侧：表单 */}
+        {/* Right side: Form */}
         <div className="checkout-form-container">
           <form onSubmit={handleSubmit} className="checkout-form">
-            {/* 配送信息 */}
+            {/* Delivery Information */}
             <section className="form-section">
               <h2>Shipping Information</h2>
               
@@ -317,7 +311,7 @@ function Checkout() {
               </div>
             </section>
 
-            {/* 支付信息 */}
+            {/* Payment Information */}
             <section className="form-section">
               <h2>Payment Information</h2>
               
@@ -395,7 +389,7 @@ function Checkout() {
               </div>
             </section>
 
-            {/* 提交按钮 */}
+            {/* Submit button */}
             <button
               type="submit"
               className="btn-submit"

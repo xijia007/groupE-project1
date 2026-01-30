@@ -23,6 +23,7 @@ function EditProduct() {
       try {
         const res = await fetch(`/api/products/${id}`);
         const data = await res.json();
+        // Prevent state update if component unmounted
         if (isMounted) {
           setProduct(data.data || null);
         }
@@ -34,6 +35,7 @@ function EditProduct() {
     };
 
     fetchProduct();
+    // Cleanup function to set isMounted false
     return () => {
       isMounted = false;
     };
@@ -41,6 +43,9 @@ function EditProduct() {
 
 
   const { user } = useAuth();
+  
+  // Security Check: Verify if the current user is the creator of the product
+  // Checks both string IDs and ObjectIds depending on backend response format
   const isOwner = product && user && (product.createdBy === user.userId || product.createdBy === user._id || product.createdBy === user.id);
 
   if (loading) return <h1>Loading...</h1>;
@@ -85,6 +90,7 @@ function EditProduct() {
         submitLabel="Update Product"
         readOnly={!isOwner}
         onSubmit={async (data) => {
+          // Double check ownership before allowing submission
           if (!isOwner) return; 
           try {
             const token = localStorage.getItem("accessToken");
@@ -99,10 +105,8 @@ function EditProduct() {
 
             if (!res.ok) return;
 
-            // Update local cart state immediately so user sees changes without refresh
-            // Ensure ID type matches what's in the store (handling potential string/number mismatch)
-            // We use the ID from the URL but try to cast if existing product has number ID.
-            // A safer bet is to use the ID from the fetched product state if available.
+            // Optimistic Update: Update Redux store immediately 
+            // This prevents needing a page reload to see price/name changes in the cart
             const productId = product?.id || id;
             
             dispatch(updateProductInCart({ 
