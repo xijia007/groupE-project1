@@ -388,14 +388,10 @@
   background: #9ca3af;
 }
 
-/* Responsive Design */
-/* Responsive Design */
 @media (max-width: 640px) {
   .cart-popup {
     width: 100vw;
-    /* Calculated based on 12px padding + 40px row1 + 16px gap + 36px row2 + 12px padding = ~116px */
     top: 116px;   
-    /* Calculated based on 20px padding + 24px icon + 16px gap + 20px link + 16px gap + 16px copy + 20px padding = ~132px */
     bottom: 136px; 
     right: 0;
     left: 0;

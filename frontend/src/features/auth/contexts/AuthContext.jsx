@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
             const data = await res.json();
             setUser(data.user);
         } else {
-            // 如果 token 失效，自动 logout
+            // If token invalid, auto logout
             if (res.status === 401) {
                 logout();
             }
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
     }
   }, [accessToken, logout]);
 
-  // 当 token 变化时，自动 fetch user
+  // Auto fetch user when token changes
   useEffect(() => {
     if (accessToken) {
         fetchUser();

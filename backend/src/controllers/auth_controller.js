@@ -222,7 +222,6 @@ export const refreshToken = async (req, res) => {
   }
 };
 
-// 修改密码（需要验证旧密码）
 export const changePassword = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -235,22 +234,18 @@ export const changePassword = async (req, res) => {
       });
     }
 
-    // 1. 获取用户
     const user = await db.collection("Users").findOne({ _id: new ObjectId(userId) });
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // 2. 验证旧密码
     const isMatch = await bcrpyt.compare(oldPassword, user.password);
     if (!isMatch) {
       return res.status(400).json({ success: false, message: "Incorrect old password" });
     }
 
-    // 3. 加密新密码
     const hashedNewPassword = await bcrpyt.hash(newPassword, 10);
 
-    // 4. 更新数据库
     await db.collection("Users").updateOne(
       { _id: new ObjectId(userId) },
       { $set: { password: hashedNewPassword } }

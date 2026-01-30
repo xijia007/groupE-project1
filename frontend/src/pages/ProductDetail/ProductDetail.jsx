@@ -20,7 +20,7 @@ function ProductDetail() {
     const dispatch = useDispatch();
     const cartQuantity = useSelector(selectItemQuantity(id));
     const { showToast } = useToast();
-    const { isLoggedIn } = useAuth(); // 使用 AuthContext 获取实时登录状态
+    const { isLoggedIn } = useAuth(); // Use AuthContext to get real-time login status.
 
     useEffect(() => {
         let isMounted = true;
@@ -91,14 +91,14 @@ function ProductDetail() {
                 return;
             }
             
-            // 如果用户已登录，同步到后端
+            // If the user is logged in, synchronize the data to the backend.
             if (isLoggedIn) {
                 dispatch(addToCartBackend({ 
                     productId: product._id || product.id, 
                     quantity: 1 
                 }));
             } else {
-                // 未登录，只更新本地
+                // Not logged in, only updating locally.
                 dispatch(addToCart({ product, quantity: 1 }));
             }
             
@@ -116,14 +116,14 @@ function ProductDetail() {
             
             const newQuantity = cartQuantity + 1;
             
-            // 如果用户已登录，同步到后端
+            // If the user is logged in, synchronize the data to the backend.
             if (isLoggedIn) {
                 dispatch(updateCartBackend({ 
                     productId: product._id || product.id, 
                     quantity: newQuantity 
                 }));
             } else {
-                // 未登录，只更新本地
+                // Not logged in, only updating locally.
                 dispatch(updateQuantity({ 
                     productId: product._id || product.id, 
                     quantity: newQuantity 
@@ -136,14 +136,14 @@ function ProductDetail() {
         if (product && cartQuantity > 0) {
             const newQuantity = cartQuantity - 1;
             
-            // 如果用户已登录，同步到后端
+            // If the user is logged in, synchronize the data to the backend.
             if (isLoggedIn) {
                 dispatch(updateCartBackend({ 
                     productId: product._id || product.id, 
                     quantity: newQuantity 
                 }));
             } else {
-                // 未登录，只更新本地
+                // Not logged in, only updating locally.
                 dispatch(updateQuantity({ 
                     productId: product._id || product.id, 
                     quantity: newQuantity 
@@ -161,7 +161,7 @@ function ProductDetail() {
     }
 
     const stockValue = Number(product.stock ?? 0);
-    // const isAdmin = userInfo?.role === "admin"; // 不再需要单独判断 Admin
+    
     let stockText = "";
     
     if (stockValue <= 0) {

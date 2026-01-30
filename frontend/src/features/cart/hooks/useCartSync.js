@@ -10,14 +10,14 @@ import {
 import { useAuth } from '../../auth/contexts/AuthContext';
 
 /**
- * 自定义 Hook：监听用户登录/登出状态，自动同步购物车
- * 
- * 功能：
- * 1. 用户登录时：
- *    - 合并访客购物车到用户购物车（localStorage）
- *    - 同步本地购物车到后端
- *    - 从后端加载购物车
- * 2. 用户登出时：切换到访客购物车
+Custom Hook: Monitors user login/logout status and automatically synchronizes the shopping cart.
+
+Features:
+1. When the user logs in:
+    - Merges the guest shopping cart into the user's shopping cart (localStorage)
+    - Synchronizes the local shopping cart with the backend
+    - Loads the shopping cart from the backend
+2. When the user logs out: Switches to the guest shopping cart
  */
 export function useCartSync() {
   const dispatch = useDispatch();
@@ -27,26 +27,27 @@ export function useCartSync() {
   useEffect(() => {
     const syncCart = async () => {
       if (isLoggedIn) {
-        // 检查是否有访客购物车数据
+        // Check if there is any visitor shopping cart data.
         const guestCartJson = localStorage.getItem('cart_guest');
         const guestCart = guestCartJson ? JSON.parse(guestCartJson) : [];
 
         if (guestCart.length > 0) {
-          // 如果有访客数据，先同步（合并）到后端
+          // Regardless of whether it has been synchronized or not, 
+          // the latest complete state will ultimately be retrieved from the backend.
           await dispatch(syncCartToBackend(guestCart));
           
-          // 同步成功后，清除访客数据，避免重复同步
+          // If there is visitor data, synchronize (merge) it with the backend first.
           localStorage.removeItem('cart_guest');
         } 
         
-        // 无论是否同步过，最后都从后端拉取最新完全状态
+        // 
         await dispatch(loadCartFromBackend());
 
-        // 注意：syncCartOnLogin 主要是用于合并本地 Redux State，但既然我们已经决定
-        // 以后端为准，并只处理访客数据，那么 Redux State 最终会被 loadCartFromBackend 覆盖。
-        // 所以这里其实不需要再调用 syncCartOnLogin 了，或者只需要它来清理本地状态。
+        // Note: syncCartOnLogin is primarily used to merge the local Redux state, but since we have decided
+        // to prioritize the backend data and only handle guest data, the Redux state will ultimately be overwritten by loadCartFromBackend.
+        // Therefore, calling syncCartOnLogin here is actually unnecessary, or it only needs to be used to clear the local state.
       } else {
-        // 用户登出，切换到访客购物车
+        // The user has logged out and switched to the guest shopping cart.
         dispatch(syncCartOnLogout());
       }
     };
@@ -55,7 +56,7 @@ export function useCartSync() {
   }, [isLoggedIn, dispatch]);
 }
 
-// 辅助函数：获取当前用户 ID
+// Helper function: Get the current user ID
 const getCurrentUserId = () => {
   try {
     const token = localStorage.getItem('accessToken');

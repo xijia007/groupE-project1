@@ -4,7 +4,7 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   padding: 20px 40px;
-  background: #000000; /* 改为纯黑 */
+  background: #000000;
   border-top: 1px solid #333333;
   gap: var(--spacing-lg);
 }

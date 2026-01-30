@@ -6,7 +6,7 @@ import "./Profile.css";
 
 function Profile() {
     const navigate = useNavigate();
-    const { isLoggedIn, logout, user, fetchUser } = useAuth(); // 获取 fetchUser 和 user
+    const { isLoggedIn, logout, user, fetchUser } = useAuth(); // Get fetchUser and user
     const { showToast } = useToast();
     const [userInfo, setUserInfo] = useState({
         name: "",
@@ -14,7 +14,7 @@ function Profile() {
         role: "",
     })
     
-    // 当全局 user 变化时，更新本地表单 state
+    // Update the local form state when the global user changes.
     useEffect(() => {
         if (user) {
             setUserInfo({
@@ -27,9 +27,9 @@ function Profile() {
     }, [user]);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [loading, setLoading] = useState(!user); // 如果没有 user，则 loading
+    const [loading, setLoading] = useState(!user); // If there is no user, then loading...
 
-    // 修改密码相关状态
+    // Password change related status
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [passwordData, setPasswordData] = useState({ oldPassword: "", newPassword: "" });
 
@@ -59,11 +59,10 @@ function Profile() {
             showToast('Server Error', 'error');
         }
     };
-
-    // 删除 fetchUserDate，完全依赖 AuthContext
     
     useEffect(() => {
-        // 如果已登录但没有用户数据（例如刚刷新页面），尝试 fetch
+        // If the user is logged in but there is no user data (for example, after refreshing the page), 
+        // try fetching the data.
         if (isLoggedIn && !user) {
             fetchUser();
         }
@@ -85,7 +84,7 @@ function Profile() {
             if (res.ok) {
                 showToast('Profile updated successfully', 'success');
                 setIsEditing(false);
-                // 刷新全局状态，这将触发上面的 useEffect 更新本地 userInfo
+                // Refreshing the global state will trigger the useEffect hook above to update the local userInfo.
                 await fetchUser(); 
             } else {
                 showToast('Update failed', 'error');
@@ -170,7 +169,7 @@ function Profile() {
                     <div className="section-header">
                         <h3>Security</h3>
                     </div>
-                    {/* 修改密码表单区域 */}
+                    {/* Change password form area */}
                     {!showPasswordForm ? (
                         <>
                             <p>Want to change your password?</p>

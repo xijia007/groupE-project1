@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// API 基础 URL
+// API Base URL
 const API_BASE = '/api/cart';
 
-// 获取 token
+// Get token
 const getAuthToken = () => localStorage.getItem('accessToken');
 
 // Async Thunks for backend sync
-// 从后端加载购物车
+// Load cart from backend
 export const loadCartFromBackend = createAsyncThunk(
   'cart/loadFromBackend',
   async (_, { rejectWithValue }) => {
@@ -34,7 +34,7 @@ export const loadCartFromBackend = createAsyncThunk(
   }
 );
 
-// 添加商品到后端购物车
+// Add item to backend cart
 export const addToCartBackend = createAsyncThunk(
   'cart/addToBackend',
   async ({ productId, quantity }, { rejectWithValue }) => {
@@ -63,7 +63,7 @@ export const addToCartBackend = createAsyncThunk(
   }
 );
 
-// 更新后端购物车商品数量
+// Update item quantity in backend cart
 export const updateCartBackend = createAsyncThunk(
   'cart/updateBackend',
   async ({ productId, quantity }, { rejectWithValue }) => {
@@ -92,7 +92,7 @@ export const updateCartBackend = createAsyncThunk(
   }
 );
 
-// 从后端删除购物车商品
+// Remove item from backend cart
 export const removeFromCartBackend = createAsyncThunk(
   'cart/removeFromBackend',
   async (productId, { rejectWithValue }) => {
@@ -120,7 +120,7 @@ export const removeFromCartBackend = createAsyncThunk(
   }
 );
 
-// 清空后端购物车
+// Clear backend cart
 export const clearCartBackend = createAsyncThunk(
   'cart/clearBackend',
   async (_, { rejectWithValue }) => {
@@ -147,7 +147,7 @@ export const clearCartBackend = createAsyncThunk(
   }
 );
 
-// 同步本地购物车到后端（登录后）
+// Sync local cart to backend (after login)
 export const syncCartToBackend = createAsyncThunk(
   'cart/syncToBackend',
   async (cartItems, { rejectWithValue }) => {
@@ -177,13 +177,13 @@ export const syncCartToBackend = createAsyncThunk(
 );
 
 
-// 获取当前用户 ID（从 localStorage 的 token 中解析）
+// Get current User ID (parsed from JWT token in localStorage)
 const getCurrentUserId = () => {
   try {
     const token = localStorage.getItem('accessToken');
     if (!token) return null;
     
-    // 解析 JWT token 获取用户信息
+    // Parse JWT token to get user info
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.userId || payload.id || payload.sub;
   } catch (error) {
@@ -192,13 +192,13 @@ const getCurrentUserId = () => {
   }
 };
 
-// 获取购物车存储的 key
+// Get storage key for cart
 const getCartStorageKey = () => {
   const userId = getCurrentUserId();
   return userId ? `cart_user_${userId}` : 'cart_guest';
 };
 
-// 从 localStorage 加载购物车
+// Load cart from localStorage
 const loadCartFromStorage = () => {
   try {
     const key = getCartStorageKey();
@@ -210,7 +210,7 @@ const loadCartFromStorage = () => {
   }
 };
 
-// 保存购物车到 localStorage
+// Save cart to localStorage
 const saveCartToStorage = (cartItems) => {
   try {
     const key = getCartStorageKey();
@@ -220,8 +220,7 @@ const saveCartToStorage = (cartItems) => {
   }
 };
 
-// 合并两个购物车（用于登录时合并访客购物车）
-// 合并两个购物车（用于登录时合并访客购物车）
+// Merge two carts (used for merging guest cart on login)
 const mergeCarts = (guestCart, userCart) => {
   const merged = [...userCart];
   
@@ -230,18 +229,18 @@ const mergeCarts = (guestCart, userCart) => {
     const stock = Number(guestItem.stock ?? Infinity);
     
     if (existingIndex >= 0) {
-      // 商品已存在，合并数量
+      // Item already exists, merge quantity
       const currentQty = merged[existingIndex].quantity;
       const newQty = currentQty + guestItem.quantity;
       
-      // 检查是否超过库存
+      // Check if stock is exceeded
       if (stock !== Infinity && newQty > stock) {
          merged[existingIndex].quantity = stock;
       } else {
          merged[existingIndex].quantity = newQty;
       }
     } else {
-      // 新商品，添加到购物车，同样需要检查初始数量是否超标(虽然 guestCart 本身应该已校验，但在合并时再次确认更安全)
+      // New item, add to cart. Also check if initial quantity exceeds stock (safety check)
       let initialQty = guestItem.quantity;
       if (stock !== Infinity && initialQty > stock) {
           initialQty = stock;
@@ -256,73 +255,71 @@ const mergeCarts = (guestCart, userCart) => {
 const initialState = {
   items: loadCartFromStorage(),
   userId: getCurrentUserId(),
-  appliedPromo: null, // { code, type, value, description }
+  appliedPromo: null,
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    // ... existing reducers ...
-    
-    // 设置已应用的优惠码
+    // Set applied promo code
     setAppliedPromo: (state, action) => {
       state.appliedPromo = action.payload;
     },
 
-    // 移除优惠码
+    // Remove promo code
     removeAppliedPromo: (state) => {
       state.appliedPromo = null;
     },
 
-    // 添加商品到购物车
+    // Add item to cart
     addToCart: (state, action) => {
       const { product, quantity = 1 } = action.payload;
       const existingItem = state.items.find((item) => item.id === product.id);
       const stock = Number(product.stock ?? Infinity);
 
       if (existingItem) {
-        // 如果商品已存在，检查库存后再增加数量
+        // If item exists, check stock before increasing quantity
         const newQuantity = existingItem.quantity + quantity;
         
-        // 检查是否超过库存
+        // Check if stock is exceeded
         if (stock !== Infinity && newQuantity > stock) {
-          // 超过库存，设置为最大库存数量
+          // Exceeds stock, set to max stock
           existingItem.quantity = stock;
         } else {
           existingItem.quantity = newQuantity;
         }
         
-        // 更新其它可能变化的属性
+        // Update other properties that might have changed
         if (product.stock !== undefined) existingItem.stock = product.stock;
         if (product.price !== undefined) existingItem.price = product.price;
         if (product.name !== undefined) existingItem.name = product.name;
         if (product.img_url !== undefined) existingItem.img_url = product.img_url;
       } else {
-        // 如果是新商品，检查库存后添加到购物车
+        // If new item, check stock before adding
         const initialQuantity = stock !== Infinity && quantity > stock ? stock : quantity;
         state.items.push({ ...product, quantity: initialQuantity });
       }
 
-      // 保存到 localStorage
+      // save cart to localStorage
       saveCartToStorage(state.items);
     },
 
-    // 更新商品数量
+    // Update item quantity
     updateQuantity: (state, action) => {
       const { productId, quantity } = action.payload;
 
       if (quantity <= 0) {
-        // 如果数量为 0 或负数，移除商品
+        // If quantity is 0 or negative, remove item
         state.items = state.items.filter((item) => item.id !== productId);
       } else {
         const item = state.items.find((item) => item.id === productId);
         if (item) {
           const stock = Number(item.stock ?? Infinity);
           
-          // 检查是否超过库存
+          // Check if stock is exceeded
           if (stock !== Infinity && quantity > stock) {
-            // 超过库存，设置为最大库存数量
+            // Exceeds stock, set to max stock
             item.quantity = stock;
           } else {
             item.quantity = quantity;
@@ -333,29 +330,29 @@ const cartSlice = createSlice({
       saveCartToStorage(state.items);
     },
 
-    // 从购物车移除商品
+    // Remove item from cart
     removeFromCart: (state, action) => {
       const productId = action.payload;
       state.items = state.items.filter((item) => item.id !== productId);
       saveCartToStorage(state.items);
     },
 
-    // 清空购物车
+    // Clear cart
     clearCart: (state) => {
       state.items = [];
       state.appliedPromo = null; // Clear promo on cart clear? Usually yes.
       saveCartToStorage(state.items);
     },
 
-    // 用户登录时同步购物车
+    // Sync cart on user login
     syncCartOnLogin: (state) => {
       const newUserId = getCurrentUserId();
       
       if (newUserId && newUserId !== state.userId) {
-        // 用户刚登录，需要合并购物车
-        const guestCart = [...state.items]; // 当前访客购物车
+        // User just logged in, need to merge carts
+        const guestCart = [...state.items]; // Current guest cart
         
-        // 加载用户的购物车
+        // Load user's cart
         const userCartKey = `cart_user_${newUserId}`;
         let userCart = [];
         try {
@@ -365,14 +362,14 @@ const cartSlice = createSlice({
           console.error('Error loading user cart:', error);
         }
         
-        // 合并购物车
+        // Merge carts
         state.items = mergeCarts(guestCart, userCart);
         state.userId = newUserId;
         
-        // 保存合并后的购物车
+        // Save merged cart
         saveCartToStorage(state.items);
         
-        // 清除访客购物车
+        // Clear guest cart
         try {
           localStorage.removeItem('cart_guest');
         } catch (error) {
@@ -381,14 +378,14 @@ const cartSlice = createSlice({
       }
     },
 
-    // 用户登出时切换到访客购物车
+    // Switch to guest cart on logout
     syncCartOnLogout: (state) => {
-      // 清空当前购物车
+      // Clear current cart
       state.items = [];
       state.userId = null;
       state.appliedPromo = null; // Reset promo on logout
       
-      // 加载访客购物车
+      // Load guest cart
       try {
         const guestCart = localStorage.getItem('cart_guest');
         state.items = guestCart ? JSON.parse(guestCart) : [];
@@ -397,7 +394,7 @@ const cartSlice = createSlice({
       }
     },
 
-    // 更新购物车中的商品详情（例如价格变动）
+    // Update product details in cart (e.g. price change)
     updateProductInCart: (state, action) => {
        const { id, updates } = action.payload;
        const item = state.items.find(item => item.id === id);
@@ -410,40 +407,40 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // 从后端加载购物车
+      // Load cart from backend
       .addCase(loadCartFromBackend.fulfilled, (state, action) => {
         if (action.payload) {
           state.items = action.payload;
           saveCartToStorage(action.payload);
         }
       })
-      // 添加到后端购物车
+      // Add to backend cart
       .addCase(addToCartBackend.fulfilled, (state, action) => {
         if (action.payload) {
           state.items = action.payload;
           saveCartToStorage(action.payload);
         }
       })
-      // 更新后端购物车
+      // Update backend cart
       .addCase(updateCartBackend.fulfilled, (state, action) => {
         if (action.payload) {
           state.items = action.payload;
           saveCartToStorage(action.payload);
         }
       })
-      // 从后端删除
+      // Remove from backend cart
       .addCase(removeFromCartBackend.fulfilled, (state, action) => {
         if (action.payload) {
           state.items = action.payload;
           saveCartToStorage(action.payload);
         }
       })
-      // 清空后端购物车
+      // Clear backend cart
       .addCase(clearCartBackend.fulfilled, (state, action) => {
         state.items = [];
         saveCartToStorage([]);
       })
-      // 同步到后端
+      // Sync to backend
       .addCase(syncCartToBackend.fulfilled, (state, action) => {
         if (action.payload) {
           state.items = action.payload;
@@ -453,7 +450,7 @@ const cartSlice = createSlice({
   },
 });
 
-// 导出 actions
+// Export actions
 export const { 
   addToCart, 
   updateQuantity, 
@@ -466,7 +463,7 @@ export const {
   updateProductInCart
 } = cartSlice.actions;
 
-// Selectors - 用于从 state 中获取数据
+// Selectors - Get data from state
 export const selectCartItems = (state) => state.cart.items;
 
 export const selectCartTotalItems = (state) =>
@@ -484,5 +481,5 @@ export const selectCartUserId = (state) => state.cart.userId;
 
 export const selectAppliedPromo = (state) => state.cart.appliedPromo;
 
-// 导出 reducer
+// Export reducer
 export default cartSlice.reducer;

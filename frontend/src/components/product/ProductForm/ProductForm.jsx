@@ -21,6 +21,12 @@ const PREDEFINED_CATEGORIES = [
     "Category6",
 ];
 
+// Reusable Product Form Component
+// Props:
+// - initialValues: Object containing existing product data (for edit mode)
+// - onSubmit: Function called with cleaned form data on successful submission
+// - submitLabel: Text to display on the submit button
+// - readOnly: Boolean, if true, disables all inputs and hides submit button (view-only mode)
 function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnly = false }) {
     // Determine which categories to query
     const categoryOptions = PREDEFINED_CATEGORIES;
@@ -41,6 +47,8 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
     }, [initialValues]);
 
     // Validation logic to ensure data quality before submission
+    // Returns true if valid, false otherwise
+    // Updates 'errors' state with specific messages
     const validate = () => {
         const newErrors = {};
 
@@ -80,6 +88,10 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
     };
 
     // Form submission handler
+    // 1. Prevents default form submission
+    // 2. Runs validation
+    // 3. Normalizes data (handles numbers, optional fields)
+    // 4. Calls parent onSubmit callback
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent page refresh
         if (validate()) {
