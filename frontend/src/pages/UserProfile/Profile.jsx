@@ -5,106 +5,42 @@ import { useToast } from "../../features/toast/contexts/ToastContext";
 import "./Profile.css";
 
 function Profile() {
-    const navigate = useNavigate();
-    const { isLoggedIn, logout, user, fetchUser } = useAuth(); // Get fetchUser and user
-    const { showToast } = useToast();
-    const [userInfo, setUserInfo] = useState({
-        name: "",
-        email: "",
-        role: "",
-    })
-    
-    // Update the local form state when the global user changes.
-    useEffect(() => {
-        if (user) {
-            setUserInfo({
-                name: user.name || "",
-                email: user.email || "",
-                role: user.role || ""
-            });
-            setLoading(false);
-        }
-    }, [user]);
+  const navigate = useNavigate();
+  const { isLoggedIn, logout, user, fetchUser } = useAuth();
+  const { showToast } = useToast();
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [loading, setLoading] = useState(!user); // If there is no user, then loading...
-
-    // Password change related status
-    const [showPasswordForm, setShowPasswordForm] = useState(false);
-    const [passwordData, setPasswordData] = useState({ oldPassword: "", newPassword: "" });
-
-    const handleChangePassword = async (e) => {
-        e.preventDefault();
-        try {
-            const token = localStorage.getItem('accessToken');
-            const res = await fetch('/api/auth/change-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(passwordData)
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                showToast('Password updated successfully', 'success');
-                setShowPasswordForm(false);
-                setPasswordData({ oldPassword: "", newPassword: "" });
-            } else {
-                showToast(data.message || 'Update failed', 'error');
-            }
-        } catch (error) {
-            showToast('Server Error', 'error');
-        }
-    };
-    
-    useEffect(() => {
-        // If the user is logged in but there is no user data (for example, after refreshing the page), 
-        // try fetching the data.
-        if (isLoggedIn && !user) {
-            fetchUser();
-        }
-    }, [isLoggedIn, user, fetchUser]);
-
-    const handleUpdateProfile = async(e) => {
-        e.preventDefault();
-        try {
-            const token = localStorage.getItem('accessToken');
-            const res = await fetch('/api/auth/profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ name: userInfo.name })
-            });
-
-            if (res.ok) {
-                showToast('Profile updated successfully', 'success');
-                setIsEditing(false);
-                // Refreshing the global state will trigger the useEffect hook above to update the local userInfo.
-                await fetchUser(); 
-            } else {
-                showToast('Update failed', 'error');
-            }
-        } catch (error) {
-            showToast('Server Error', 'error');
-        }
-    }
-  }, [user]);
-
+  // State Declarations
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    role: "",
+  });
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(!user); // 如果没有 user，则 loading
-
-  // 修改密码相关状态
+  const [loading, setLoading] = useState(true);
+  
+  // Password Change State
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
   });
 
+  // Effect: Sync local state with auth context user
+  useEffect(() => {
+    if (user) {
+      setUserInfo({
+        name: user.name || "",
+        email: user.email || "",
+        role: user.role || "",
+      });
+      setLoading(false);
+    } else if (isLoggedIn) {
+        // Logged in but no user data yet
+        fetchUser();
+    }
+  }, [user, isLoggedIn, fetchUser]);
+
+  // Handler: Change Password
   const handleChangePassword = async (e) => {
     e.preventDefault();
     try {
@@ -132,15 +68,7 @@ function Profile() {
     }
   };
 
-  // 删除 fetchUserDate，完全依赖 AuthContext
-
-  useEffect(() => {
-    // 如果已登录但没有用户数据（例如刚刷新页面），尝试 fetch
-    if (isLoggedIn && !user) {
-      fetchUser();
-    }
-  }, [isLoggedIn, user, fetchUser]);
-
+  // Handler: Update Profile
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
@@ -166,20 +94,24 @@ function Profile() {
     }
   };
 
-  if (loading) {
+  if (loading && !user) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="profile-container">
+      {/* Sidebar */}
       <div className="profile-sidebar">
-        <div className="user-profile-label">User profile</div>
-        <div className="user-name">
-          <h2>Name: {userInfo.name}</h2>
+        <div className="avatar-placeholder">
+            {userInfo.name.charAt(0).toUpperCase()}
         </div>
-        <div className="user-role-badge">Role: {userInfo.role || "User"}</div>
+        <div className="user-profile-label">User Profile</div>
+        <div className="user-name">
+          <h2>{userInfo.name}</h2>
+        </div>
+        <div className="user-role-badge">{userInfo.role || "User"}</div>
         <p style={{ marginTop: "1rem", color: "#718096" }}>
-          Email: {userInfo.email}
+          {userInfo.email}
         </p>
         <button
           className="sign-out-button"
@@ -193,11 +125,18 @@ function Profile() {
         </button>
       </div>
 
+      {/* Main Content */}
       <div className="profile-content">
+        
+        {/* General Information Card */}
         <div className="section-card">
           <div className="section-header">
             <h3>General Information</h3>
-            <button onClick={() => setIsEditing(!isEditing)}>
+            <button
+                className="btn-primary" 
+                style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }} 
+                onClick={() => setIsEditing(!isEditing)}
+            >
               {isEditing ? "Cancel" : "Edit"}
             </button>
           </div>
@@ -214,107 +153,15 @@ function Profile() {
                 }
               />
             </div>
-
-            <div className="profile-content">
-                <div className="section-card">
-                    <div className="section-header">
-                        <h3>General Information</h3>
-                        <button
-                            onClick={()=> setIsEditing(!isEditing)}
-                        >
-                            {isEditing ? 'Cancel' : 'Edit'}
-                        </button>
-                    </div>
-                    <form onSubmit={handleUpdateProfile}>
-                        <div className="form-group">
-                            <label>User Name</label>
-                                <input 
-                                    type='text'
-                                    className="form-input"
-                                    value={userInfo.name}
-                                    disabled={!isEditing}
-                                    onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                                />
-                        </div>
-                        <div className="form-group">
-                            <label>Email Address</label>
-                            <input 
-                                type='email'
-                                className="form-input"
-                                value={userInfo.email}
-                                disabled
-                            />
-                            <small style={{color:'#a0aec0'}}>Email cannot be changed</small>
-                        </div>
-
-                        {isEditing && (
-                            <button type='submit' className="save-button">
-                                Save Changes
-                            </button>
-                        )}
-                    </form>
-                </div>
-                <div className="section-card">
-                    <div className="section-header">
-                        <h3>Security</h3>
-                    </div>
-                    {/* Change password form area */}
-                    {!showPasswordForm ? (
-                        <>
-                            <p>Want to change your password?</p>
-                            <button 
-                                className="update-password-button"
-                                onClick={() => setShowPasswordForm(true)}
-                            >
-                                Update Password
-                            </button>
-                        </>
-                    ) : (
-                        <form onSubmit={handleChangePassword} style={{marginTop: '1rem'}}>
-                            <div className="form-group">
-                                <label>Current Password</label>
-                                <input 
-                                    type="password" 
-                                    className="form-input"
-                                    required
-                                    value={passwordData.oldPassword}
-                                    onChange={(e) => setPasswordData({...passwordData, oldPassword: e.target.value})}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>New Password</label>
-                                <input 
-                                    type="password" 
-                                    className="form-input"
-                                    required
-                                    value={passwordData.newPassword}
-                                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
-                                />
-                            </div>
-                            <div style={{display: 'flex', gap: '1rem'}}>
-                                <button type="submit" className="save-button">
-                                    Change Password
-                                </button>
-                                <button 
-                                    type="button" 
-                                    onClick={() => {
-                                        setShowPasswordForm(false);
-                                        setPasswordData({ oldPassword: "", newPassword: "" });
-                                    }}
-                                    style={{
-                                        padding: '0.75rem 1.5rem',
-                                        border: '1px solid #cbd5e0',
-                                        borderRadius: '6px',
-                                        background: 'white',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    )}
-                </div>
+            <div className="form-group">
+                <label>Email Address</label>
+                <input 
+                    type='email'
+                    className="form-input"
+                    value={userInfo.email}
+                    disabled
+                />
+                <small style={{color:'#a0aec0'}}>Email cannot be changed</small>
             </div>
 
             {isEditing && (
@@ -324,6 +171,8 @@ function Profile() {
             )}
           </form>
         </div>
+
+        {/* Security Card */}
         <div className="section-card">
           <div className="section-header">
             <h3>Security</h3>
