@@ -32,7 +32,13 @@ function Home() {
   }
   const isMobileView = isMoblie(768);
   const ItemsPerPage = isMobileView ? 3 : 10;
-  const [filterByCreator, setFilterByCreator] = useState(false);
+  const [filterByCreator, setFilterByCreator] = useState(() => {
+    return sessionStorage.getItem('adminEditMode') === 'true';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('adminEditMode', filterByCreator);
+  }, [filterByCreator]);
 
   // Prepare raw products
   const rawProducts = useMemo(() => {
