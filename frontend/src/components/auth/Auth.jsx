@@ -78,7 +78,11 @@ function Auth({
     setRoleTouched(true);
 
     // Validate before submit
-    if (!isValidEmail(email) || !isValidPassword(password) || !isValidRole(role)) {
+    if (
+      !isValidEmail(email) ||
+      !isValidPassword(password) ||
+      !isValidRole(role)
+    ) {
       return;
     }
 
@@ -251,7 +255,11 @@ function Auth({
                 </button>
               </div>
               {passwordError && (
-                <span className="error-message">{Status === "SignUp" ? "Password must be at least 6 characters!" : "Invalid password input!"}</span>
+                <span className="error-message">
+                  {Status === "SignUp"
+                    ? "Password must be at least 6 characters!"
+                    : "Invalid password input!"}
+                </span>
               )}
             </div>
 
@@ -264,7 +272,7 @@ function Auth({
           </form>
         )}
         {Status === "SignUp" && (
-          <form onSubmit={handleRegister}>
+          <form onSubmit={handleRegister} noValidate>
             <div className="signin-form-group">
               <label htmlFor="email">Email</label>
               <input
@@ -302,27 +310,43 @@ function Auth({
                 </button>
               </div>
               {passwordError && (
-                <span className="error-message">Password must be at least 6 characters!</span>
+                <span className="error-message">
+                  Password must be at least 6 characters!
+                </span>
               )}
-              
-              <div style={{ marginTop: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', color: '#1a1a1a' }}>Role</label>
-                <select 
-                    required 
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    onBlur={handleRoleBlur}
-                    className={roleError ? "input-error" : ""}
-                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: roleError ? '1px solid #e74c3c' : '1px solid #ccc' }}
+
+              <div style={{ marginTop: "15px" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    fontSize: "14px",
+                    color: "#1a1a1a",
+                  }}
                 >
-                    <option value="" disabled hidden>
+                  Role
+                </label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  onFocus={() => setRoleTouched(true)}
+                  onBlur={handleRoleBlur}
+                  className={roleError ? "input-error" : ""}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    borderRadius: "6px",
+                    border: roleError ? "1px solid #e74c3c" : "1px solid #ccc",
+                  }}
+                >
+                  <option value="" disabled hidden>
                     Please select a role
-                    </option>
-                    <option value="regular">Regular</option>
-                    <option value="admin">Admin</option>
+                  </option>
+                  <option value="regular">Regular</option>
+                  <option value="admin">Admin</option>
                 </select>
                 {roleError && (
-                    <span className="error-message">Please select a role!</span>
+                  <span className="error-message">Please select a role!</span>
                 )}
               </div>
             </div>
