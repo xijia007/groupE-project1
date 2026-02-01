@@ -61,16 +61,6 @@ The frontend runs on `http://localhost:5173` (Vite default).
 *   **Admin Dashboard**: Create and edit products (requires 'admin' role).
 *   **Responsive Design**: optimized for both desktop and mobile views.
 
-## 📝 Demo Scripts
-
-For helpful data initialization (like adding global coupons), generally found in `backend/src/scripts/`:
-
-```bash
-# Example: Add a global coupon code
-cd backend
-node src/scripts/add_global_coupon.js
-```
-
 ## 📁 Project Structure
 
 ```
@@ -253,6 +243,4 @@ groupE-project1/
 
 ## 📚 Additional Resources
 
-*   **DEMO_SCRIPT.md**: Technical walkthrough with code references
-*   **PRESENTATION_SCRIPT.md**: Word-for-word demo narration
 *   **PROJECT_TASK_LIST.md**: Team task distribution
