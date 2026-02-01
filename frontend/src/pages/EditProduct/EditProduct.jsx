@@ -114,7 +114,8 @@ function EditProduct() {
               updates: data 
             }));
 
-            navigate("/");
+            // Navigate back to the product detail page to see the updated information
+            navigate(`/products/${id}`);
           } catch (err) {
             // optional: error handling
           }
