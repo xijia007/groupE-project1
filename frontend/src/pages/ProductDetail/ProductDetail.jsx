@@ -99,7 +99,12 @@ function ProductDetail() {
                 }));
             } else {
                 // Not logged in, only updating locally.
-                dispatch(addToCart({ product, quantity: 1 }));
+                // Ensure product has 'id' field for cart matching
+                const normalizedProduct = { 
+                    ...product, 
+                    id: product._id || product.id 
+                };
+                dispatch(addToCart({ product: normalizedProduct, quantity: 1 }));
             }
             
             showToast("Added to cart", "success");
@@ -115,17 +120,18 @@ function ProductDetail() {
             }
             
             const newQuantity = cartQuantity + 1;
+            const productId = product._id || product.id || id;
             
             // If the user is logged in, synchronize the data to the backend.
             if (isLoggedIn) {
                 dispatch(updateCartBackend({ 
-                    productId: product._id || product.id, 
+                    productId, 
                     quantity: newQuantity 
                 }));
             } else {
                 // Not logged in, only updating locally.
                 dispatch(updateQuantity({ 
-                    productId: product._id || product.id, 
+                    productId, 
                     quantity: newQuantity 
                 }));
             }
@@ -135,17 +141,18 @@ function ProductDetail() {
     const handleDecrement = () => {
         if (product && cartQuantity > 0) {
             const newQuantity = cartQuantity - 1;
+            const productId = product._id || product.id || id;
             
             // If the user is logged in, synchronize the data to the backend.
             if (isLoggedIn) {
                 dispatch(updateCartBackend({ 
-                    productId: product._id || product.id, 
+                    productId, 
                     quantity: newQuantity 
                 }));
             } else {
                 // Not logged in, only updating locally.
                 dispatch(updateQuantity({ 
-                    productId: product._id || product.id, 
+                    productId, 
                     quantity: newQuantity 
                 }));
             }

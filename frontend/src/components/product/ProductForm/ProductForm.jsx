@@ -35,6 +35,8 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
     const [formData, setFormData] = useState(defaultValues);
     // State to store validation error messages
     const [errors, setErrors] = useState({});
+    // State to store the preview URL (only updates when Upload button is clicked)
+    const [previewUrl, setPreviewUrl] = useState("");
 
     useEffect(() => {
         if (initialValues) {
@@ -42,6 +44,8 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
             if (initialValues && Object.keys(initialValues).length > 0) {
                 // Merge initial data with default structure to ensure all fields exist
                 setFormData({ ...defaultValues, ...initialValues });
+                // Set preview URL to initial image if editing existing product
+                setPreviewUrl(initialValues.img_url || "");
             }
         }
     }, [initialValues]);
@@ -84,6 +88,13 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
         // clear the specific error message as the user starts typing
         if (errors[field]) {
             setErrors((prev) => ({ ...prev, [field]: null}));
+        }
+    };
+
+    // Handle Upload button click - set preview URL from input value
+    const handleUpload = () => {
+        if (formData.img_url.trim()) {
+            setPreviewUrl(formData.img_url.trim());
         }
     };
 
@@ -195,7 +206,7 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
                                 placeholder="http://"
                                 disabled={readOnly}
                             />
-                            {!readOnly && <button type="button" className="upload-button">Upload</button>}
+                            {!readOnly && <button type="button" className="upload-button" onClick={handleUpload}>Upload</button>}
                         </div>
                         {errors.img_url && <span className="error-message">{errors.img_url}</span>}
                     </div>
@@ -203,9 +214,9 @@ function ProductForm({ initialValues, onSubmit, submitLabel, categories, readOnl
 
                 {/* 5. Image Preview */}
                 <div className="image-preview-section">
-                    <div className={`image-preview ${formData.img_url ? 'has-image' : ''}`}>
-                        {formData.img_url ? (
-                            <img src={formData.img_url} alt="Product preview" />
+                    <div className={`image-preview ${previewUrl ? 'has-image' : ''}`}>
+                        {previewUrl ? (
+                            <img src={previewUrl} alt="Product preview" />
                         ) : (
                             <div className="preview-placeholder">
                                 <div className="placeholder-icon"></div>
